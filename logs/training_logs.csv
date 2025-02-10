@@ -1,0 +1,3 @@
+version,training_data,models,scores,macro_f1,roc_auc,pr_auc,timestamp,notes
+v4,training_data_v1_initial_2025-02-01.csv,lgbm_model_v4.pkl|xgboost_model_v4.pkl|catboost_model_v4.pkl,0.5073924305071936,,,2025-02-09T16:27:07.024273
+v5,training_data_v1_initial_2025-02-01.csv,lgbm_model_v5.pkl|xgboost_model_v5.pkl|catboost_model_v5.pkl,0.5059740029050418,,,2025-02-09T16:56:45.414738,Training with latest corrected dataset

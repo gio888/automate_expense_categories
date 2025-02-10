@@ -1,0 +1,323 @@
+Orphan-JPY
+Orphan-THB
+Assets
+Assets:Current Assets
+Assets:Current Assets:Cash Foreign
+Assets:Current Assets:Cash Foreign:AUD
+Assets:Current Assets:Cash Foreign:CAD
+Assets:Current Assets:Cash Foreign:CNY
+Assets:Current Assets:Cash Foreign:EUR
+Assets:Current Assets:Cash Foreign:GBP
+Assets:Current Assets:Cash Foreign:HKD
+Assets:Current Assets:Cash Foreign:HUF
+Assets:Current Assets:Cash Foreign:IDR
+Assets:Current Assets:Cash Foreign:ILS
+Assets:Current Assets:Cash Foreign:JPY
+Assets:Current Assets:Cash Foreign:KHR
+Assets:Current Assets:Cash Foreign:KRW
+Assets:Current Assets:Cash Foreign:MYR
+Assets:Current Assets:Cash Foreign:QAR
+Assets:Current Assets:Cash Foreign:SGD
+Assets:Current Assets:Cash Foreign:THB
+Assets:Current Assets:Cash Foreign:TWD
+Assets:Current Assets:Cash Foreign:USD
+Assets:Current Assets:Cash Foreign:USD Clearing
+Assets:Current Assets:Cash Foreign:VND
+Assets:Current Assets:Cash Local
+Assets:Current Assets:Cash Local:ADB
+Assets:Current Assets:Cash Local:Cash Emergency Kit
+Assets:Current Assets:Cash Local:Cash for Groceries
+Assets:Current Assets:Cash Local:Cash in Wallet (BE)
+Assets:Current Assets:Cash Local:Cash in Wallet (GB)
+Assets:Current Assets:Cash Local:EPS
+Assets:Current Assets:Cash Local:GCash
+Assets:Current Assets:Cash Local:GCash (BE)
+Assets:Current Assets:Cash Local:GCash (House)
+Assets:Current Assets:Cash Local:Lalamove
+Assets:Current Assets:Cash Local:Paymaya
+Assets:Current Assets:Cash Local:RISE
+Assets:Current Assets:Cash Local:SALPay
+Assets:Current Assets:Reimbursibles
+Assets:Current Assets:Banks Foreign
+Assets:Current Assets:Banks Foreign:BPI Savings USD
+Assets:Current Assets:Banks Foreign:Chase Savings USD
+Assets:Current Assets:Banks Foreign:Clearing USD
+Assets:Current Assets:Banks Foreign:HSBC Savings USD
+Assets:Current Assets:Banks Foreign:test foreign
+Assets:Current Assets:Banks Foreign:Westpac Offset Account AUD
+Assets:Current Assets:Banks Foreign:Westpac USD
+Assets:Current Assets:Banks Local
+Assets:Current Assets:Banks Local:BDO Current
+Assets:Current Assets:Banks Local:BDO Savings
+Assets:Current Assets:Banks Local:BPI ATM House
+Assets:Current Assets:Banks Local:BPI Checking (BE)
+Assets:Current Assets:Banks Local:BPI Checking (GB)
+Assets:Current Assets:Banks Local:BPI Household
+Assets:Current Assets:Banks Local:BPI Savings (BE)
+Assets:Current Assets:Banks Local:BPI Savings (GB)
+Assets:Current Assets:Banks Local:Clearing PHP
+Assets:Current Assets:Banks Local:Interbank Transfers Clearing
+Assets:Current Assets:Banks Local:Metrobank Checking (GB)
+Assets:Current Assets:Banks Local:Metrobank Savings (GB)
+Assets:Current Assets:Banks Local:test local
+Assets:Fixed Assets
+Assets:Fixed Assets:Equipment General
+Assets:Fixed Assets:Other Asset
+Assets:Fixed Assets:Vehicle
+Assets:Investments
+Assets:Investments:Alessi Sore
+Assets:Investments:BacBoys Beach
+Assets:Investments:Baclands
+Assets:Investments:Biz Briony Bag
+Assets:Investments:House AU
+Assets:Investments:Investment in Business
+Assets:Investments:MyIsland
+Assets:Investments:Properties (GB)
+Assets:Investments:Rideshare
+Assets:Investments:Turing Machines
+Assets:Investments:Brokerage Account
+Assets:Investments:Brokerage Account:Bond
+Assets:Investments:Brokerage Account:Market Index
+Assets:Investments:Brokerage Account:Mutual Fund
+Assets:Investments:Brokerage Account:Stock
+Assets:Investments:Brokerage Account:UITF
+Assets:Investments:Brokerage Account:UITF:BPIPEIF
+Assets:Investments:Brokerage Account:UITF:BPSTUIT
+Assets:Investments:Brokerage Account:UITF:FMETF
+Assets:Investments:Brokerage Account:UITF:FMSLBAL
+Assets:Investments:Brokerage Account:UITF:FMSLEQT
+Assets:Investments:Brokerage Account:UITF:IFDLCPE
+Assets:Investments:Brokerage Account:UITF:IFDPPBP
+Assets:Investments:Brokerage Account:UITF:MBPKEAR
+Assets:Investments:Brokerage Account:UITF:MBSTART
+Assets:Investments:Brokerage Account:UITF:PHILAMF
+Assets:Investments:Brokerage Account:UITF:PROPBAL
+Assets:Investments:Brokerage Account:UITF:UCPBBAL
+Assets:Investments:Brokerage Account:UITF:UCPBEQT
+Assets:Loans to
+Assets:Loans to:Ara Loan
+Assets:Loans to:Benjo
+Assets:Loans to:Claire
+Assets:Loans to:Kit Wendell
+Assets:Loans to:Marie
+Assets:Loans to:Rizalyn
+Assets:Test Multi Asset 1
+Assets:Test Multi Asset 2
+Assets:Test USD
+Liabilities
+Liabilities:Credit Card
+Liabilities:Credit Card:BPI Mastercard
+Liabilities:Credit Card:BPI Mastercard:e-credit
+Liabilities:Credit Card:BPI Mastercard:Gold
+Liabilities:Credit Card:Citi Visa
+Liabilities:Credit Card:HSBC Visa
+Liabilities:Credit Card:Westpac Mastercard
+Liabilities:Loans
+Liabilities:Loans:Bill and Inday-Common
+Liabilities:Loans:Westpac Loan (AUD) - 44986 (BE)
+Liabilities:Other
+Liabilities:Other:Annie Account
+Liabilities:Other:Ara Loan
+Liabilities:Other:Ara Loan:Allowance
+Liabilities:Other:Ara Loan:Bonus
+Liabilities:Other:Ara Loan:OT
+Liabilities:Other:Ara Loan:Others
+Liabilities:Other:Ara Loan:Salary
+Liabilities:Other:Marie
+Liabilities:Other:Michelle Loan
+Liabilities:Other:Michelle Loan:Allowance
+Liabilities:Other:Michelle Loan:OT
+Liabilities:Other:Michelle Loan:Salary
+Liabilities:Test Multi Liability 1
+Income
+Income:Bonus
+Income:Dividend Income
+Income:Gifts Received
+Income:Interest Income
+Income:Interest Income:Bond Interest
+Income:Interest Income:CD Interest
+Income:Interest Income:Checking Interest
+Income:Interest Income:Money Market Interest
+Income:Interest Income:Other Interest
+Income:Interest Income:Savings Interest
+Income:Other Income
+Income:Rent
+Income:Salary
+Income:Salary:Briony
+Income:Salary:Gio
+Exchange Rate
+Exchange Rate:Imbalance-ARS
+Exchange Rate:Imbalance-AUD
+Exchange Rate:Imbalance-BMD
+Exchange Rate:Imbalance-CNY
+Exchange Rate:Imbalance-EUR
+Exchange Rate:Imbalance-HUF
+Exchange Rate:Imbalance-IDR
+Exchange Rate:Imbalance-KHR
+Exchange Rate:Imbalance-KRW
+Exchange Rate:Imbalance-PHP
+Exchange Rate:Imbalance-USD
+Exchange Rate:Imbalance-VND
+Expenses
+Expenses:Banking Costs
+Expenses:Banking Costs:Bank Service Charge
+Expenses:Banking Costs:Credit Card
+Expenses:Banking Costs:Interest
+Expenses:Banking Costs:Mortgage Interest
+Expenses:Childcare
+Expenses:Childcare:Books
+Expenses:Childcare:Clothes
+Expenses:Childcare:Doctor
+Expenses:Childcare:Extracurricular Activities
+Expenses:Childcare:Others
+Expenses:Childcare:School Supplies
+Expenses:Childcare:Toys
+Expenses:Childcare:Tuition Fees
+Expenses:Clothes
+Expenses:Depreciation
+Expenses:Education
+Expenses:Education:Books
+Expenses:Education:Newspaper & Magazines
+Expenses:Electronics & Software
+Expenses:Entertainment
+Expenses:Entertainment:Drinks
+Expenses:Entertainment:Music/Movies
+Expenses:Entertainment:Recreation
+Expenses:Exchange Rates Loss
+Expenses:Food
+Expenses:Food:Alcohol
+Expenses:Food:Dining
+Expenses:Food:Groceries
+Expenses:Gadgets
+Expenses:Gifts
+Expenses:Health
+Expenses:Health:Alternative
+Expenses:Health:Dental
+Expenses:Health:Doctor
+Expenses:Health:Medicines
+Expenses:Health:Sports
+Expenses:Household Staff
+Expenses:Household Staff:Ara
+Expenses:Household Staff:Ara:Allowance
+Expenses:Household Staff:Ara:Basic
+Expenses:Household Staff:Ara:Benefits
+Expenses:Household Staff:Ara:Bonus
+Expenses:Household Staff:Ara:Load
+Expenses:Household Staff:Ara:Medical
+Expenses:Household Staff:Ara:OT
+Expenses:Household Staff:Ara:Others
+Expenses:Household Staff:Marie
+Expenses:Household Staff:Marie:Allowance
+Expenses:Household Staff:Marie:Basic
+Expenses:Household Staff:Marie:Benefits
+Expenses:Household Staff:Marie:Bonus
+Expenses:Household Staff:Marie:Load
+Expenses:Household Staff:Marie:Medical
+Expenses:Household Staff:Marie:OT
+Expenses:Household Staff:Marie:Others
+Expenses:Household Staff:Michelle
+Expenses:Household Staff:Michelle:Allowance
+Expenses:Household Staff:Michelle:Basic
+Expenses:Household Staff:Michelle:Benefits
+Expenses:Household Staff:Michelle:Bonus
+Expenses:Household Staff:Michelle:Load
+Expenses:Household Staff:Michelle:Medical
+Expenses:Household Staff:Michelle:OT
+Expenses:Household Staff:Michelle:Others
+Expenses:Household Staff:Others
+Expenses:Household Supplies
+Expenses:Household Supplies:Pet Expenses
+Expenses:Housing
+Expenses:Housing:Gardening
+Expenses:Housing:Pool Services
+Expenses:Housing:Rent
+Expenses:Housing:Repairs
+Expenses:Housing:Storage
+Expenses:Insurance
+Expenses:Insurance:Auto Insurance
+Expenses:Insurance:Health Insurance
+Expenses:Insurance:Home Insurance
+Expenses:Insurance:Life Insurance
+Expenses:Insurance:Travel Insurance
+Expenses:Miscellaneous
+Expenses:Miscellaneous:Adjustment
+Expenses:Miscellaneous:Others
+Expenses:Miscellaneous:Unaccounted
+Expenses:Parental Care
+Expenses:Personal Care
+Expenses:Professional Development & Productivity
+Expenses:Professional Fees
+Expenses:Subscriptions
+Expenses:Taxes
+Expenses:Test Multi Expense 1
+Expenses:Test Multi Expense 2
+Expenses:Transportation
+Expenses:Transportation:Gas
+Expenses:Transportation:Parking
+Expenses:Transportation:Public
+Expenses:Transportation:Registration
+Expenses:Transportation:Repair and Maintenance
+Expenses:Travel
+Expenses:Travel:Fare
+Expenses:Travel:Hotel
+Expenses:Travel:Internet
+Expenses:Travel:Others
+Expenses:Travel:Taxi/Car Rental
+Expenses:Utilities
+Expenses:Utilities:Cable
+Expenses:Utilities:Drinking Water
+Expenses:Utilities:Electric
+Expenses:Utilities:Gas
+Expenses:Utilities:Internet
+Expenses:Utilities:Mobile
+Expenses:Utilities:Phone
+Expenses:Utilities:Water
+Equity
+Equity:Opening Balance
+Equity:Opening Balance:AUD
+Equity:Opening Balance:PHP
+Equity:Opening Balance:USD
+Equity:Opening Balances
+Equity:Opening Balances - TWD
+Trading
+Trading:CURRENCY
+Trading:CURRENCY:ARS
+Trading:CURRENCY:AUD
+Trading:CURRENCY:BMD
+Trading:CURRENCY:CAD
+Trading:CURRENCY:CNY
+Trading:CURRENCY:EUR
+Trading:CURRENCY:GBP
+Trading:CURRENCY:HKD
+Trading:CURRENCY:HUF
+Trading:CURRENCY:IDR
+Trading:CURRENCY:ILS
+Trading:CURRENCY:JPY
+Trading:CURRENCY:KHR
+Trading:CURRENCY:KRW
+Trading:CURRENCY:MYR
+Trading:CURRENCY:PHP
+Trading:CURRENCY:QAR
+Trading:CURRENCY:SGD
+Trading:CURRENCY:THB
+Trading:CURRENCY:USD
+Trading:CURRENCY:VND
+Trading:FUND
+Trading:FUND:BPIPEIF
+Trading:FUND:BPSTUIT
+Trading:FUND:FMETF
+Trading:FUND:FMSLBAL
+Trading:FUND:FMSLEQT
+Trading:FUND:IFDLCPE
+Trading:FUND:IFDPPBP
+Trading:FUND:MBPKEAR
+Trading:FUND:MBSTART
+Trading:FUND:PHILAMF
+Trading:FUND:PROPBAL
+Trading:FUND:UCPBBAL
+Trading:FUND:UCPBEQT
+Imbalance-PHP
+Imbalance-USD
+Orphan AUD
+Orphan-PHP
+Orphan-USD

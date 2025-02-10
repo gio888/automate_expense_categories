@@ -1,0 +1,74 @@
+                                                      precision    recall  f1-score   support
+
+     Assets:Current Assets:Banks Local:BPI ATM House       0.99      0.99      0.99       136
+Assets:Current Assets:Cash Local:Cash in Wallet (BE)       1.00      0.56      0.71         9
+Assets:Current Assets:Cash Local:Cash in Wallet (GB)       0.38      0.50      0.43         6
+                Assets:Current Assets:Cash Local:EPS       0.50      1.00      0.67         1
+                     Assets:Fixed Assets:Other Asset       0.00      0.00      0.00         0
+                               Assets:Loans to:Marie       0.00      0.00      0.00         0
+                          Equity:Opening Balance:PHP       1.00      1.00      1.00         1
+                            Expenses:Childcare:Books       0.00      0.00      0.00         1
+                          Expenses:Childcare:Clothes       0.25      1.00      0.40         2
+       Expenses:Childcare:Extracurricular Activities       0.91      0.81      0.86        26
+                           Expenses:Childcare:Others       0.00      0.00      0.00         3
+                  Expenses:Childcare:School Supplies       0.33      0.33      0.33         3
+                             Expenses:Childcare:Toys       0.00      0.00      0.00         0
+                                Expenses:Food:Dining       0.96      0.79      0.87        34
+                             Expenses:Food:Groceries       0.94      0.98      0.96      1092
+                                      Expenses:Gifts       0.86      0.70      0.78        27
+                         Expenses:Health:Alternative       0.50      1.00      0.67         1
+                           Expenses:Health:Medicines       0.83      0.83      0.83        12
+                              Expenses:Health:Sports       0.90      0.53      0.67        17
+              Expenses:Household Staff:Ara:Allowance       0.80      0.50      0.62         8
+                  Expenses:Household Staff:Ara:Basic       1.00      1.00      1.00         1
+               Expenses:Household Staff:Ara:Benefits       0.60      1.00      0.75         3
+                  Expenses:Household Staff:Ara:Bonus       0.00      0.00      0.00         2
+                   Expenses:Household Staff:Ara:Load       0.91      0.91      0.91        11
+                Expenses:Household Staff:Ara:Medical       0.50      0.50      0.50         2
+                     Expenses:Household Staff:Ara:OT       0.40      0.29      0.33         7
+                 Expenses:Household Staff:Ara:Others       0.00      0.00      0.00         4
+            Expenses:Household Staff:Marie:Allowance       0.80      1.00      0.89         8
+                Expenses:Household Staff:Marie:Basic       1.00      1.00      1.00         3
+             Expenses:Household Staff:Marie:Benefits       0.00      0.00      0.00         1
+                Expenses:Household Staff:Marie:Bonus       0.00      0.00      0.00         2
+                 Expenses:Household Staff:Marie:Load       1.00      1.00      1.00        12
+              Expenses:Household Staff:Marie:Medical       0.00      0.00      0.00         2
+                   Expenses:Household Staff:Marie:OT       0.50      0.67      0.57         3
+               Expenses:Household Staff:Marie:Others       1.00      1.00      1.00         1
+           Expenses:Household Staff:Michelle:Medical       0.00      0.00      0.00         1
+                Expenses:Household Staff:Michelle:OT       0.83      1.00      0.91         5
+            Expenses:Household Staff:Michelle:Others       0.20      1.00      0.33         1
+                     Expenses:Household Staff:Others       1.00      1.00      1.00         1
+                         Expenses:Household Supplies       0.78      0.51      0.61        93
+            Expenses:Household Supplies:Pet Expenses       0.67      0.73      0.70        11
+                          Expenses:Housing:Gardening       0.50      0.10      0.17        10
+                      Expenses:Housing:Pool Services       0.00      0.00      0.00         5
+                            Expenses:Housing:Repairs       0.50      0.75      0.60         4
+                   Expenses:Insurance:Auto Insurance       0.00      0.00      0.00         1
+                              Expenses:Miscellaneous       0.00      0.00      0.00         1
+                   Expenses:Miscellaneous:Adjustment       1.00      0.89      0.94        27
+                  Expenses:Miscellaneous:Unaccounted       0.00      0.00      0.00         2
+                              Expenses:Personal Care       0.00      0.00      0.00         1
+                          Expenses:Professional Fees       0.83      0.88      0.85       177
+                                      Expenses:Taxes       0.00      0.00      0.00         1
+                     Expenses:Transportation:Parking       0.63      1.00      0.77        12
+                      Expenses:Transportation:Public       0.89      0.89      0.89        38
+                Expenses:Transportation:Registration       0.29      1.00      0.44         2
+                   Expenses:Utilities:Drinking Water       0.98      0.98      0.98        56
+                         Expenses:Utilities:Electric       0.00      0.00      0.00         1
+                              Expenses:Utilities:Gas       0.83      1.00      0.91         5
+                           Expenses:Utilities:Mobile       0.00      0.00      0.00         1
+                Liabilities:Other:Ara Loan:Allowance       0.86      0.97      0.92        39
+                       Liabilities:Other:Ara Loan:OT       0.00      0.00      0.00         3
+                   Liabilities:Other:Ara Loan:Others       0.00      0.00      0.00         0
+                             Liabilities:Other:Marie       1.00      0.33      0.50         3
+           Liabilities:Other:Michelle Loan:Allowance       0.96      0.92      0.94        24
+                  Liabilities:Other:Michelle Loan:OT       1.00      1.00      1.00         2
+              Liabilities:Other:Michelle Loan:Salary       0.00      0.00      0.00         1
+                                          Orphan-PHP       0.00      0.00      0.00         1
+                                   Split Transaction       1.00      0.80      0.89         5
+                                             Unknown       0.00      0.00      0.00         0
+
+                                            accuracy                           0.90      1975
+                                           macro avg       0.49      0.52      0.49      1975
+                                        weighted avg       0.89      0.90      0.89      1975

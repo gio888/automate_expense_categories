@@ -1,0 +1,71 @@
+                                                      precision    recall  f1-score   support
+
+     Assets:Current Assets:Banks Local:BPI ATM House       1.00      0.99      1.00       136
+Assets:Current Assets:Cash Local:Cash in Wallet (BE)       0.71      0.56      0.63         9
+Assets:Current Assets:Cash Local:Cash in Wallet (GB)       0.50      0.67      0.57         6
+                Assets:Current Assets:Cash Local:EPS       0.50      1.00      0.67         1
+                     Assets:Fixed Assets:Other Asset       0.00      0.00      0.00         0
+                          Equity:Opening Balance:PHP       1.00      1.00      1.00         1
+                            Expenses:Childcare:Books       0.00      0.00      0.00         1
+                          Expenses:Childcare:Clothes       0.25      1.00      0.40         2
+       Expenses:Childcare:Extracurricular Activities       1.00      0.77      0.87        26
+                           Expenses:Childcare:Others       0.00      0.00      0.00         3
+                  Expenses:Childcare:School Supplies       0.50      0.33      0.40         3
+                                Expenses:Food:Dining       0.83      0.88      0.86        34
+                             Expenses:Food:Groceries       0.93      0.97      0.95      1092
+                                      Expenses:Gifts       0.95      0.70      0.81        27
+                         Expenses:Health:Alternative       0.33      1.00      0.50         1
+                           Expenses:Health:Medicines       0.89      0.67      0.76        12
+                              Expenses:Health:Sports       1.00      0.53      0.69        17
+              Expenses:Household Staff:Ara:Allowance       0.80      0.50      0.62         8
+                  Expenses:Household Staff:Ara:Basic       1.00      1.00      1.00         1
+               Expenses:Household Staff:Ara:Benefits       0.43      1.00      0.60         3
+                  Expenses:Household Staff:Ara:Bonus       0.00      0.00      0.00         2
+                   Expenses:Household Staff:Ara:Load       0.91      0.91      0.91        11
+                Expenses:Household Staff:Ara:Medical       0.50      0.50      0.50         2
+                     Expenses:Household Staff:Ara:OT       0.57      0.57      0.57         7
+                 Expenses:Household Staff:Ara:Others       0.00      0.00      0.00         4
+            Expenses:Household Staff:Marie:Allowance       0.73      1.00      0.84         8
+                Expenses:Household Staff:Marie:Basic       1.00      1.00      1.00         3
+             Expenses:Household Staff:Marie:Benefits       0.00      0.00      0.00         1
+                Expenses:Household Staff:Marie:Bonus       0.50      0.50      0.50         2
+                 Expenses:Household Staff:Marie:Load       1.00      1.00      1.00        12
+              Expenses:Household Staff:Marie:Medical       0.00      0.00      0.00         2
+                   Expenses:Household Staff:Marie:OT       0.75      1.00      0.86         3
+               Expenses:Household Staff:Marie:Others       1.00      1.00      1.00         1
+           Expenses:Household Staff:Michelle:Medical       0.00      0.00      0.00         1
+                Expenses:Household Staff:Michelle:OT       1.00      1.00      1.00         5
+            Expenses:Household Staff:Michelle:Others       0.20      1.00      0.33         1
+                     Expenses:Household Staff:Others       1.00      1.00      1.00         1
+                         Expenses:Household Supplies       0.77      0.47      0.59        93
+            Expenses:Household Supplies:Pet Expenses       0.88      0.64      0.74        11
+                          Expenses:Housing:Gardening       0.00      0.00      0.00        10
+                      Expenses:Housing:Pool Services       0.00      0.00      0.00         5
+                            Expenses:Housing:Repairs       0.50      0.75      0.60         4
+                   Expenses:Insurance:Auto Insurance       0.00      0.00      0.00         1
+                              Expenses:Miscellaneous       0.00      0.00      0.00         1
+                   Expenses:Miscellaneous:Adjustment       1.00      0.93      0.96        27
+                  Expenses:Miscellaneous:Unaccounted       0.00      0.00      0.00         2
+                              Expenses:Personal Care       0.00      0.00      0.00         1
+                          Expenses:Professional Fees       0.84      0.84      0.84       177
+                                      Expenses:Taxes       0.00      0.00      0.00         1
+                     Expenses:Transportation:Parking       0.63      1.00      0.77        12
+                      Expenses:Transportation:Public       0.84      0.95      0.89        38
+                Expenses:Transportation:Registration       0.29      1.00      0.44         2
+                   Expenses:Utilities:Drinking Water       0.96      0.98      0.97        56
+                         Expenses:Utilities:Electric       0.00      0.00      0.00         1
+                              Expenses:Utilities:Gas       0.83      1.00      0.91         5
+                           Expenses:Utilities:Mobile       0.00      0.00      0.00         1
+                Liabilities:Other:Ara Loan:Allowance       0.86      0.97      0.92        39
+                       Liabilities:Other:Ara Loan:OT       0.00      0.00      0.00         3
+                   Liabilities:Other:Ara Loan:Others       0.00      0.00      0.00         0
+                             Liabilities:Other:Marie       0.00      0.00      0.00         3
+           Liabilities:Other:Michelle Loan:Allowance       0.96      0.92      0.94        24
+                  Liabilities:Other:Michelle Loan:OT       1.00      1.00      1.00         2
+              Liabilities:Other:Michelle Loan:Salary       0.00      0.00      0.00         1
+                                          Orphan-PHP       0.00      0.00      0.00         1
+                                   Split Transaction       1.00      0.80      0.89         5
+
+                                            accuracy                           0.89      1975
+                                           macro avg       0.51      0.56      0.51      1975
+                                        weighted avg       0.88      0.89      0.88      1975

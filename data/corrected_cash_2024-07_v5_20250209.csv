@@ -1,0 +1,128 @@
+Date,Description,Amount (Negated),Amount,Category,Predicted Category,Prediction_Confidence,Check
+7/1/2024,rolly salary,3000,,Expenses:Professional Fees,Expenses:Professional Fees,41%,Prediction Correct
+7/3/2024,withdraw,,20000,Assets:Current Assets:Banks Local:BPI ATM House,Assets:Current Assets:Banks Local:BPI ATM House,58%,Prediction Correct
+7/5/2024,bamboo diffuser,522,,Expenses:Food:Groceries,Expenses:Food:Groceries,59%,Prediction Correct
+7/5/2024,cupling,250,,Expenses:Food:Groceries,Expenses:Food:Groceries,59%,Prediction Correct
+7/5/2024,willy labor,500,,Expenses:Professional Fees,Expenses:Professional Fees,50%,Prediction Correct
+7/5/2024,mam B,60,,Expenses:Transportation:Parking,Expenses:Transportation:Parking,39%,Prediction Correct
+7/5/2024,elmer,1000,,Expenses:Professional Fees,Expenses:Housing:Gardening,33%,Prediction Not Correct
+7/5/2024,santis rider,250,,Expenses:Professional Fees,Expenses:Professional Fees,61%,Prediction Correct
+7/5/2024,yoghurt,228,,Expenses:Food:Groceries,Expenses:Food:Groceries,59%,Prediction Correct
+7/5/2024,milk,690,,Expenses:Food:Groceries,Expenses:Food:Groceries,66%,Prediction Correct
+7/5/2024,truffle,334,,Expenses:Food:Groceries,Expenses:Food:Groceries,59%,Prediction Correct
+7/5/2024,ham,242,,Expenses:Food:Groceries,Expenses:Food:Groceries,64%,Prediction Correct
+7/5/2024,ground beef,1350,,Expenses:Food:Groceries,Expenses:Food:Groceries,63%,Prediction Correct
+7/5/2024,pork neck,938,,Expenses:Food:Groceries,Expenses:Food:Groceries,64%,Prediction Correct
+7/5/2024,strawberry,280,,Expenses:Food:Groceries,Expenses:Food:Groceries,61%,Prediction Correct
+7/5/2024,grapes,250,,Expenses:Food:Groceries,Expenses:Food:Groceries,63%,Prediction Correct
+7/5/2024,white onion,160,,Expenses:Food:Groceries,Expenses:Food:Groceries,49%,Prediction Correct
+7/5/2024,leeks,65,,Expenses:Food:Groceries,Expenses:Food:Groceries,62%,Prediction Correct
+7/5/2024,ampalaya,90,,Expenses:Food:Groceries,Expenses:Food:Groceries,60%,Prediction Correct
+7/5/2024,betroot,180,,Expenses:Food:Groceries,Expenses:Food:Groceries,60%,Prediction Correct
+7/5/2024,potato,250,,Expenses:Food:Groceries,Expenses:Food:Groceries,64%,Prediction Correct
+7/5/2024,papaya,120,,Expenses:Food:Groceries,Expenses:Food:Groceries,62%,Prediction Correct
+7/5/2024,mushroom,180,,Expenses:Food:Groceries,Expenses:Food:Groceries,59%,Prediction Correct
+7/5/2024,french beans,120,,Expenses:Food:Groceries,Expenses:Food:Groceries,64%,Prediction Correct
+7/5/2024,bokchoy,70,,Expenses:Food:Groceries,Expenses:Food:Groceries,60%,Prediction Correct
+7/5/2024,snow peas,90,,Expenses:Food:Groceries,Expenses:Food:Groceries,63%,Prediction Correct
+7/5/2024,basil,100,,Expenses:Food:Groceries,Expenses:Food:Groceries,64%,Prediction Correct
+7/5/2024,mint,100,,Expenses:Food:Groceries,Expenses:Food:Groceries,64%,Prediction Correct
+7/5/2024,alugbati,45,,Expenses:Food:Groceries,Expenses:Food:Groceries,63%,Prediction Correct
+7/5/2024,spring onion,45,,Expenses:Food:Groceries,Expenses:Food:Groceries,65%,Prediction Correct
+7/5/2024,mango,160,,Expenses:Food:Groceries,Expenses:Food:Groceries,64%,Prediction Correct
+7/5/2024,romaine,560,,Expenses:Food:Groceries,Expenses:Food:Groceries,64%,Prediction Correct
+7/5/2024,cucumber,320,,Expenses:Food:Groceries,Expenses:Food:Groceries,64%,Prediction Correct
+7/5/2024,celery,180,,Expenses:Food:Groceries,Expenses:Food:Groceries,64%,Prediction Correct
+7/5/2024,apple,150,,Expenses:Food:Groceries,Expenses:Food:Groceries,53%,Prediction Correct
+7/5/2024,broccoli,360,,Expenses:Food:Groceries,Expenses:Food:Groceries,64%,Prediction Correct
+7/5/2024,egg,250,,Expenses:Food:Groceries,Expenses:Food:Groceries,65%,Prediction Correct
+7/5/2024,prawn,1480,,Expenses:Food:Groceries,Expenses:Food:Groceries,59%,Prediction Correct
+7/5/2024,asparagus,450,,Expenses:Food:Groceries,Expenses:Food:Groceries,64%,Prediction Correct
+7/5/2024,wansoy,210,,Expenses:Food:Groceries,Expenses:Food:Groceries,63%,Prediction Correct
+7/5/2024,flowers,550,,Expenses:Food:Groceries,Expenses:Food:Groceries,45%,Prediction Correct
+7/5/2024,tilapia,420,,Expenses:Food:Groceries,Expenses:Food:Groceries,60%,Prediction Correct
+7/5/2024,talakitok,750,,Expenses:Food:Groceries,Expenses:Food:Groceries,59%,Prediction Correct
+7/5/2024,pampano,580,,Expenses:Food:Groceries,Expenses:Food:Groceries,63%,Prediction Correct
+7/5/2024,ara food allowance,1000,,Liabilities:Other:Ara Loan:Allowance,Liabilities:Other:Ara Loan:Allowance,56%,Prediction Correct
+7/5/2024,michelle food allowance,1000,,Liabilities:Other:Michelle Loan:Allowance,Liabilities:Other:Michelle Loan:Allowance,56%,Prediction Correct
+7/5/2024,knife sharpening,750,,Expenses:Professional Fees,Expenses:Professional Fees,63%,Prediction Correct
+7/5/2024,ARC,480,,Expenses:Utilities:Drinking Water,Expenses:Utilities:Drinking Water,64%,Prediction Correct
+7/6/2024,withdraw,,9000,Assets:Current Assets:Banks Local:BPI ATM House,Assets:Current Assets:Banks Local:BPI ATM House,58%,Prediction Correct
+7/6/2024,shadow food & litter,3420,,Expenses:Household Supplies:Pet Expenses,Expenses:Household Supplies:Pet Expenses,60%,Prediction Correct
+7/6/2024,soda stream + delfee,1890,,Expenses:Professional Fees,Expenses:Professional Fees,34%,Prediction Correct
+7/6/2024,bernard berries,900,,Expenses:Food:Groceries,Expenses:Food:Groceries,63%,Prediction Correct
+7/6/2024,nuts,1350,,Expenses:Food:Groceries,Expenses:Food:Groceries,63%,Prediction Correct
+7/6/2024,nuts del fee,300,,Expenses:Professional Fees,Expenses:Professional Fees,43%,Prediction Correct
+7/7/2024,withdraw,,6000,Assets:Current Assets:Banks Local:BPI ATM House,Assets:Current Assets:Banks Local:BPI ATM House,58%,Prediction Correct
+7/7/2024,arguilla LCD phone change,2000,,Expenses:Gadgets,Expenses:Food:Groceries,43%,Prediction Not Correct
+7/8/2024,EPS Healthy Option,,3019,Assets:Current Assets:Cash Local:EPS,Assets:Current Assets:Cash Local:EPS,49%,Prediction Correct
+7/8/2024,EPS Healthy Option,3019,,Assets:Current Assets:Cash Local:EPS,Assets:Current Assets:Cash Local:EPS,49%,Prediction Correct
+7/8/2024,healthy option alessi,2120,,Expenses:Health:Alternative,Expenses:Health:Alternative,50%,Prediction Correct
+7/8/2024,taxi,100,,Expenses:Transportation:Public,Expenses:Transportation:Public,64%,Prediction Correct
+7/8/2024,summit water,2015,,Expenses:Utilities:Drinking Water,Expenses:Utilities:Drinking Water,65%,Prediction Correct
+7/8/2024,EPS Mercury Drug,,1160,Expenses:Health:Medicines,Expenses:Health:Medicines,46%,Prediction Correct
+7/8/2024,EPS Mercury Drug,1160,,Expenses:Health:Medicines,Expenses:Health:Medicines,46%,Prediction Correct
+7/8/2024,SM supermarket veggies,820,,Expenses:Food:Groceries,Expenses:Food:Groceries,59%,Prediction Correct
+7/9/2024,mam B Handihaler,305,,Expenses:Personal Care,Expenses:Transportation:Parking,39%,Prediction Not Correct
+7/9/2024,del fee,150,,Expenses:Professional Fees,Expenses:Professional Fees,63%,Prediction Correct
+7/9/2024,shopee container,160,,Expenses:Food:Groceries,Expenses:Food:Groceries,30%,Prediction Correct
+7/9/2024,mam B tip,1000,,Expenses:Professional Fees,Expenses:Food:Groceries,21%,Prediction Not Correct
+7/11/2024,withdraw,,10000,Assets:Current Assets:Banks Local:BPI ATM House,Assets:Current Assets:Banks Local:BPI ATM House,58%,Prediction Correct
+7/11/2024,albert couch,10000,,Expenses:Professional Fees,Expenses:Food:Groceries,59%,Prediction Not Correct
+7/12/2024,withdraw,,18000,Assets:Current Assets:Banks Local:BPI ATM House,Assets:Current Assets:Banks Local:BPI ATM House,58%,Prediction Correct
+7/12/2024,true value sponge cloth,1020,,Expenses:Household Supplies,Expenses:Household Supplies,59%,Prediction Correct
+7/12/2024,elmer x3,3000,,Expenses:Professional Fees,Expenses:Food:Groceries,40%,Prediction Not Correct
+7/12/2024,michelle food allowance,3000,,Liabilities:Other:Michelle Loan:Allowance,Liabilities:Other:Michelle Loan:Allowance,56%,Prediction Correct
+7/12/2024,pomelo,189,,Expenses:Food:Groceries,Expenses:Food:Groceries,64%,Prediction Correct
+7/12/2024,orange,100,,Expenses:Food:Groceries,Expenses:Food:Groceries,64%,Prediction Correct
+7/12/2024,banana,159,,Expenses:Food:Groceries,Expenses:Food:Groceries,64%,Prediction Correct
+7/12/2024,romaine,720,,Expenses:Food:Groceries,Expenses:Food:Groceries,64%,Prediction Correct
+7/12/2024,pipino,391,,Expenses:Food:Groceries,Expenses:Food:Groceries,63%,Prediction Correct
+7/12/2024,celery,260,,Expenses:Food:Groceries,Expenses:Food:Groceries,64%,Prediction Correct
+7/12/2024,apple,150,,Expenses:Food:Groceries,Expenses:Food:Groceries,53%,Prediction Correct
+7/12/2024,prawn,1500,,Expenses:Food:Groceries,Expenses:Food:Groceries,59%,Prediction Correct
+7/12/2024,tilapya,510,,Expenses:Food:Groceries,Expenses:Food:Groceries,62%,Prediction Correct
+7/12/2024,talakitok,760,,Expenses:Food:Groceries,Expenses:Food:Groceries,59%,Prediction Correct
+7/12/2024,pampano,610,,Expenses:Food:Groceries,Expenses:Food:Groceries,63%,Prediction Correct
+7/12/2024,arguilla charger,420,,Expenses:Food:Groceries,Expenses:Food:Groceries,59%,Prediction Correct
+7/16/2024,withdraw,,16000,Assets:Current Assets:Banks Local:BPI ATM House,Assets:Current Assets:Banks Local:BPI ATM House,58%,Prediction Correct
+7/16/2024,albert couch,4000,,Expenses:Professional Fees,Expenses:Food:Groceries,59%,Prediction Not Correct
+7/16/2024,willy salary,500,,Expenses:Professional Fees,Expenses:Professional Fees,58%,Prediction Correct
+7/16/2024,seams stress,1000,,Expenses:Professional Fees,Expenses:Food:Groceries,59%,Prediction Not Correct
+7/16/2024,aircon cleaning,5100,,Expenses:Professional Fees,Expenses:Housing:Repairs,44%,Prediction Not Correct
+7/18/2024,lalamove vacuum,250,,Expenses:Professional Fees,Expenses:Professional Fees,60%,Prediction Correct
+7/19/2024,lalamove seamstress,120,,Expenses:Professional Fees,Expenses:Professional Fees,60%,Prediction Correct
+7/19/2024,shadow grab,800,,Expenses:Household Supplies:Pet Expenses,Expenses:Household Supplies:Pet Expenses,48%,Prediction Correct
+7/31/2024,withdraw,,15000,Assets:Current Assets:Banks Local:BPI ATM House,Assets:Current Assets:Banks Local:BPI ATM House,58%,Prediction Correct
+7/31/2024,shadow cat hotel extra fee,2400,,Expenses:Household Supplies:Pet Expenses,Expenses:Household Supplies:Pet Expenses,32%,Prediction Correct
+7/31/2024,honey,2250,,Expenses:Food:Groceries,Expenses:Food:Groceries,62%,Prediction Correct
+7/31/2024,dry cat food,1157,,Expenses:Household Supplies:Pet Expenses,Expenses:Childcare:Toys,46%,Prediction Not Correct
+7/31/2024,landmark,1324,,Expenses:Household Supplies,Expenses:Household Supplies,48%,Prediction Correct
+7/31/2024,ara angkas,200,,Expenses:Transportation:Public,Expenses:Transportation:Public,63%,Prediction Correct
+7/31/2024,alessi healthy option,2160,,Expenses:Health:Alternative,Expenses:Health:Alternative,50%,Prediction Correct
+7/31/2024,santis rider,250,,Expenses:Professional Fees,Expenses:Professional Fees,61%,Prediction Correct
+7/31/2024,ground pork,920,,Expenses:Food:Groceries,Expenses:Food:Groceries,64%,Prediction Correct
+7/31/2024,ground beef,515,,Expenses:Food:Groceries,Expenses:Food:Groceries,63%,Prediction Correct
+7/31/2024,yoghurt,420,,Expenses:Food:Groceries,Expenses:Food:Groceries,59%,Prediction Correct
+7/31/2024,gouda cheese,370,,Expenses:Food:Groceries,Expenses:Food:Groceries,64%,Prediction Correct
+7/31/2024,amlife amplodipine,735,,Expenses:Health:Medicines,Expenses:Food:Groceries,59%,Prediction Not Correct
+7/31/2024,crestor,1028,,Expenses:Health:Medicines,Expenses:Food:Groceries,59%,Prediction Not Correct
+7/31/2024,rolly salary,3000,,Expenses:Professional Fees,Expenses:Professional Fees,41%,Prediction Correct
+7/31/2024,car van tip,500,,Expenses:Transportation:Public,Expenses:Transportation:Registration,58%,Prediction Not Correct
+7/31/2024,santis rider,250,,Expenses:Professional Fees,Expenses:Professional Fees,61%,Prediction Correct
+7/31/2024,tomatoes,83,,Expenses:Food:Groceries,Expenses:Food:Groceries,59%,Prediction Correct
+7/31/2024,pork neck,1033,,Expenses:Food:Groceries,Expenses:Food:Groceries,64%,Prediction Correct
+7/31/2024,milk,276,,Expenses:Food:Groceries,Expenses:Food:Groceries,66%,Prediction Correct
+7/31/2024,romaine,164,,Expenses:Food:Groceries,Expenses:Food:Groceries,64%,Prediction Correct
+7/31/2024,farmers ham,79,,Expenses:Food:Groceries,Expenses:Food:Groceries,64%,Prediction Correct
+7/31/2024,manchego,333,,Expenses:Food:Groceries,Expenses:Food:Groceries,62%,Prediction Correct
+7/31/2024,youghurt,228,,Expenses:Food:Groceries,Expenses:Food:Groceries,59%,Prediction Correct
+7/31/2024,parmesan,414,,Expenses:Food:Groceries,Expenses:Food:Groceries,59%,Prediction Correct
+7/31/2024,mozarella,392,,Expenses:Food:Groceries,Expenses:Food:Groceries,59%,Prediction Correct
+7/31/2024,calamansi,1020,,Expenses:Food:Groceries,Expenses:Food:Groceries,64%,Prediction Correct
+7/31/2024,cucumber,180,,Expenses:Food:Groceries,Expenses:Food:Groceries,64%,Prediction Correct
+7/31/2024,tomatoes,90,,Expenses:Food:Groceries,Expenses:Food:Groceries,59%,Prediction Correct
+7/31/2024,romaine,250,,Expenses:Food:Groceries,Expenses:Food:Groceries,64%,Prediction Correct
+7/31/2024,hotdog bread,180,,Expenses:Food:Groceries,Expenses:Food:Groceries,63%,Prediction Correct
+7/31/2024,nasonex alessi,1994,,Expenses:Health:Medicines,Expenses:Childcare:Clothes,33%,Prediction Not Correct
+7/31/2024,medicol,130,,Expenses:Health:Medicines,Expenses:Food:Groceries,59%,Prediction Not Correct
