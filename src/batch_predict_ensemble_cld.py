@@ -1,4 +1,9 @@
+import sys
 import os
+
+# Ensure the src directory is in the system path
+sys.path.append(os.path.join(os.path.dirname(__file__), "src"))
+
 import pandas as pd
 import numpy as np
 import joblib
