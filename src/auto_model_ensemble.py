@@ -1,4 +1,12 @@
+# First, only the essential imports for path setup
 import os
+import sys
+from pathlib import Path
+
+# Setup the path BEFORE any other imports
+PROJECT_ROOT = Path(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, str(PROJECT_ROOT))
+
 import pandas as pd
 import numpy as np
 import joblib
@@ -10,27 +18,86 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import f1_score, classification_report, roc_auc_score, average_precision_score
 from flaml import AutoML
+from google.cloud import storage
 
-# ✅ Define Paths
-PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DATA_DIR = os.path.join(PROJECT_ROOT, "data")
-MODELS_DIR = os.path.join(PROJECT_ROOT, "models")
-LOGS_DIR = os.path.join(PROJECT_ROOT, "logs")
+# Import our custom classes
+from src.model_storage import ModelStorage
+from src.model_registry import ModelRegistry
+
+# ✅ Define Paths and Configuration
+DATA_DIR = PROJECT_ROOT / "data"
+MODELS_DIR = PROJECT_ROOT / "models"
+LOGS_DIR = PROJECT_ROOT / "logs"
+REGISTRY_DIR = MODELS_DIR / "registry"
+
+# GCS Configuration
+BUCKET_NAME = "expense-categorization-ml-models-backup"
+CREDENTIALS_PATH = "***CREDENTIALS-REMOVED***"
 
 # Create directories if they don't exist
 os.makedirs(MODELS_DIR, exist_ok=True)
 os.makedirs(LOGS_DIR, exist_ok=True)
+os.makedirs(REGISTRY_DIR, exist_ok=True)
 
 # ✅ Setup Logging
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(message)s",
     handlers=[
-        logging.FileHandler(os.path.join(LOGS_DIR, "training.log")),
+        logging.FileHandler(LOGS_DIR / "training.log"),
         logging.StreamHandler()
     ]
 )
 logger = logging.getLogger(__name__)
+
+# Initialize storage and registry
+model_storage = ModelStorage(BUCKET_NAME, CREDENTIALS_PATH, MODELS_DIR)
+model_registry = ModelRegistry(REGISTRY_DIR, BUCKET_NAME, CREDENTIALS_PATH)
+
+def save_model(model, name: str, metrics: dict, training_data: str) -> dict:
+    """
+    Save model using ModelStorage and register it
+    
+    Args:
+        model: Trained model to save
+        name: Model name
+        metrics: Performance metrics
+        training_data: Training data file used
+    
+    Returns:
+        dict: Model save locations
+    """
+    try:
+        # Get next version
+        version = model_registry.get_latest_version(name)
+        version = (version or 0) + 1
+        
+        # Save model using storage class
+        locations = model_storage.save_model(model, name, version)
+        
+        # Register the model
+        model_registry.register_model(
+            model_name=name,
+            version=version,
+            locations=locations,
+            metrics=metrics,
+            training_data=training_data,
+            additional_metadata={
+                'framework': 'flaml',
+                'python_version': '3.9'  # You might want to get this dynamically
+            }
+        )
+        
+        logger.info(f"✅ Model {name} v{version} saved and registered successfully")
+        return locations
+        
+    except Exception as e:
+        logger.error(f"❌ Error saving {name} model: {str(e)}")
+        # Fallback to local save
+        local_path = MODELS_DIR / f"{name}_model_fallback.pkl"
+        joblib.dump(model, local_path)
+        logger.info(f"✅ Model saved locally as fallback: {local_path}")
+        return {'local_path': str(local_path)}
 
 def load_data():
     """Load the latest training data file"""
@@ -39,123 +106,72 @@ def load_data():
         if not files:
             raise FileNotFoundError("No training data files found")
         
-        DATA_FILE = sorted(files)[-1]
-        logger.info(f"📂 Loading training data: {DATA_FILE}")
-        df = pd.read_csv(os.path.join(DATA_DIR, DATA_FILE))
+        latest_file = sorted(files)[-1]
+        logger.info(f"📂 Loading training data: {latest_file}")
+        df = pd.read_csv(DATA_DIR / latest_file)
         
-        # Log DVC reminder
-        logger.info(f"🔔 Reminder: Run `dvc add {os.path.join(DATA_DIR, DATA_FILE)}` to track dataset changes.")
-        return df
+        return df, latest_file
     except Exception as e:
         logger.error(f"Error loading data: {str(e)}")
         raise
 
-def consolidate_rare_categories(df, min_samples=5):
-    """Consolidate categories with fewer than min_samples into an 'Other' category"""
-    category_counts = df["Category"].value_counts()
-    rare_categories = category_counts[category_counts < min_samples].index
-    
-    logger.info(f"\n📊 Before consolidation: {len(category_counts)} categories")
-    logger.info(f"Found {len(rare_categories)} categories with fewer than {min_samples} samples")
-    
-    # Create a mapping dictionary
-    category_mapping = {cat: "Other" for cat in rare_categories}
-    
-    # Apply mapping to create new column
-    df["Category_Consolidated"] = df["Category"].map(lambda x: category_mapping.get(x, x))
-    
-    # Log the changes
-    new_counts = df["Category_Consolidated"].value_counts()
-    logger.info(f"After consolidation: {len(new_counts)} categories")
-    logger.info("\nCategory distribution after consolidation:")
-    for cat, count in new_counts.items():
-        logger.info(f"{cat}: {count} samples ({count/len(df)*100:.2f}%)")
-    
-    return df
-
-def analyze_category_distribution(y):
-    """Analyze and log category distribution"""
-    category_counts = pd.Series(y).value_counts()
-    total_samples = len(y)
-    
-    logger.info("\n📊 Category distribution:")
-    for category, count in category_counts.items():
-        percentage = (count/total_samples) * 100
-        logger.info(f"{category}: {count} samples ({percentage:.2f}%)")
-    
-    return category_counts
-
-def save_model(model, name):
-    """Save a model to disk"""
-    path = os.path.join(MODELS_DIR, f"{name}_model.pkl")
-    joblib.dump(model, path)
-    logger.info(f"✅ Model saved: {path}")
-    return path
-
-def evaluate_model(model, X_test, y_test, compute_extra_metrics=False):
+def evaluate_model(model, X_test, y_test, compute_extra_metrics=True):
     """Evaluate model performance with various metrics"""
     metrics = {
         'macro_f1': f1_score(y_test, model.predict(X_test), average='macro')
     }
     
     if compute_extra_metrics:
-        y_pred_proba = model.predict_proba(X_test)
-        y_test_dummies = pd.get_dummies(y_test)
-        
-        metrics.update({
-            'roc_auc': roc_auc_score(y_test_dummies, y_pred_proba, multi_class='ovr'),
-            'pr_auc': average_precision_score(y_test_dummies, y_pred_proba)
-        })
+        try:
+            y_pred_proba = model.predict_proba(X_test)
+            y_test_dummies = pd.get_dummies(y_test)
+            
+            metrics.update({
+                'roc_auc': roc_auc_score(y_test_dummies, y_pred_proba, multi_class='ovr'),
+                'pr_auc': average_precision_score(y_test_dummies, y_pred_proba)
+            })
+        except Exception as e:
+            logger.warning(f"Could not compute probability-based metrics: {str(e)}")
     
     return metrics
 
-def log_metrics(metrics, model_name):
-    """Log model performance metrics"""
-    logger.info(f"📊 {model_name} performance: {metrics}")
-    
-    if os.getenv('PROD_ENVIRONMENT'):
-        metrics_file = os.path.join(LOGS_DIR, f"{model_name}_metrics.csv")
-        pd.DataFrame([metrics]).to_csv(
-            metrics_file,
-            mode='a',
-            header=not os.path.exists(metrics_file)
-        )
-
-def train_models(df, compute_shap=True, metrics_callback=None):
+def train_models(df, training_file, compute_shap=True, min_category_samples=5):
     """Train multiple models using FLAML AutoML"""
-    # Consolidate rare categories
-    df = consolidate_rare_categories(df, min_samples=5)
-    
-    # Prepare data
+    # Prepare initial data
     X = df["Description"].fillna("")
-    y = df["Category_Consolidated"].astype(str).fillna("Other")
+    y = df["Category"].astype(str).fillna("Other")
     
-    # Analyze category distribution
-    analyze_category_distribution(y)
+    # Analyze initial category distribution
+    category_counts = pd.Series(y).value_counts()
+    logger.info("\n📊 Initial category distribution:")
+    for category, count in category_counts.items():
+        logger.info(f"{category}: {count} samples ({count/len(y)*100:.2f}%)")
     
-    # Encode labels before splitting
-    label_encoder = LabelEncoder()
-    y_encoded = label_encoder.fit_transform(y)
+    # Filter categories based on minimum samples threshold
+    valid_categories = category_counts[category_counts >= min_category_samples].index
+    mask = y.isin(valid_categories)
+    X = X[mask]
+    y = y[mask]
     
-    # Save category mapping
-    category_mapping = dict(zip(label_encoder.classes_, range(len(label_encoder.classes_))))
-    joblib.dump(category_mapping, os.path.join(MODELS_DIR, "category_mapping.pkl"))
-    logger.info("✅ Category mapping saved.")
+    # Log filtering results
+    excluded_categories = set(category_counts.index) - set(valid_categories)
+    removed_samples = len(df) - len(X)
+    logger.info(f"\n📊 Category filtering results:")
+    logger.info(f"Minimum samples threshold: {min_category_samples}")
+    logger.info(f"Removed categories: {len(excluded_categories)}")
+    logger.info(f"Removed samples: {removed_samples} ({removed_samples/len(df)*100:.1f}%)")
+    if excluded_categories:
+        logger.info("\nExcluded categories (insufficient samples):")
+        for cat in excluded_categories:
+            logger.info(f"- {cat}: {category_counts.get(cat, 0)} samples")
     
-    # Split data with stratification
-    X_train, X_test, y_train_encoded, y_test_encoded = train_test_split(
-        X, y_encoded,
+    # Split data
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y,
         test_size=0.2,
         random_state=42,
-        stratify=y_encoded
+        stratify=y
     )
-    
-    logger.info(f"🔍 Unique categories in training set: {len(np.unique(y_train_encoded))}")
-    logger.info(f"🔍 Unique categories in test set: {len(np.unique(y_test_encoded))}")
-    
-    # Save label encoder
-    joblib.dump(label_encoder, os.path.join(MODELS_DIR, "label_encoder.pkl"))
-    logger.info("✅ Label encoder saved.")
     
     # Vectorize text
     tfidf_vectorizer = TfidfVectorizer(
@@ -167,25 +183,16 @@ def train_models(df, compute_shap=True, metrics_callback=None):
     X_train_tfidf = tfidf_vectorizer.fit_transform(X_train)
     X_test_tfidf = tfidf_vectorizer.transform(X_test)
     
-    # Verify data alignment
-    assert X_train_tfidf.shape[0] == len(y_train_encoded), "Training data/label mismatch"
-    assert X_test_tfidf.shape[0] == len(y_test_encoded), "Test data/label mismatch"
-    
-    logger.info(f"🔍 Training data shape: {X_train_tfidf.shape}, Labels shape: {len(y_train_encoded)}")
-    logger.info(f"🔍 Test data shape: {X_test_tfidf.shape}, Labels shape: {len(y_test_encoded)}")
-    
-    # Save vectorizer
-    joblib.dump(tfidf_vectorizer, os.path.join(MODELS_DIR, "tfidf_vectorizer.pkl"))
-    logger.info("✅ TF-IDF vectorizer saved.")
-    
     models = {}
+    model_metrics = {}
+    
     for model_name in ["lgbm", "xgboost", "catboost"]:
         try:
-            logger.info(f"🚀 Training {model_name} model...")
+            logger.info(f"\n{'='*30}\n🚀 Training {model_name} model...\n{'='*30}")
             automl = AutoML()
             automl.fit(
                 X_train_tfidf,
-                y_train_encoded,
+                y_train,
                 task="classification",
                 metric="macro_f1",
                 time_budget=300,
@@ -194,53 +201,104 @@ def train_models(df, compute_shap=True, metrics_callback=None):
             )
             
             models[model_name] = automl
-            save_model(automl, model_name)
             
-            metrics = evaluate_model(automl, X_test_tfidf, y_test_encoded, compute_extra_metrics=True)
-            log_metrics(metrics, model_name)
+            # Evaluate model
+            metrics = evaluate_model(automl, X_test_tfidf, y_test, compute_extra_metrics=True)
+            model_metrics[model_name] = metrics
             
-            if metrics_callback:
-                metrics_callback(metrics)
+            # Save and register model
+            save_model(
+                model=automl,
+                name=model_name,
+                metrics=metrics,
+                training_data=training_file
+            )
+            
+            # Generate and save classification report
+            y_pred = automl.predict(X_test_tfidf)
+            report = classification_report(y_test, y_pred)
+            with open(LOGS_DIR / f"classification_report_{model_name}.txt", "w") as f:
+                f.write(report)
             
         except Exception as e:
             logger.error(f"❌ Error training {model_name}: {str(e)}")
             logger.error("Stack trace:", exc_info=True)
+            continue
     
-    return models, tfidf_vectorizer, X_test_tfidf, X_train_tfidf, label_encoder
+    # Save vectorizer
+    try:
+        save_model(
+            model=tfidf_vectorizer,
+            name="tfidf_vectorizer",
+            metrics={},  # Vectorizer doesn't have metrics
+            training_data=training_file
+        )
+    except Exception as e:
+        logger.error(f"❌ Error saving vectorizer: {str(e)}")
+        joblib.dump(tfidf_vectorizer, MODELS_DIR / "tfidf_vectorizer_fallback.pkl")
+    
+    if compute_shap and models:
+        compute_shap_values(models, X_test_tfidf, X_train_tfidf)
+    
+    return models, tfidf_vectorizer, X_test_tfidf, X_train_tfidf, model_metrics
 
-def compute_shap_explanations(models, X_test_tfidf, X_train_tfidf):
+def compute_shap_values(models, X_test_tfidf, X_train_tfidf):
     """Compute and save SHAP explanations for model interpretability"""
-    logger.info("🔍 Computing SHAP explanations...")
-    background_data = X_train_tfidf[:50]  # Use subset of training data as background
+    logger.info("\n🔍 Computing SHAP explanations...")
+    background_data = X_train_tfidf[:50]
     
     for model_name, model in models.items():
         try:
             explainer = shap.Explainer(model.predict, background_data)
             shap_values = explainer(X_test_tfidf)
-            shap.summary_plot(shap_values, X_test_tfidf, show=False)
-            shap_file = os.path.join(LOGS_DIR, f"shap_summary_{model_name}.png")
-            shap.save(shap_file)
+            
+            # Save SHAP plot
+            shap.summary_plot(
+                shap_values, 
+                X_test_tfidf,
+                show=False,
+                plot_size=(12, 8)
+            )
+            shap_file = LOGS_DIR / f"shap_summary_{model_name}.png"
+            shap.save_html(shap_file)
             logger.info(f"✅ SHAP summary saved: {shap_file}")
+            
         except Exception as e:
             logger.error(f"❌ SHAP computation failed for {model_name}: {str(e)}")
-            logger.error("Stack trace:", exc_info=True)
 
 def main():
     """Main training pipeline"""
     try:
-        # Load and preprocess data
-        df = load_data()
+        logger.info("\n" + "="*50 + "\n📚 Starting model training pipeline\n" + "="*50)
+        
+        # Load data
+        df, training_file = load_data()
+        logger.info(f"Loaded {len(df)} records from {training_file}")
         
         # Train models
-        models, tfidf_vectorizer, X_test_tfidf, X_train_tfidf, label_encoder = train_models(
+        models, vectorizer, X_test, X_train, metrics = train_models(
             df,
+            training_file,
             compute_shap=True
         )
         
-        # Generate model explanations
-        compute_shap_explanations(models, X_test_tfidf, X_train_tfidf)
+        # Log final metrics summary
+        logger.info("\n📊 Final Performance Summary:")
+        for model_name, model_metrics in metrics.items():
+            logger.info(f"\n{model_name}:")
+            for metric, value in model_metrics.items():
+                logger.info(f"  {metric}: {value:.4f}")
         
-        logger.info("✅ Training completed successfully!")
+        # Check and log model registry status
+        logger.info("\n📦 Model Registry Status:")
+        for model_name in models.keys():
+            version = model_registry.get_latest_version(model_name)
+            locations = model_registry.get_model_locations(model_name, version)
+            logger.info(f"\n{model_name} v{version}:")
+            for loc_type, path in locations.items():
+                logger.info(f"  {loc_type}: {path}")
+        
+        logger.info("\n✅ Training pipeline completed successfully!")
         
     except Exception as e:
         logger.error(f"❌ Training pipeline failed: {str(e)}")
