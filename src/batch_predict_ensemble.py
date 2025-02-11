@@ -31,33 +31,71 @@ class BatchPredictor:
     def __init__(self, batch_size: int = 1000):
         self.batch_size = batch_size
         self.models = {}
+        self.model_versions = {}  # Track versions for each model
         self.vectorizer = None
-        self.version = None
+        self.vectorizer_version = None
+        self.label_encoder = None
         self.load_latest_models()
+        
+    def get_latest_version(self, pattern: str) -> int:
+        """Find latest version for a specific model pattern"""
+        files = glob.glob(os.path.join(MODELS_DIR, pattern))
+        if not files:
+            return None
+            
+        versions = []
+        for f in files:
+            try:
+                version = int(f.split('_v')[-1].split('.pkl')[0])
+                versions.append(version)
+            except (ValueError, IndexError):
+                continue
+                
+        return max(versions) if versions else None
         
     def load_latest_models(self) -> None:
         """Load the latest versions of all models and vectorizer"""
         try:
-            model_files = glob.glob(os.path.join(MODELS_DIR, "lgbm_model_v*.pkl"))
-            versions = [int(f.split('_v')[-1].split('.pkl')[0]) for f in model_files]
-            
-            if not versions:
-                raise ValueError("No versioned models found!")
+            # Load latest vectorizer version first
+            self.vectorizer_version = self.get_latest_version("tfidf_vectorizer_model_v*.pkl")
+            if self.vectorizer_version is None:
+                raise ValueError("No vectorizer versions found!")
                 
-            self.version = max(versions)
-            logger.info(f"Loading model version v{self.version}")
+            vectorizer_path = os.path.join(MODELS_DIR, f"tfidf_vectorizer_model_v{self.vectorizer_version}.pkl")
+            if not os.path.exists(vectorizer_path):
+                raise FileNotFoundError(f"Latest vectorizer file not found: {vectorizer_path}")
             
-            # Load all models
+            self.vectorizer = joblib.load(vectorizer_path)
+            logger.info(f"Loaded TF-IDF vectorizer v{self.vectorizer_version}")
+            
+            # Load label encoder with correct model_storage.py pattern
+            label_encoder_path = os.path.join(MODELS_DIR, f"label_encoder_model_v{self.vectorizer_version}.pkl")
+            if os.path.exists(label_encoder_path):
+                self.label_encoder = joblib.load(label_encoder_path)
+                logger.info(f"Loaded label encoder v{self.vectorizer_version}")
+            else:
+                logger.warning("Label encoder not found! Predictions will be numeric.")
+            
+            # Load latest version of each model type independently
             model_types = ['lgbm', 'xgboost', 'catboost']
             for model_type in model_types:
-                model_path = os.path.join(MODELS_DIR, f"{model_type}_model_v{self.version}.pkl")
-                if os.path.exists(model_path):
-                    self.models[model_type] = joblib.load(model_path)
-                    logger.info(f"Loaded {model_type} model")
+                pattern = f"{model_type}_model_v*.pkl"
+                latest_version = self.get_latest_version(pattern)
                 
-            # Load vectorizer
-            self.vectorizer = joblib.load(os.path.join(MODELS_DIR, f"tfidf_vectorizer_v{self.version}.pkl"))
-            logger.info("Loaded TF-IDF vectorizer")
+                if latest_version is not None:
+                    model_path = os.path.join(MODELS_DIR, f"{model_type}_model_v{latest_version}.pkl")
+                    if os.path.exists(model_path):
+                        model = joblib.load(model_path)
+                        self.models[model_type] = model
+                        self.model_versions[model_type] = latest_version
+                        logger.info(f"Loaded {model_type} model v{latest_version}")
+                    else:
+                        logger.warning(f"Model not found: {model_path}")
+                else:
+                    logger.warning(f"No versions found for {model_type}")
+            
+            if not self.models:
+                raise ValueError("No models could be loaded!")
             
         except Exception as e:
             logger.error(f"Error loading models: {str(e)}")
@@ -69,36 +107,60 @@ class BatchPredictor:
         all_confidences = []
         
         try:
+            # Process in batches
             for i in range(0, len(descriptions), self.batch_size):
                 batch = descriptions[i:i + self.batch_size]
                 
-                # Transform batch
+                # Transform batch using vectorizer
                 features = self.vectorizer.transform(batch)
                 
-                # Get predictions from all models
+                # Get predictions from all available models
                 batch_predictions = []
                 batch_confidences = []
                 
                 for model_name, model in self.models.items():
-                    preds = model.predict(features)
-                    probs = model.predict_proba(features)
-                    batch_predictions.append(preds)
-                    batch_confidences.append(np.max(probs, axis=1))
-                    
+                    try:
+                        preds = model.predict(features)
+                        probs = model.predict_proba(features)
+                        batch_predictions.append(preds)
+                        batch_confidences.append(np.max(probs, axis=1))
+                    except Exception as e:
+                        logger.warning(f"Error getting predictions from {model_name} model: {str(e)}")
+                        continue
+                
+                if not batch_predictions:
+                    raise ValueError("No valid predictions from any model!")
+                
                 # Combine predictions using majority voting
-                final_predictions = pd.DataFrame(batch_predictions).mode(axis=0).iloc[0]
+                pred_df = pd.DataFrame(batch_predictions)
+                final_predictions = pred_df.mode(axis=0).iloc[0]
+                
+                # Convert numeric predictions back to category names if possible
+                if self.label_encoder is not None:
+                    final_predictions = self.label_encoder.inverse_transform(final_predictions)
+                
+                # Average confidence scores
                 final_confidences = np.mean(batch_confidences, axis=0)
                 
                 all_predictions.extend(final_predictions)
                 all_confidences.extend(final_confidences)
                 
                 logger.debug(f"Processed batch of {len(batch)} descriptions")
+            
+            if not all_predictions:
+                raise ValueError("No predictions generated!")
                 
             return all_predictions, all_confidences
             
         except Exception as e:
             logger.error(f"Error in batch prediction: {str(e)}")
             raise
+            
+    @property
+    def version(self) -> str:
+        """Generate a version string combining all model versions"""
+        versions = [f"{model}v{ver}" for model, ver in self.model_versions.items()]
+        return '_'.join(versions)
 
 class PredictionMonitor:
     """Monitors prediction performance and logs metrics"""
