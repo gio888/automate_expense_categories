@@ -165,13 +165,28 @@ def train_models(df, training_file, compute_shap=True, min_category_samples=5):
         for cat in excluded_categories:
             logger.info(f"- {cat}: {category_counts.get(cat, 0)} samples")
     
-    # Split data
+    # ✅ Apply Label Encoding BEFORE splitting the data
+    label_encoder = LabelEncoder()
+    y_encoded = label_encoder.fit_transform(y)  # Convert category names to numbers
+
+    # ✅ Split data using encoded labels (FIXED SYNTAX)
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y,
+        X, y_encoded,  # ⬅️ Now using encoded labels
         test_size=0.2,
         random_state=42,
-        stratify=y
-    )
+        stratify=y_encoded
+    )  # ✅ CLOSED MISSING PARENTHESIS
+
+    # ✅ ADD DEBUGGING CODE
+    print("\n🔍 DEBUG: First 10 values of y_train before training:", y_train[:10])
+    print("Type of y_train:", type(y_train))
+    print("Unique values in y_train:", set(y_train))
+
+    # Ensure y_train is numerical before passing it to AutoML
+    if isinstance(y_train[0], str):
+        print("\n❌ ERROR: y_train is still in string format before training!")
+    else:
+        print("\n✅ y_train is correctly encoded before training!")
     
     # Vectorize text
     tfidf_vectorizer = TfidfVectorizer(
@@ -241,6 +256,7 @@ def train_models(df, training_file, compute_shap=True, min_category_samples=5):
         compute_shap_values(models, X_test_tfidf, X_train_tfidf)
     
     return models, tfidf_vectorizer, X_test_tfidf, X_train_tfidf, model_metrics
+
 
 def compute_shap_values(models, X_test_tfidf, X_train_tfidf):
     """Compute and save SHAP explanations for model interpretability"""
