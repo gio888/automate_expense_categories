@@ -169,6 +169,14 @@ def train_models(df, training_file, compute_shap=True, min_category_samples=5):
     label_encoder = LabelEncoder()
     y_encoded = label_encoder.fit_transform(y)  # Convert category names to numbers
 
+    # After fitting the label encoder
+    save_model(
+        model=label_encoder,
+        name="label_encoder",
+        metrics={},
+        training_data=training_file
+    )
+
     # ✅ Split data using encoded labels (FIXED SYNTAX)
     X_train, X_test, y_train, y_test = train_test_split(
         X, y_encoded,  # ⬅️ Now using encoded labels
@@ -197,6 +205,8 @@ def train_models(df, training_file, compute_shap=True, min_category_samples=5):
     )
     X_train_tfidf = tfidf_vectorizer.fit_transform(X_train)
     X_test_tfidf = tfidf_vectorizer.transform(X_test)
+
+    print(f"✅ X_train_tfidf shape: {X_train_tfidf.shape}")  # Debugging feature count
 
     # ✅ Save the vectorized training data for SHAP
     X_train_tfidf_path = "models/X_train_tfidf_v5.pkl"  # Change versioning dynamically if needed
