@@ -197,6 +197,11 @@ def train_models(df, training_file, compute_shap=True, min_category_samples=5):
     )
     X_train_tfidf = tfidf_vectorizer.fit_transform(X_train)
     X_test_tfidf = tfidf_vectorizer.transform(X_test)
+
+    # ✅ Save the vectorized training data for SHAP
+    X_train_tfidf_path = "models/X_train_tfidf_v5.pkl"  # Change versioning dynamically if needed
+    joblib.dump(X_train_tfidf, X_train_tfidf_path)
+    print(f"✅ Saved vectorized dataset: {X_train_tfidf_path}")
     
     models = {}
     model_metrics = {}
