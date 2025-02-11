@@ -137,22 +137,58 @@ def evaluate_model(model, X_test, y_test, compute_extra_metrics=True):
 
 def train_models(df, training_file, compute_shap=True, min_category_samples=5):
     """Train multiple models using FLAML AutoML"""
-    # [Previous data preparation code remains the same...]
+    # Prepare initial data
+    X = df["Description"].fillna("")
+    y = df["Category"].astype(str).fillna("Other")
+    
+    # Analyze initial category distribution
+    category_counts = pd.Series(y).value_counts()
+    logger.info("\n📊 Initial category distribution:")
+    for category, count in category_counts.items():
+        logger.info(f"{category}: {count} samples ({count/len(y)*100:.2f}%)")
+    
+    # Filter categories based on minimum samples threshold
+    valid_categories = category_counts[category_counts >= min_category_samples].index
+    mask = y.isin(valid_categories)
+    X = X[mask]
+    y = y[mask]
+    
+    # Log filtering results
+    excluded_categories = set(category_counts.index) - set(valid_categories)
+    removed_samples = len(df) - len(X)
+    logger.info(f"\n📊 Category filtering results:")
+    logger.info(f"Minimum samples threshold: {min_category_samples}")
+    logger.info(f"Removed categories: {len(excluded_categories)}")
+    logger.info(f"Removed samples: {removed_samples} ({removed_samples/len(df)*100:.1f}%)")
+    if excluded_categories:
+        logger.info("\nExcluded categories (insufficient samples):")
+        for cat in excluded_categories:
+            logger.info(f"- {cat}: {category_counts.get(cat, 0)} samples")
+    
+    # Split data
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y,
+        test_size=0.2,
+        random_state=42,
+        stratify=y
+    )
+    
+    # Vectorize text
+    tfidf_vectorizer = TfidfVectorizer(
+        max_features=5000,
+        ngram_range=(1, 2),
+        min_df=2,
+        max_df=0.95
+    )
+    X_train_tfidf = tfidf_vectorizer.fit_transform(X_train)
+    X_test_tfidf = tfidf_vectorizer.transform(X_test)
     
     models = {}
     model_metrics = {}
-    training_errors = {}
     
     for model_name in ["lgbm", "xgboost", "catboost"]:
         try:
             logger.info(f"\n{'='*30}\n🚀 Training {model_name} model...\n{'='*30}")
-            
-            # Log training parameters
-            logger.info(f"Training parameters for {model_name}:")
-            logger.info(f"- Features: {X_train_tfidf.shape[1]} columns")
-            logger.info(f"- Training samples: {X_train_tfidf.shape[0]}")
-            logger.info(f"- Unique categories: {len(np.unique(y_train))}")
-            
             automl = AutoML()
             automl.fit(
                 X_train_tfidf,
@@ -166,15 +202,11 @@ def train_models(df, training_file, compute_shap=True, min_category_samples=5):
             
             models[model_name] = automl
             
-            # Evaluate and log detailed metrics
+            # Evaluate model
             metrics = evaluate_model(automl, X_test_tfidf, y_test, compute_extra_metrics=True)
             model_metrics[model_name] = metrics
             
-            logger.info(f"\n📊 {model_name} Performance Metrics:")
-            for metric_name, value in metrics.items():
-                logger.info(f"- {metric_name}: {value:.4f}")
-            
-            # Save and register model with detailed metadata
+            # Save and register model
             save_model(
                 model=automl,
                 name=model_name,
@@ -182,42 +214,31 @@ def train_models(df, training_file, compute_shap=True, min_category_samples=5):
                 training_data=training_file
             )
             
-            logger.info(f"✅ {model_name} training completed successfully")
+            # Generate and save classification report
+            y_pred = automl.predict(X_test_tfidf)
+            report = classification_report(y_test, y_pred)
+            with open(LOGS_DIR / f"classification_report_{model_name}.txt", "w") as f:
+                f.write(report)
             
         except Exception as e:
-            error_msg = f"❌ Error training {model_name}: {str(e)}"
-            logger.error(error_msg)
+            logger.error(f"❌ Error training {model_name}: {str(e)}")
             logger.error("Stack trace:", exc_info=True)
-            
-            # Store error details
-            training_errors[model_name] = {
-                'error_type': type(e).__name__,
-                'error_message': str(e),
-                'timestamp': datetime.now().isoformat()
-            }
-            
-            # Log error to separate file
-            error_log_path = os.path.join(LOGS_DIR, f"training_error_{model_name}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log")
-            with open(error_log_path, 'w') as f:
-                f.write(f"Error Type: {type(e).__name__}\n")
-                f.write(f"Error Message: {str(e)}\n")
-                f.write(f"Timestamp: {datetime.now().isoformat()}\n")
-                import traceback
-                f.write("\nStack Trace:\n")
-                traceback.print_exc(file=f)
-            
-            # Consider failing training if critical models fail
-            if model_name in ['lgbm', 'xgboost']:  # Critical models
-                raise Exception(f"Critical model {model_name} failed: {str(e)}")
             continue
     
-    # Log final training summary
-    logger.info("\n📋 Training Summary:")
-    logger.info(f"Successfully trained models: {list(models.keys())}")
-    if training_errors:
-        logger.warning("⚠️ Training Errors:")
-        for model_name, error in training_errors.items():
-            logger.warning(f"- {model_name}: {error['error_type']}: {error['error_message']}")
+    # Save vectorizer
+    try:
+        save_model(
+            model=tfidf_vectorizer,
+            name="tfidf_vectorizer",
+            metrics={},  # Vectorizer doesn't have metrics
+            training_data=training_file
+        )
+    except Exception as e:
+        logger.error(f"❌ Error saving vectorizer: {str(e)}")
+        joblib.dump(tfidf_vectorizer, MODELS_DIR / "tfidf_vectorizer_fallback.pkl")
+    
+    if compute_shap and models:
+        compute_shap_values(models, X_test_tfidf, X_train_tfidf)
     
     return models, tfidf_vectorizer, X_test_tfidf, X_train_tfidf, model_metrics
 
