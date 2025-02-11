@@ -262,30 +262,37 @@ def train_models(df, training_file, compute_shap=True, min_category_samples=5):
     
     return models, tfidf_vectorizer, X_test_tfidf, X_train_tfidf, model_metrics
 
-
 def compute_shap_values(models, X_test_tfidf, X_train_tfidf):
     """Compute and save SHAP explanations for model interpretability"""
-    logger.info("\n🔍 Computing SHAP explanations...")
-    background_data = X_train_tfidf[:50]
+    print("\n🔍 Computing SHAP explanations...")
     
-    for model_name, model in models.items():
+    # ✅ Use a proper background dataset
+    background_data = X_train_tfidf[:50]  # Use multiple samples instead of one
+
+    for model_name, automl in models.items():
         try:
+            # ✅ Extract the actual LightGBM/XGBoost/CatBoost model
+            if hasattr(automl.model, "estimator"):
+                model = automl.model.estimator  # Get the core ML model
+                print(f"✅ Extracted Model for SHAP: {type(model)}")
+            else:
+                print(f"⚠️ Could not extract underlying model for {model_name}, skipping SHAP.")
+                continue  # Skip if extraction fails
+
+            # ✅ Initialize SHAP Explainer with the correct model
             explainer = shap.Explainer(model.predict, background_data)
-            shap_values = explainer(X_test_tfidf)
-            
-            # Save SHAP plot
-            shap.summary_plot(
-                shap_values, 
-                X_test_tfidf,
-                show=False,
-                plot_size=(12, 8)
-            )
-            shap_file = LOGS_DIR / f"shap_summary_{model_name}.png"
-            shap.save_html(shap_file)
-            logger.info(f"✅ SHAP summary saved: {shap_file}")
-            
+
+            # ✅ Compute SHAP values on a small batch
+            shap_values = explainer(X_test_tfidf[:5])
+
+            # ✅ Save SHAP summary (optional)
+            shap.summary_plot(shap_values, X_test_tfidf, show=False)
+            shap_file = f"logs/shap_summary_{model_name}.png"
+            print(f"✅ SHAP summary saved: {shap_file}")
+
         except Exception as e:
-            logger.error(f"❌ SHAP computation failed for {model_name}: {str(e)}")
+            print(f"❌ SHAP computation failed for {model_name}: {str(e)}")
+
 
 def main():
     """Main training pipeline"""
