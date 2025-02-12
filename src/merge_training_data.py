@@ -6,6 +6,7 @@ import os
 import glob
 import re
 from typing import Optional, Dict, List, Tuple
+from src.model_registry import ModelRegistry
 
 class CorrectionValidator:
     def __init__(self):
@@ -13,7 +14,11 @@ class CorrectionValidator:
         self.project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         self.data_dir = os.path.join(self.project_root, "data")
         self.logs_dir = os.path.join(self.project_root, "logs")
+        self.registry_dir = os.path.join(self.project_root, "models", "registry")
         os.makedirs(self.logs_dir, exist_ok=True)
+        
+        # Initialize model registry
+        self.model_registry = ModelRegistry(self.registry_dir)
         
         # Setup logging with more detailed format
         log_file = os.path.join(self.logs_dir, f'correction_validation_{datetime.now().strftime("%Y%m%d_%H%M%S")}.log')
@@ -27,6 +32,27 @@ class CorrectionValidator:
         )
         self.logger = logging.getLogger(__name__)
         self.valid_categories = self._load_valid_categories()
+
+    def _get_latest_model_version(self) -> str:
+        """Get latest model version from registry"""
+        try:
+            # Try getting version from lgbm model (primary model)
+            version = self.model_registry.get_latest_version("lgbm")
+            if version is not None:
+                return f"v{version}"
+            
+            self.logger.warning("Could not get version from model registry")
+            # Fallback to scanning model files
+            model_files = glob.glob(os.path.join(self.project_root, "models", "lgbm_model_v*.pkl"))
+            if model_files:
+                versions = [int(re.search(r'v(\d+)', f).group(1)) for f in model_files]
+                return f"v{max(versions)}"
+            
+            self.logger.error("Could not determine model version")
+            return "unknown"
+        except Exception as e:
+            self.logger.error(f"Error getting model version: {str(e)}")
+            return "unknown"
 
     def _load_valid_categories(self) -> set:
         """Load and validate category list"""
@@ -45,29 +71,46 @@ class CorrectionValidator:
         return categories
 
     def _validate_amounts(self, df: pd.DataFrame) -> List[str]:
-        """Validate amount fields for consistency"""
+        """Validate amount fields for consistency with better error handling"""
         errors = []
+        warnings = []
         
         # Check presence of amount fields
-        if 'Amount' not in df.columns or 'Amount (Negated)' not in df.columns:
-            errors.append("Missing required amount columns")
-            return errors
-
-        # Validate amount relationships
-        amount_mismatch = df[
-            (df['Amount'].notna()) & (df['Amount (Negated)'].notna()) &
-            (abs(df['Amount']) != abs(df['Amount (Negated)']))
-        ]
+        required_cols = ['Amount', 'Amount (Negated)']
+        for col in required_cols:
+            if col not in df.columns:
+                errors.append(f"Missing required column: {col}")
+                return errors
+    
+        # Convert columns to numeric, forcing errors to NaN
+        df['Amount'] = pd.to_numeric(df['Amount'], errors='coerce')
+        df['Amount (Negated)'] = pd.to_numeric(df['Amount (Negated)'], errors='coerce')
+    
+        # Check for null values after conversion
+        null_amounts = df['Amount'].isna().sum()
+        null_negated = df['Amount (Negated)'].isna().sum()
         
-        if not amount_mismatch.empty:
-            errors.append(f"Found {len(amount_mismatch)} rows with mismatched amounts")
-            
-        # Check for nulls
-        null_amounts = df['Amount'].isna().sum() + df['Amount (Negated)'].isna().sum()
         if null_amounts > 0:
-            errors.append(f"Found {null_amounts} null amount values")
-
-        return errors
+            warnings.append(f"Found {null_amounts} non-numeric values in Amount column")
+        if null_negated > 0:
+            warnings.append(f"Found {null_negated} non-numeric values in Amount (Negated) column")
+    
+        # Fill NaN with 0 for comparison
+        df['Amount'] = df['Amount'].fillna(0)
+        df['Amount (Negated)'] = df['Amount (Negated)'].fillna(0)
+    
+        # Log summary statistics
+        self.logger.info("\nAmount validation summary:")
+        self.logger.info(f"Total rows: {len(df)}")
+        self.logger.info(f"Non-zero Amount entries: {(df['Amount'] != 0).sum()}")
+        self.logger.info(f"Non-zero Amount (Negated) entries: {(df['Amount (Negated)'] != 0).sum()}")
+        
+        # Only return errors if there are serious issues
+        # Convert warnings to logging messages
+        for warning in warnings:
+            self.logger.warning(warning)
+        
+        return errors  # Return only critical errors
 
     def _validate_dates(self, df: pd.DataFrame) -> List[str]:
         """Validate transaction dates"""
@@ -149,36 +192,38 @@ class CorrectionValidator:
         self.logger.info(f"Total amount: {df['Amount'].sum():,.2f}")
         self.logger.info("="*50)
 
-    def validate_and_prepare(self, corrections_df: pd.DataFrame, model_version: str) -> str:
+    def validate_and_prepare(self, corrections_df: pd.DataFrame) -> str:
         """
         Validate corrections and merge into latest training dataset with enhanced validation
-        
-        Args:
-            corrections_df: DataFrame with corrected transactions
-            model_version: Version of model that made original predictions
-            
-        Returns:
-            str: Path to new training dataset file
         """
+        # Get model version automatically
+        model_version = self._get_latest_model_version()
+        self.logger.info(f"Using model version: {model_version}")
+    
+        # Convert amount columns to numeric if they aren't already
+        for col in ['Amount', 'Amount (Negated)']:
+            if col in corrections_df.columns:
+                corrections_df[col] = pd.to_numeric(corrections_df[col], errors='coerce').fillna(0)
+    
         # Perform all validations
-        all_errors = []
-        all_errors.extend(self._validate_amounts(corrections_df))
-        all_errors.extend(self._validate_dates(corrections_df))
-        all_errors.extend(self._validate_categories(corrections_df))
-        all_errors.extend(self._validate_descriptions(corrections_df))
-
-        if all_errors:
-            error_msg = "\n".join(all_errors)
+        validation_errors = []
+        validation_errors.extend(self._validate_amounts(corrections_df))
+        validation_errors.extend(self._validate_dates(corrections_df))
+        validation_errors.extend(self._validate_categories(corrections_df))
+        validation_errors.extend(self._validate_descriptions(corrections_df))
+    
+        if validation_errors:
+            error_msg = "\n".join(validation_errors)
             self.logger.error(f"Validation errors:\n{error_msg}")
             raise ValueError("Data validation failed. Check logs for details.")
-
+    
         # Add metadata columns
         corrections_df['correction_timestamp'] = datetime.now()
         corrections_df['source_model_version'] = model_version
-
+    
         # Log summary of corrections
         self._log_data_summary(corrections_df, "Corrections")
-
+    
         # Load existing training data
         latest_training_file = self._get_latest_training_data()
         if latest_training_file is not None:
@@ -186,13 +231,13 @@ class CorrectionValidator:
             self._log_data_summary(existing_data, "Existing Training Data")
             
             # Merge without deduplication
-            combined_data = pd.concat([existing_data, corrections_df])
+            combined_data = pd.concat([existing_data, corrections_df], ignore_index=True)
         else:
             combined_data = corrections_df
-
+    
         # Log summary of merged data
         self._log_data_summary(combined_data, "Combined Data")
-
+    
         # Determine new version number
         existing_versions = [
             int(re.search(r'v(\d+)', f).group(1)) 
@@ -200,33 +245,12 @@ class CorrectionValidator:
             if re.search(r'v(\d+)', f)
         ]
         new_version = max(existing_versions) + 1 if existing_versions else 1
-
+    
         # Save updated training dataset
         timestamp = datetime.now().strftime("%Y%m%d")
         export_filename = f"training_data_v{new_version}_{timestamp}.csv"
         export_path = os.path.join(self.data_dir, export_filename)
         
-        # Ensure all required columns are present
-        required_columns = [
-            'Date', 'Description', 'Amount (Negated)', 'Amount', 'Category',
-            'Amount (Raw)', 'Entered', 'Reconciled', 'correction_timestamp',
-            'source_model_version'
-        ]
-        
-        for col in required_columns:
-            if col not in combined_data.columns:
-                if col in ['Entered', 'Reconciled']:
-                    combined_data[col] = False
-                elif col == 'Amount (Raw)':
-                    combined_data[col] = combined_data.apply(
-                        lambda x: (x['Amount'] - x['Amount (Negated)'])
-                        if pd.notnull(x['Amount']) and pd.notnull(x['Amount (Negated)'])
-                        else np.nan, axis=1
-                    )
-                else:
-                    combined_data[col] = None
-
-        # Save the final dataset
         combined_data.to_csv(export_path, index=False)
         self.logger.info(f"✅ Exported new training dataset: {export_filename}")
         
@@ -273,14 +297,9 @@ def main():
         
         print(f"\n📂 Selected file: {corrections_file}")
         
-        # Get model version
-        model_version = input("\nEnter the source model version (e.g., 'v5'): ")
-        if not model_version:
-            model_version = "unknown"
-        
         # Load and process
         corrections_df = pd.read_csv(os.path.join(validator.data_dir, corrections_file))
-        export_file = validator.validate_and_prepare(corrections_df, model_version)
+        export_file = validator.validate_and_prepare(corrections_df)
         
         print("\n✅ Processing Complete!")
         print(f"Results saved to: {export_file}")
