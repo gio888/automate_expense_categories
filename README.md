@@ -156,12 +156,76 @@ The system tracks:
 
 ## 📝 License
 
-[Your License Here]
+MIT License
+Copyright (c) 2025
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ## 🤝 Contributing
 
-[Your Contributing Guidelines Here]
+We welcome contributions to improve the expense categorization ML pipeline! Here's how you can help:
+Contributing Guidelines
+
+Fork the Repository
+
+Create your own fork of the code
+Make the changes in your fork
+
+
+Make Your Changes
+
+Create a new branch for your feature or fix
+Write clear, concise commit messages
+Include tests if applicable
+Update documentation as needed
+
+
+Code Style
+
+Follow PEP 8 guidelines for Python code
+Use meaningful variable and function names
+Add comments for complex logic
+Maintain existing code formatting
+
+
+Testing
+
+Ensure all tests pass
+Add new tests for new features
+Test your changes with different data scenarios
+
+
+Submit a Pull Request
+
+Provide a clear description of the changes
+Link any relevant issues
+Update the README if needed
+Fill out the pull request template
+
+
+Code Review
+
+Be responsive to feedback
+Make requested changes promptly
+Keep discussions constructive
+
+
+
+Reporting Issues
+
+Use the issue tracker to report bugs
+Include detailed steps to reproduce the issue
+Provide system information and stack traces if applicable
+Tag issues appropriately
+
+Feature Requests
+
+Use the issue tracker for feature requests
+Clearly describe the proposed functionality
+Explain the use case and benefits
+Be open to discussion and feedback
 
 ## 📫 Contact
 
-[Your Contact Information Here]
+gbacareza@gmail.com
