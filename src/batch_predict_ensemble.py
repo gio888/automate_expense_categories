@@ -35,14 +35,15 @@ class BatchPredictor:
         self.vectorizer = None
         self.vectorizer_version = None
         self.label_encoder = None
+        self.label_encoder_version = None
         self.load_latest_models()
-        
+    
     def get_latest_version(self, pattern: str) -> int:
         """Find latest version for a specific model pattern"""
         files = glob.glob(os.path.join(MODELS_DIR, pattern))
         if not files:
             return None
-            
+        
         versions = []
         for f in files:
             try:
@@ -50,9 +51,9 @@ class BatchPredictor:
                 versions.append(version)
             except (ValueError, IndexError):
                 continue
-                
-        return max(versions) if versions else None
         
+        return max(versions) if versions else None
+    
     def load_latest_models(self) -> None:
         """Load the latest versions of all models and vectorizer"""
         try:
@@ -60,7 +61,7 @@ class BatchPredictor:
             self.vectorizer_version = self.get_latest_version("tfidf_vectorizer_model_v*.pkl")
             if self.vectorizer_version is None:
                 raise ValueError("No vectorizer versions found!")
-                
+            
             vectorizer_path = os.path.join(MODELS_DIR, f"tfidf_vectorizer_model_v{self.vectorizer_version}.pkl")
             if not os.path.exists(vectorizer_path):
                 raise FileNotFoundError(f"Latest vectorizer file not found: {vectorizer_path}")
@@ -68,13 +69,26 @@ class BatchPredictor:
             self.vectorizer = joblib.load(vectorizer_path)
             logger.info(f"Loaded TF-IDF vectorizer v{self.vectorizer_version}")
             
-            # Load label encoder with correct model_storage.py pattern
-            label_encoder_path = os.path.join(MODELS_DIR, f"label_encoder_model_v{self.vectorizer_version}.pkl")
-            if os.path.exists(label_encoder_path):
-                self.label_encoder = joblib.load(label_encoder_path)
-                logger.info(f"Loaded label encoder v{self.vectorizer_version}")
+            # Load label encoder independently
+            self.label_encoder_version = self.get_latest_version("label_encoder_model_v*.pkl")
+            if self.label_encoder_version is not None:
+                label_encoder_path = os.path.join(MODELS_DIR, f"label_encoder_model_v{self.label_encoder_version}.pkl")
+                logger.info(f"Looking for label encoder at: {label_encoder_path}")
+                
+                if os.path.exists(label_encoder_path):
+                    self.label_encoder = joblib.load(label_encoder_path)
+                    logger.info(f"✅ Successfully loaded label encoder v{self.label_encoder_version}")
+                    logger.info(f"Label encoder classes: {self.label_encoder.classes_}")
+                else:
+                    logger.warning(f"❌ Label encoder not found at path: {label_encoder_path}")
             else:
-                logger.warning("Label encoder not found! Predictions will be numeric.")
+                logger.warning("⚠️ No label encoder versions found!")
+                # List all files in models directory to help debug
+                model_files = os.listdir(MODELS_DIR)
+                logger.info("Available files in models directory:")
+                for file in model_files:
+                    if 'label' in file.lower():
+                        logger.info(f"- {file}")
             
             # Load latest version of each model type independently
             model_types = ['lgbm', 'xgboost', 'catboost']
@@ -100,7 +114,7 @@ class BatchPredictor:
         except Exception as e:
             logger.error(f"Error loading models: {str(e)}")
             raise
-            
+    
     def predict_batch(self, descriptions: List[str]) -> Tuple[List[str], List[float]]:
         """Process predictions in batches for better performance"""
         all_predictions = []
@@ -135,9 +149,28 @@ class BatchPredictor:
                 pred_df = pd.DataFrame(batch_predictions)
                 final_predictions = pred_df.mode(axis=0).iloc[0]
                 
+                # Add debug logging for predictions
+                logger.info(f"Number of predictions before label encoding: {len(final_predictions)}")
+                logger.info(f"Sample of numeric predictions: {final_predictions[:5]}")
+                logger.info(f"Predictions dtype: {final_predictions.dtype}")
+                
                 # Convert numeric predictions back to category names if possible
                 if self.label_encoder is not None:
-                    final_predictions = self.label_encoder.inverse_transform(final_predictions)
+                    logger.info("Converting predictions using label encoder...")
+                    try:
+                        # Convert predictions to integers before using label encoder
+                        final_predictions = final_predictions.astype(int)
+                        logger.info(f"Converted predictions to integers. Sample: {final_predictions[:5]}")
+                        
+                        final_predictions = self.label_encoder.inverse_transform(final_predictions)
+                        logger.info(f"✅ Successfully converted predictions to categories")
+                        logger.info(f"Sample of category predictions: {final_predictions[:5]}")
+                    except Exception as e:
+                        logger.error(f"❌ Error converting predictions: {str(e)}")
+                        logger.error(f"Label encoder classes: {self.label_encoder.classes_}")
+                        # If conversion fails, keep numeric predictions
+                else:
+                    logger.warning("⚠️ No label encoder available - predictions will remain numeric")
                 
                 # Average confidence scores
                 final_confidences = np.mean(batch_confidences, axis=0)
@@ -155,7 +188,7 @@ class BatchPredictor:
         except Exception as e:
             logger.error(f"Error in batch prediction: {str(e)}")
             raise
-            
+    
     @property
     def version(self) -> str:
         """Generate a version string combining all model versions"""
