@@ -205,3 +205,5 @@ gnucash-predict*.json
 .env.local
 .env.*.local
 config.local.yamllogs/prediction_metrics.jsonl
+data/old/
+src/old/
