@@ -204,4 +204,4 @@ gnucash-predict*.json
 # Local development
 .env.local
 .env.*.local
-config.local.yaml
+config.local.yamllogs/prediction_metrics.jsonl
