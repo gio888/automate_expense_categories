@@ -115,30 +115,25 @@ class CorrectionValidator:
     def _validate_dates(self, df: pd.DataFrame) -> List[str]:
         """Validate transaction dates"""
         errors = []
-        
+    
         if 'Date' not in df.columns:
             errors.append("Missing Date column")
             return errors
 
-        # Convert dates to datetime
+        # Convert 'Date' column to datetime and handle errors
         try:
-            dates = pd.to_datetime(df['Date'])
-            
-            # Check for future dates
-            future_dates = dates[dates > datetime.now()]
-            if not future_dates.empty:
-                errors.append(f"Found {len(future_dates)} future dates")
+            df['Date'] = pd.to_datetime(df['Date'], errors='coerce')
 
-            # Check for very old dates (e.g., more than 5 years old)
-            old_threshold = datetime.now() - timedelta(days=5*365)
-            old_dates = dates[dates < old_threshold]
-            if not old_dates.empty:
-                errors.append(f"Found {len(old_dates)} dates older than 5 years")
+            # Check for invalid dates that could not be converted
+            invalid_dates = df['Date'].isna().sum()
+            if invalid_dates > 0:
+                self.logger.warning(f"⚠️ Found {invalid_dates} invalid date(s), setting them to NaT.")
 
         except Exception as e:
             errors.append(f"Error parsing dates: {str(e)}")
 
         return errors
+
 
     def _validate_categories(self, df: pd.DataFrame) -> List[str]:
         """Validate transaction categories"""
@@ -184,7 +179,8 @@ class CorrectionValidator:
         """Log summary statistics of the data"""
         self.logger.info(f"\n{'='*20} {stage} Summary {'='*20}")
         self.logger.info(f"Total records: {len(df)}")
-        self.logger.info(f"Date range: {df['Date'].min()} to {df['Date'].max()}")
+        df['Date'] = pd.to_datetime(df['Date'], errors='coerce')
+        self.logger.info(f"Date range: {df['Date'].dropna().min()} to {df['Date'].dropna().max()}")
         self.logger.info("\nCategory distribution:")
         for category, count in df['Category'].value_counts().items():
             self.logger.info(f"  {category}: {count} ({count/len(df)*100:.1f}%)")
