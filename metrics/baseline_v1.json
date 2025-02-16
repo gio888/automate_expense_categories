@@ -1,0 +1,16 @@
+{
+  "timestamp": "2025-02-16T12:20:54.922595",
+  "test_file": "data/processed_Cash 2024-09 to 12_vlgbmv11_xgboostv7_catboostv9_20250215_173046.csv",
+  "model_versions": {
+    "lgbm": 11,
+    "xgboost": 7,
+    "catboost": 9
+  },
+  "vectorizer_version": 9,
+  "predictions_shape": [
+    670,
+    3
+  ],
+  "confidence_mean": 0.7930498038516387,
+  "confidence_std": 0.0856993519259435
+}
