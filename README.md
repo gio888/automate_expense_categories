@@ -87,6 +87,20 @@ Features:
 - Performance monitoring
 - Automated alerting for low-confidence predictions
 
+### Manually Correct Predictions
+
+Here we manually correct the predictions which we will import to our accounting system.
+
+We will:
+- Manually correct the predictions
+- Import to our accounting system
+- Merge to current training data
+
+
+### New Training Data
+
+Merge corrected data with current training data to become new training data
+
 ## 🔄 ML Pipeline Components
 
 ### 1. Data Management
