@@ -24,6 +24,9 @@ from google.cloud import storage
 from src.model_storage import ModelStorage
 from src.model_registry import ModelRegistry
 
+#Import transacion source to handle different types of transactions
+from src.transaction_types import TransactionSource
+
 # ✅ Define Paths and Configuration
 DATA_DIR = PROJECT_ROOT / "data"
 MODELS_DIR = PROJECT_ROOT / "models"
@@ -99,17 +102,26 @@ def save_model(model, name: str, metrics: dict, training_data: str) -> dict:
         logger.info(f"✅ Model saved locally as fallback: {local_path}")
         return {'local_path': str(local_path)}
 
-def load_data():
-    """Load the latest training data file"""
+def load_data(source: TransactionSource):
+    """Load the latest training data file for specified source"""
     try:
-        files = [f for f in os.listdir(DATA_DIR) if f.startswith("training_data_")]
+        source_prefix = f"training_data_{source.value}_"
+        files = [f for f in os.listdir(DATA_DIR) if f.startswith(source_prefix)]
         if not files:
-            raise FileNotFoundError("No training data files found")
+            raise FileNotFoundError(f"No training data files found for source: {source.value}")
         
         latest_file = sorted(files)[-1]
-        logger.info(f"📂 Loading training data: {latest_file}")
+        logger.info(f"📂 Loading {source.value} training data: {latest_file}")
         df = pd.read_csv(DATA_DIR / latest_file)
         
+        if 'transaction_source' not in df.columns:
+            raise ValueError(f"Training data missing transaction_source column: {latest_file}")
+            
+        if not all(df['transaction_source'] == source.value):
+            mismatched = df[df['transaction_source'] != source.value]
+            raise ValueError(f"Found {len(mismatched)} records with incorrect source in {latest_file}")
+        
+        logger.info(f"✅ Loaded {len(df)} records from {latest_file}")
         return df, latest_file
     except Exception as e:
         logger.error(f"Error loading data: {str(e)}")
@@ -303,14 +315,27 @@ def compute_shap_values(models, X_test_tfidf, X_train_tfidf):
         except Exception as e:
             print(f"❌ SHAP computation failed for {model_name}: {str(e)}")
 
+def parse_args():
+    """Parse command line arguments"""
+    import argparse
+    parser = argparse.ArgumentParser(description='Train models for specific transaction source')
+    parser.add_argument('--source', type=str, required=True, 
+                       choices=['household', 'credit_card'],
+                       help='Transaction source to train models for')
+    return parser.parse_args()
 
 def main():
     """Main training pipeline"""
     try:
-        logger.info("\n" + "="*50 + "\n📚 Starting model training pipeline\n" + "="*50)
+        args = parse_args()
+        source = TransactionSource(args.source)
         
-        # Load data
-        df, training_file = load_data()
+        logger.info("\n" + "="*50)
+        logger.info(f"📚 Starting model training pipeline for {source.value}")
+        logger.info("="*50 + "\n")
+        
+        # Load source-specific data
+        df, training_file = load_data(source)
         logger.info(f"Loaded {len(df)} records from {training_file}")
         
         # Train models
@@ -330,9 +355,11 @@ def main():
         # Check and log model registry status
         logger.info("\n📦 Model Registry Status:")
         for model_name in models.keys():
-            version = model_registry.get_latest_version(model_name)
-            locations = model_registry.get_model_locations(model_name, version)
-            logger.info(f"\n{model_name} v{version}:")
+            # Prefix model names with source
+            source_model_name = f"{source.value}_{model_name}"
+            version = model_registry.get_latest_version(source_model_name)
+            locations = model_registry.get_model_locations(source_model_name, version)
+            logger.info(f"\n{source_model_name} v{version}:")
             for loc_type, path in locations.items():
                 logger.info(f"  {loc_type}: {path}")
         
