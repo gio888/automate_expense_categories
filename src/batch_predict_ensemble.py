@@ -32,10 +32,15 @@ class BatchPredictor:
     """Handles batch prediction with source-specific models and efficient processing"""
     
     def __init__(self, batch_size: int = 1000):
+        credentials_path = os.getenv("GCP_CREDENTIALS_PATH")
+        if not credentials_path:
+            logger.error("GCP_CREDENTIALS_PATH environment variable is not set.")
+            raise ValueError("GCP_CREDENTIALS_PATH environment variable is not set.")
+        
         self.registry = ModelRegistry(registry_dir=os.path.join(MODELS_DIR, "registry"))
         self.storage = ModelStorage(
             bucket_name="expense-categorization-ml-models-backup",
-            credentials_path=os.getenv("GCP_CREDENTIALS_PATH"),
+            credentials_path=credentials_path,
             models_dir=MODELS_DIR,
             cache_dir="cache"
         )
@@ -292,7 +297,6 @@ class PredictionMonitor:
             logger.warning("⚠️ Prediction Quality Alerts:")
             for alert in alerts:
                 logger.warning(f"- {alert}")
-        raise
 
 def main():
     """Main entry point with improved error handling"""
