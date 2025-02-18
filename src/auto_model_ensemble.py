@@ -13,6 +13,7 @@ import joblib
 import logging
 import shap
 from datetime import datetime
+from sklearn.utils.class_weight import compute_class_weight
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
@@ -73,7 +74,7 @@ def save_model(model, name: str, metrics: dict, training_data: str) -> dict:
     try:
         # Get next version
         version = model_registry.get_latest_version(name)
-        version = (version or 0) + 1
+        version = 1 if version is None else version + 1  # ⬅️ FIX: Default to 1 if no prior version
         
         # Save model using storage class
         locations = model_storage.save_model(model, name, version)
@@ -197,6 +198,13 @@ def train_models(df, training_file, compute_shap=True, min_category_samples=5):
         stratify=y_encoded
     )  # ✅ CLOSED MISSING PARENTHESIS
 
+    # Compute balanced class weights
+    class_weights = compute_class_weight("balanced", classes=np.unique(y_train), y=y_train)
+    balanced_weights = dict(zip(np.unique(y_train), class_weights))
+
+    print("\n🔍 Computed Class Weights:")
+    print(balanced_weights)  # Optional: Print to verify class weight distribution
+
     # ✅ ADD DEBUGGING CODE
     print("\n🔍 DEBUG: First 10 values of y_train before training:", y_train[:10])
     print("Type of y_train:", type(y_train))
@@ -239,7 +247,8 @@ def train_models(df, training_file, compute_shap=True, min_category_samples=5):
                 metric="macro_f1",
                 time_budget=300,
                 estimator_list=[model_name],
-                verbose=2
+                verbose=2,
+                sample_weight=np.array([balanced_weights[label] for label in y_train])  # ✅ Convert to NumPy array
             )
             
             models[model_name] = automl
