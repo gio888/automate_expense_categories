@@ -7,6 +7,9 @@ import json
 from datetime import datetime
 import logging
 from typing import List, Tuple, Dict, Any
+from src.transaction_types import TransactionSource  # Import the enum
+from src.model_registry import ModelRegistry
+from src.model_storage import ModelStorage
 
 # Define paths and setup logging
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -26,174 +29,220 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 class BatchPredictor:
-    """Handles batch prediction with efficient processing and monitoring"""
+    """Handles batch prediction with source-specific models and efficient processing"""
     
     def __init__(self, batch_size: int = 1000):
+        self.registry = ModelRegistry(registry_dir=os.path.join(MODELS_DIR, "registry"))
+        self.storage = ModelStorage(
+            bucket_name="expense-categorization-ml-models-backup",
+            credentials_path=os.getenv("GCP_CREDENTIALS_PATH"),
+            models_dir=MODELS_DIR,
+            cache_dir="cache"
+        )
         self.batch_size = batch_size
-        self.models = {}
-        self.model_versions = {}  # Track versions for each model
-        self.vectorizer = None
-        self.vectorizer_version = None
-        self.label_encoder = None
-        self.label_encoder_version = None
+        # Dictionary to store models for each source
+        self.models: Dict[str, Dict[str, Any]] = {}
+        self.model_versions: Dict[str, Dict[str, int]] = {}
+        # Dictionary to store vectorizers for each source
+        self.vectorizers: Dict[str, Any] = {}
+        self.vectorizer_versions: Dict[str, int] = {}
+        # Dictionary to store label encoders for each source
+        self.label_encoders: Dict[str, Any] = {}
+        self.label_encoder_versions: Dict[str, int] = {}
         self.load_latest_models()
-    
-    def get_latest_version(self, pattern: str) -> int:
-        """Find latest version for a specific model pattern"""
-        files = glob.glob(os.path.join(MODELS_DIR, pattern))
-        if not files:
-            return None
-        
-        versions = []
-        for f in files:
-            try:
-                version = int(f.split('_v')[-1].split('.pkl')[0])
-                versions.append(version)
-            except (ValueError, IndexError):
-                continue
-        
-        return max(versions) if versions else None
+        self.version = "1.0"  # Set the version attribute
     
     def load_latest_models(self) -> None:
-        """Load the latest versions of all models and vectorizer"""
-        try:
-            # Load latest vectorizer version first
-            self.vectorizer_version = self.get_latest_version("tfidf_vectorizer_model_v*.pkl")
-            if self.vectorizer_version is None:
-                raise ValueError("No vectorizer versions found!")
+        for source in [TransactionSource.HOUSEHOLD, TransactionSource.CREDIT_CARD]:
+            try:
+                logger.info(f"\nLoading models for {source.value}...")
             
-            vectorizer_path = os.path.join(MODELS_DIR, f"tfidf_vectorizer_model_v{self.vectorizer_version}.pkl")
-            if not os.path.exists(vectorizer_path):
-                raise FileNotFoundError(f"Latest vectorizer file not found: {vectorizer_path}")
-            
-            self.vectorizer = joblib.load(vectorizer_path)
-            logger.info(f"Loaded TF-IDF vectorizer v{self.vectorizer_version}")
-            
-            # Load label encoder independently
-            self.label_encoder_version = self.get_latest_version("label_encoder_model_v*.pkl")
-            if self.label_encoder_version is not None:
-                label_encoder_path = os.path.join(MODELS_DIR, f"label_encoder_model_v{self.label_encoder_version}.pkl")
-                logger.info(f"Looking for label encoder at: {label_encoder_path}")
+                # Load vectorizer with version tracking
+                model_info = self.registry.get_model_info(f"{source.value}_tfidf_vectorizer")
+                if model_info:
+                    version = model_info['version']
+                    self.vectorizers[source.value] = self.storage.load_model(
+                        f"{source.value}_tfidf_vectorizer", 
+                        version
+                    )
+                    self.vectorizer_versions[source.value] = version
+                    logger.info(f"✅ Loaded {source.value} TF-IDF vectorizer v{version}")
                 
-                if os.path.exists(label_encoder_path):
-                    self.label_encoder = joblib.load(label_encoder_path)
-                    logger.info(f"✅ Successfully loaded label encoder v{self.label_encoder_version}")
-                    logger.info(f"Label encoder classes: {self.label_encoder.classes_}")
-                else:
-                    logger.warning(f"❌ Label encoder not found at path: {label_encoder_path}")
-            else:
-                logger.warning("⚠️ No label encoder versions found!")
-                # List all files in models directory to help debug
-                model_files = os.listdir(MODELS_DIR)
-                logger.info("Available files in models directory:")
-                for file in model_files:
-                    if 'label' in file.lower():
-                        logger.info(f"- {file}")
-            
-            # Load latest version of each model type independently
-            model_types = ['lgbm', 'xgboost', 'catboost']
-            for model_type in model_types:
-                pattern = f"{model_type}_model_v*.pkl"
-                latest_version = self.get_latest_version(pattern)
-                
-                if latest_version is not None:
-                    model_path = os.path.join(MODELS_DIR, f"{model_type}_model_v{latest_version}.pkl")
-                    if os.path.exists(model_path):
-                        model = joblib.load(model_path)
-                        self.models[model_type] = model
-                        self.model_versions[model_type] = latest_version
-                        logger.info(f"Loaded {model_type} model v{latest_version}")
+                    # Load label encoder with version tracking
+                    encoder_info = self.registry.get_model_info(f"{source.value}_label_encoder")
+                    if encoder_info:
+                        version = encoder_info['version']
+                        self.label_encoders[source.value] = self.storage.load_model(
+                            f"{source.value}_label_encoder",
+                            version
+                        )
+                        self.label_encoder_versions[source.value] = version
+                        logger.info(f"✅ Successfully loaded {source.value} label encoder v{version}")
+                        logger.info(f"Label encoder classes: {self.label_encoders[source.value].classes_}")
                     else:
-                        logger.warning(f"Model not found: {model_path}")
+                        logger.warning(f"⚠️ No label encoder found for {source.value}")
+                
+                    # Load models with version tracking
+                    self.models[source.value] = {}
+                    self.model_versions[source.value] = {}
+                
+                    for model_type in ['lgbm', 'xgboost', 'catboost']:
+                        model_name = f"{source.value}_{model_type}"
+                        model_info = self.registry.get_model_info(model_name)
+                        if model_info:
+                            version = model_info['version']
+                            self.models[source.value][model_type] = self.storage.load_model(
+                                model_name,
+                                version
+                            )
+                            self.model_versions[source.value][model_type] = version
+                            logger.info(f"Loaded {source.value} {model_type} model v{version}")
+                        else:
+                            logger.warning(f"No {model_type} model found for {source.value}")
                 else:
-                    logger.warning(f"No versions found for {model_type}")
-            
-            if not self.models:
-                raise ValueError("No models could be loaded!")
-            
-        except Exception as e:
-            logger.error(f"Error loading models: {str(e)}")
-            raise
-    
-    def predict_batch(self, descriptions: List[str]) -> Tuple[List[str], List[float]]:
+                    logger.warning(f"No models found for {source.value}")
+                
+            except Exception as e:
+                logger.error(f"Error loading {source.value} models: {str(e)}")
+
+    def predict_batch(self, df: pd.DataFrame) -> Tuple[List[str], List[float]]:
         """Process predictions in batches for better performance"""
         all_predictions = []
         all_confidences = []
         
         try:
-            # Process in batches
-            for i in range(0, len(descriptions), self.batch_size):
-                batch = descriptions[i:i + self.batch_size]
-                
-                # Transform batch using vectorizer
-                features = self.vectorizer.transform(batch)
-                
-                # Get predictions from all available models
-                batch_predictions = []
-                batch_confidences = []
-                
-                for model_name, model in self.models.items():
-                    try:
-                        preds = model.predict(features)
-                        probs = model.predict_proba(features)
-                        batch_predictions.append(preds)
-                        batch_confidences.append(np.max(probs, axis=1))
-                    except Exception as e:
-                        logger.warning(f"Error getting predictions from {model_name} model: {str(e)}")
-                        continue
-                
-                if not batch_predictions:
-                    raise ValueError("No valid predictions from any model!")
-                
-                # Combine predictions using majority voting
-                pred_df = pd.DataFrame(batch_predictions)
-                final_predictions = pred_df.mode(axis=0).iloc[0]
-                
-                # Add debug logging for predictions
-                logger.info(f"Number of predictions before label encoding: {len(final_predictions)}")
-                logger.info(f"Sample of numeric predictions: {final_predictions[:5]}")
-                logger.info(f"Predictions dtype: {final_predictions.dtype}")
-                
-                # Convert numeric predictions back to category names if possible
-                if self.label_encoder is not None:
-                    logger.info("Converting predictions using label encoder...")
-                    try:
-                        # Convert predictions to integers before using label encoder
-                        final_predictions = final_predictions.astype(int)
-                        logger.info(f"Converted predictions to integers. Sample: {final_predictions[:5]}")
-                        
-                        final_predictions = self.label_encoder.inverse_transform(final_predictions)
-                        logger.info(f"✅ Successfully converted predictions to categories")
-                        logger.info(f"Sample of category predictions: {final_predictions[:5]}")
-                    except Exception as e:
-                        logger.error(f"❌ Error converting predictions: {str(e)}")
-                        logger.error(f"Label encoder classes: {self.label_encoder.classes_}")
-                        # If conversion fails, keep numeric predictions
-                else:
-                    logger.warning("⚠️ No label encoder available - predictions will remain numeric")
-                
-                # Average confidence scores
-                final_confidences = np.mean(batch_confidences, axis=0)
-                
-                all_predictions.extend(final_predictions)
-                all_confidences.extend(final_confidences)
-                
-                logger.debug(f"Processed batch of {len(batch)} descriptions")
+            if 'transaction_source' not in df.columns:
+                raise ValueError("DataFrame must contain 'transaction_source' column")
             
+            if 'Description' not in df.columns:
+                raise ValueError("DataFrame must contain 'Description' column")
+                
+            # Group data by transaction source
+            for source in [TransactionSource.HOUSEHOLD, TransactionSource.CREDIT_CARD]:
+                source_df = df[df['transaction_source'] == source.value]
+                if len(source_df) == 0:
+                    continue
+                    
+                logger.info(f"\nProcessing {len(source_df)} {source.value} transactions...")
+                
+                for i in range(0, len(source_df), self.batch_size):
+                    batch = source_df.iloc[i:i + self.batch_size]
+                    
+                    # Transform batch using source-specific vectorizer
+                    features = self.vectorizers[source.value].transform(batch['Description'])
+                    
+                    # Get predictions from all available models for this source
+                    batch_predictions = []
+                    batch_confidences = []
+                    
+                    for model_type, model in self.models[source.value].items():
+                        try:
+                            preds = model.predict(features)
+                            probs = model.predict_proba(features)
+                            batch_predictions.append(preds)
+                            batch_confidences.append(np.max(probs, axis=1))
+                            logger.debug(f"Got predictions from {source.value} {model_type} model")
+                        except Exception as e:
+                            logger.warning(f"Error getting predictions from {source.value} {model_type} model: {str(e)}")
+                            continue
+                    
+                    if not batch_predictions:
+                        raise ValueError(f"No valid predictions from any model for source {source.value}!")
+                    
+                    # Combine predictions using majority voting
+                    pred_df = pd.DataFrame(batch_predictions)
+                    final_predictions = pred_df.mode(axis=0).iloc[0]
+                    
+                    # Add debug logging for predictions
+                    logger.info(f"Number of {source.value} predictions before label encoding: {len(final_predictions)}")
+                    logger.info(f"Sample of numeric predictions: {final_predictions[:5]}")
+                    logger.info(f"Predictions dtype: {final_predictions.dtype}")
+                    
+                    # Convert numeric predictions back to category names
+                    if source.value in self.label_encoders:
+                        logger.info(f"Converting {source.value} predictions using label encoder...")
+                        try:
+                            final_predictions = final_predictions.astype(int)
+                            logger.info(f"Converted predictions to integers. Sample: {final_predictions[:5]}")
+                            
+                            final_predictions = self.label_encoders[source.value].inverse_transform(final_predictions)
+                            logger.info(f"✅ Successfully converted {source.value} predictions to categories")
+                            logger.info(f"Sample of category predictions: {final_predictions[:5]}")
+                        except Exception as e:
+                            logger.error(f"❌ Error converting {source.value} predictions: {str(e)}")
+                            logger.error(f"Label encoder classes: {self.label_encoders[source.value].classes_}")
+                    else:
+                        logger.warning(f"⚠️ No label encoder available for {source.value} - predictions will remain numeric")
+                    
+                    # Average confidence scores
+                    final_confidences = np.mean(batch_confidences, axis=0)
+                    
+                    all_predictions.extend(final_predictions)
+                    all_confidences.extend(final_confidences)
+                    
+                    logger.debug(f"Processed batch of {len(batch)} {source.value} descriptions")
+                
             if not all_predictions:
-                raise ValueError("No predictions generated!")
+                raise ValueError("No predictions generated for any source!")
                 
             return all_predictions, all_confidences
             
         except Exception as e:
             logger.error(f"Error in batch prediction: {str(e)}")
             raise
-    
-    @property
-    def version(self) -> str:
-        """Generate a version string combining all model versions"""
-        versions = [f"{model}v{ver}" for model, ver in self.model_versions.items()]
-        return '_'.join(versions)
+
+def process_file(input_file: str) -> None:
+    try:
+        predictor = BatchPredictor()
+        monitor = PredictionMonitor(LOGS_DIR)
+        
+        logger.info(f"Loading transaction data from: {input_file}")
+        df = pd.read_csv(input_file)
+        
+        if 'transaction_source' not in df.columns:
+            df['transaction_source'] = 'credit_card'
+            
+        logger.info(f"Loaded {len(df)} transactions")
+        
+        predictions, confidences = predictor.predict_batch(df)
+        
+        df["Category"] = predictions
+        df["Prediction_Confidence"] = confidences
+        
+        # Use the correct column names from your dataset
+        if 'Amount (Negated)' in df.columns:
+            df["Amount (Negated)"] = df["Amount (Negated)"]
+        else:
+            logger.warning("Column 'Amount (Negated)' not found in the DataFrame.")
+            df["Amount (Negated)"] = np.nan
+        
+        if 'Amount' in df.columns:
+            df["Amount"] = df["Amount"]
+        else:
+            logger.warning("Column 'Amount' not found in the DataFrame.")
+            df["Amount"] = np.nan
+        
+        df = df[["Date", "Description", "Category", "Prediction_Confidence", 
+                 "Amount (Negated)", "Amount"]]
+        
+        input_basename = os.path.splitext(os.path.basename(input_file))[0]
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        output_file = os.path.join(DATA_DIR, f"processed_{input_basename}_v{predictor.version}_{timestamp}.csv")
+        
+        df.to_csv(output_file, index=False)
+        
+        monitor.log_metrics(df)
+        
+        logger.info("\nProcessing Summary:")
+        logger.info(f"Total transactions processed: {len(df)}")
+        logger.info(f"Average prediction confidence: {df['Prediction_Confidence'].mean():.2%}")
+        logger.info(f"Low confidence predictions (<50%): {(df['Prediction_Confidence'] < 0.5).sum()}")
+        
+        print(f"\n✅ Processing complete! Results saved to: {output_file}")
+        
+    except Exception as e:
+        logger.error(f"Error processing file: {str(e)}", exc_info=True)
+        raise
 
 class PredictionMonitor:
     """Monitors prediction performance and logs metrics"""
@@ -243,55 +292,6 @@ class PredictionMonitor:
             logger.warning("⚠️ Prediction Quality Alerts:")
             for alert in alerts:
                 logger.warning(f"- {alert}")
-
-def process_file(input_file: str) -> None:
-    """Process input file with improved batch processing and monitoring"""
-    try:
-        # Initialize predictor and monitor
-        predictor = BatchPredictor()
-        monitor = PredictionMonitor(LOGS_DIR)
-        
-        # Load input file
-        logger.info(f"Loading transaction data from: {input_file}")
-        df = pd.read_csv(input_file)
-        logger.info(f"Loaded {len(df)} transactions")
-        
-        # Get predictions in batches
-        predictions, confidences = predictor.predict_batch(df["Description"].tolist())
-        
-        # Add predictions to dataframe
-        df["Category"] = predictions
-        df["Prediction_Confidence"] = confidences
-        
-        # Map In/Out columns to Amount columns
-        df["Amount (Negated)"] = df["Out"]
-        df["Amount"] = df["In"]
-        
-        # Keep required columns
-        df = df[["Date", "Description", "Category", "Prediction_Confidence", 
-                "Amount (Negated)", "Amount"]]
-        
-        # Generate output filename
-        input_basename = os.path.splitext(os.path.basename(input_file))[0]
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        output_file = os.path.join(DATA_DIR, f"processed_{input_basename}_v{predictor.version}_{timestamp}.csv")
-        
-        # Save processed data
-        df.to_csv(output_file, index=False)
-        
-        # Log metrics
-        monitor.log_metrics(df)
-        
-        # Log summary statistics
-        logger.info("\nProcessing Summary:")
-        logger.info(f"Total transactions processed: {len(df)}")
-        logger.info(f"Average prediction confidence: {df['Prediction_Confidence'].mean():.2%}")
-        logger.info(f"Low confidence predictions (<50%): {(df['Prediction_Confidence'] < 0.5).sum()}")
-        
-        print(f"\n✅ Processing complete! Results saved to: {output_file}")
-        
-    except Exception as e:
-        logger.error(f"Error processing file: {str(e)}", exc_info=True)
         raise
 
 def main():
