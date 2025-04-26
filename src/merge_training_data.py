@@ -7,6 +7,7 @@ import glob
 import re
 from typing import Optional, Dict, List, Tuple
 from src.model_registry import ModelRegistry
+from src.transaction_types import TransactionSource  # Import the TransactionSource enum
 
 class CorrectionValidator:
     def __init__(self):
@@ -33,25 +34,26 @@ class CorrectionValidator:
         self.logger = logging.getLogger(__name__)
         self.valid_categories = self._load_valid_categories()
 
-    def _get_latest_model_version(self) -> str:
-        """Get latest model version from registry"""
+    def _get_latest_model_version(self, source: TransactionSource) -> str:
+        """Get latest model version from registry for the specific source"""
         try:
-            # Try getting version from lgbm model (primary model)
-            version = self.model_registry.get_latest_version("lgbm")
+            # Try getting version from source-specific lgbm model
+            source_model_name = f"{source.value}_lgbm"
+            version = self.model_registry.get_latest_version(source_model_name)
             if version is not None:
                 return f"v{version}"
             
-            self.logger.warning("Could not get version from model registry")
+            self.logger.warning(f"Could not get version from model registry for {source.value}")
             # Fallback to scanning model files
-            model_files = glob.glob(os.path.join(self.project_root, "models", "lgbm_model_v*.pkl"))
+            model_files = glob.glob(os.path.join(self.project_root, "models", f"{source.value}_lgbm_model_v*.pkl"))
             if model_files:
                 versions = [int(re.search(r'v(\d+)', f).group(1)) for f in model_files]
                 return f"v{max(versions)}"
             
-            self.logger.error("Could not determine model version")
+            self.logger.error(f"Could not determine model version for {source.value}")
             return "unknown"
         except Exception as e:
-            self.logger.error(f"Error getting model version: {str(e)}")
+            self.logger.error(f"Error getting model version for {source.value}: {str(e)}")
             return "unknown"
 
     def _load_valid_categories(self) -> set:
@@ -134,7 +136,6 @@ class CorrectionValidator:
 
         return errors
 
-
     def _validate_categories(self, df: pd.DataFrame) -> List[str]:
         """Validate transaction categories"""
         errors = []
@@ -175,91 +176,161 @@ class CorrectionValidator:
 
         return errors
 
+    def _validate_transaction_source(self, df: pd.DataFrame) -> List[str]:
+        """Validate transaction source column"""
+        errors = []
+        
+        if 'transaction_source' not in df.columns:
+            errors.append("Missing transaction_source column. Please add a 'transaction_source' column with values 'household' or 'credit_card'")
+            return errors
+            
+        # Check that all values are valid
+        valid_sources = [source.value for source in TransactionSource]
+        invalid_sources = set(df['transaction_source'].unique()) - set(valid_sources)
+        
+        if invalid_sources:
+            errors.append(f"Found invalid transaction sources: {invalid_sources}. Valid values are: {valid_sources}")
+            
+        # Check for null sources
+        null_sources = df['transaction_source'].isna().sum()
+        if null_sources > 0:
+            errors.append(f"Found {null_sources} rows with missing transaction_source")
+            
+        return errors
+
     def _log_data_summary(self, df: pd.DataFrame, stage: str):
         """Log summary statistics of the data"""
         self.logger.info(f"\n{'='*20} {stage} Summary {'='*20}")
         self.logger.info(f"Total records: {len(df)}")
-        df['Date'] = pd.to_datetime(df['Date'], errors='coerce')
-        self.logger.info(f"Date range: {df['Date'].dropna().min()} to {df['Date'].dropna().max()}")
-        self.logger.info("\nCategory distribution:")
-        for category, count in df['Category'].value_counts().items():
-            self.logger.info(f"  {category}: {count} ({count/len(df)*100:.1f}%)")
-        self.logger.info(f"\nUnique descriptions: {df['Description'].nunique()}")
-        self.logger.info(f"Total amount: {df['Amount'].sum():,.2f}")
+        
+        if 'Date' in df.columns:
+            df['Date'] = pd.to_datetime(df['Date'], errors='coerce')
+            self.logger.info(f"Date range: {df['Date'].dropna().min()} to {df['Date'].dropna().max()}")
+            
+        if 'Category' in df.columns:
+            self.logger.info("\nCategory distribution:")
+            for category, count in df['Category'].value_counts().items():
+                self.logger.info(f"  {category}: {count} ({count/len(df)*100:.1f}%)")
+                
+        if 'transaction_source' in df.columns:
+            self.logger.info("\nTransaction source distribution:")
+            for source, count in df['transaction_source'].value_counts().items():
+                self.logger.info(f"  {source}: {count} ({count/len(df)*100:.1f}%)")
+                
+        if 'Description' in df.columns:
+            self.logger.info(f"\nUnique descriptions: {df['Description'].nunique()}")
+            
+        if 'Amount' in df.columns:
+            self.logger.info(f"Total amount: {df['Amount'].sum():,.2f}")
+            
         self.logger.info("="*50)
+
+    def _get_latest_training_data(self, source: TransactionSource) -> Optional[str]:
+        """Get the latest training data file for a specific source"""
+        # Look for source-specific training data files
+        source_prefix = f"training_data_{source.value}_"
+        training_files = glob.glob(os.path.join(self.data_dir, f"{source_prefix}*.csv"))
+        
+        if not training_files:
+            self.logger.warning(f"No existing training data found for source: {source.value}")
+            return None
+            
+        return max(training_files, key=os.path.getmtime)
 
     def validate_and_prepare(self, corrections_df: pd.DataFrame) -> str:
         """
-        Validate corrections and merge into latest training dataset with enhanced validation
+        Validate corrections and merge into latest training dataset with source-specific handling
         """
-        # Get model version automatically
-        model_version = self._get_latest_model_version()
-        self.logger.info(f"Using model version: {model_version}")
-    
-        # Convert amount columns to numeric if they aren't already
-        for col in ['Amount', 'Amount (Negated)']:
-            if col in corrections_df.columns:
-                corrections_df[col] = pd.to_numeric(corrections_df[col], errors='coerce').fillna(0)
-    
-        # Perform all validations
-        validation_errors = []
-        validation_errors.extend(self._validate_amounts(corrections_df))
-        validation_errors.extend(self._validate_dates(corrections_df))
-        validation_errors.extend(self._validate_categories(corrections_df))
-        validation_errors.extend(self._validate_descriptions(corrections_df))
-    
-        if validation_errors:
-            error_msg = "\n".join(validation_errors)
-            self.logger.error(f"Validation errors:\n{error_msg}")
-            raise ValueError("Data validation failed. Check logs for details.")
-    
-        # Add metadata columns
-        corrections_df['correction_timestamp'] = datetime.now()
-        corrections_df['source_model_version'] = model_version
-    
-        # Log summary of corrections
-        self._log_data_summary(corrections_df, "Corrections")
-    
-        # Load existing training data
-        latest_training_file = self._get_latest_training_data()
-        if latest_training_file is not None:
-            existing_data = pd.read_csv(latest_training_file)
-            self._log_data_summary(existing_data, "Existing Training Data")
+        # First validate transaction_source column
+        source_errors = self._validate_transaction_source(corrections_df)
+        if source_errors:
+            error_msg = "\n".join(source_errors)
+            self.logger.error(f"Transaction source validation errors:\n{error_msg}")
+            raise ValueError("Transaction source validation failed. Check logs for details.")
+        
+        # Group corrections by transaction source and process each group separately
+        result_files = []
+        
+        for source_value in corrections_df['transaction_source'].unique():
+            try:
+                source = TransactionSource(source_value)
+                self.logger.info(f"\nProcessing corrections for source: {source.value}")
+                
+                # Filter corrections for this source
+                source_corrections = corrections_df[corrections_df['transaction_source'] == source.value].copy()
+                self.logger.info(f"Found {len(source_corrections)} corrections for {source.value}")
+                
+                # Get model version for this source
+                model_version = self._get_latest_model_version(source)
+                self.logger.info(f"Using model version for {source.value}: {model_version}")
             
-            # Merge without deduplication
-            combined_data = pd.concat([existing_data, corrections_df], ignore_index=True)
-        else:
-            combined_data = corrections_df
-    
-        # Log summary of merged data
-        self._log_data_summary(combined_data, "Combined Data")
-    
-        # Determine new version number
-        existing_versions = [
-            int(re.search(r'v(\d+)', f).group(1)) 
-            for f in glob.glob(os.path.join(self.data_dir, "training_data_v*.csv")) 
-            if re.search(r'v(\d+)', f)
-        ]
-        new_version = max(existing_versions) + 1 if existing_versions else 1
-    
-        # Save updated training dataset
-        timestamp = datetime.now().strftime("%Y%m%d")
-        export_filename = f"training_data_v{new_version}_{timestamp}.csv"
-        export_path = os.path.join(self.data_dir, export_filename)
-        
-        combined_data.to_csv(export_path, index=False)
-        self.logger.info(f"✅ Exported new training dataset: {export_filename}")
-        
-        return export_filename
-
-    def _get_latest_training_data(self) -> Optional[str]:
-        """Get the latest training data file"""
-        training_files = glob.glob(os.path.join(self.data_dir, "training_data_v*.csv"))
-        if not training_files:
-            self.logger.warning("No existing training data found")
-            return None
-        return max(training_files, key=os.path.getmtime)
-
+                # Convert amount columns to numeric if they aren't already
+                for col in ['Amount', 'Amount (Negated)']:
+                    if col in source_corrections.columns:
+                        source_corrections[col] = pd.to_numeric(source_corrections[col], errors='coerce').fillna(0)
+            
+                # Perform all validations
+                validation_errors = []
+                validation_errors.extend(self._validate_amounts(source_corrections))
+                validation_errors.extend(self._validate_dates(source_corrections))
+                validation_errors.extend(self._validate_categories(source_corrections))
+                validation_errors.extend(self._validate_descriptions(source_corrections))
+            
+                if validation_errors:
+                    error_msg = "\n".join(validation_errors)
+                    self.logger.error(f"Validation errors for {source.value}:\n{error_msg}")
+                    raise ValueError(f"Data validation for {source.value} failed. Check logs for details.")
+            
+                # Add metadata columns
+                source_corrections['correction_timestamp'] = datetime.now()
+                source_corrections['source_model_version'] = model_version
+            
+                # Log summary of corrections
+                self._log_data_summary(source_corrections, f"{source.value.capitalize()} Corrections")
+            
+                # Load existing training data for this source
+                latest_training_file = self._get_latest_training_data(source)
+                if latest_training_file is not None:
+                    existing_data = pd.read_csv(latest_training_file)
+                    self._log_data_summary(existing_data, f"Existing {source.value.capitalize()} Training Data")
+                    
+                    # Check if transaction_source column exists in existing data
+                    if 'transaction_source' not in existing_data.columns:
+                        self.logger.warning(f"Adding missing transaction_source column to existing {source.value} data")
+                        existing_data['transaction_source'] = source.value
+                    
+                    # Merge without deduplication
+                    combined_data = pd.concat([existing_data, source_corrections], ignore_index=True)
+                else:
+                    combined_data = source_corrections
+            
+                # Log summary of merged data
+                self._log_data_summary(combined_data, f"Combined {source.value.capitalize()} Data")
+            
+                # Determine new version number for this source
+                source_pattern = f"training_data_{source.value}_v(\\d+)"
+                existing_versions = [
+                    int(re.search(source_pattern, f).group(1)) 
+                    for f in glob.glob(os.path.join(self.data_dir, f"training_data_{source.value}_v*.csv")) 
+                    if re.search(source_pattern, f)
+                ]
+                new_version = max(existing_versions) + 1 if existing_versions else 1
+            
+                # Save updated training dataset
+                timestamp = datetime.now().strftime("%Y%m%d")
+                export_filename = f"training_data_{source.value}_v{new_version}_{timestamp}.csv"
+                export_path = os.path.join(self.data_dir, export_filename)
+                
+                combined_data.to_csv(export_path, index=False)
+                self.logger.info(f"✅ Exported new training dataset for {source.value}: {export_filename}")
+                
+                result_files.append(export_filename)
+                
+            except Exception as e:
+                self.logger.error(f"Error processing {source_value} corrections: {str(e)}")
+                raise
+                
+        return ", ".join(result_files)
 
 def main():
     """Main execution flow with improved error handling and user interaction"""
@@ -295,12 +366,47 @@ def main():
         
         # Load and process
         corrections_df = pd.read_csv(os.path.join(validator.data_dir, corrections_file))
-        export_file = validator.validate_and_prepare(corrections_df)
         
-        print("\n✅ Processing Complete!")
-        print(f"Results saved to: {export_file}")
-        print("\nCheck the logs for detailed validation and processing information.")
+        # Check if transaction_source column exists
+        if 'transaction_source' not in corrections_df.columns:
+            print("\nThe selected file doesn't have a 'transaction_source' column.")
+            print("This column is required to identify whether transactions are from household or credit card sources.")
+            print("\nPlease choose an option:")
+            print("1. Add 'household' as transaction_source for all rows")
+            print("2. Add 'credit_card' as transaction_source for all rows")
+            print("3. Cancel processing")
+            
+            while True:
+                try:
+                    source_choice = input("\nEnter your choice (1-3): ")
+                    if source_choice == '1':
+                        corrections_df['transaction_source'] = 'household'
+                        print("Added 'household' as transaction_source for all records.")
+                        break
+                    elif source_choice == '2':
+                        corrections_df['transaction_source'] = 'credit_card'
+                        print("Added 'credit_card' as transaction_source for all records.")
+                        break
+                    elif source_choice == '3':
+                        print("Operation cancelled.")
+                        return
+                    else:
+                        print("❌ Invalid choice. Please enter 1, 2, or 3.")
+                except ValueError:
+                    print("❌ Please enter a valid number.")
         
+        # Process the file
+        try:
+            export_files = validator.validate_and_prepare(corrections_df)
+            
+            print("\n✅ Processing Complete!")
+            print(f"Results saved to: {export_files}")
+            print("\nCheck the logs for detailed validation and processing information.")
+            
+        except ValueError as e:
+            print(f"\n❌ Validation Error: {str(e)}")
+            print("Please fix the issues and try again.")
+            
     except Exception as e:
         print(f"\n❌ Error: {str(e)}")
         validator.logger.error("Processing failed", exc_info=True)
