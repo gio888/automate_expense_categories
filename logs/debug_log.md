@@ -88,3 +88,13 @@
 2. **Fixed the `check_metrics` method**:
    - Removed the `raise` statement at the end of the `check_metrics` method to avoid the `No active exception to reraise` error.
 
+## **📌 Next Steps (To-Do List)**
+
+1. **Improve credit card ml model**
+   - improve [model](../src/auto_model_ensemble.py) for better accuracy.
+2. **Improve Inter-relations between python files**
+   - Update the relations with updated code. Make sure all codes are necesssary and interdependecies identified
+3. **Improve Model Confidence**
+   - Investigate low-confidence predictions and consider re-training models.
+4. **Fix Metric Logging Issue**
+   - Debug `log_metrics()` function to ensure metrics are properly saved.

@@ -1,12 +1,13 @@
 .
-├── README.md
+├── automate_expense_categories.code-workspace
 ├── automate_expense_categories.egg-info
-│   ├── PKG-INFO
-│   ├── SOURCES.txt
 │   ├── dependency_links.txt
+│   ├── PKG-INFO
 │   ├── requires.txt
+│   ├── SOURCES.txt
 │   └── top_level.txt
 ├── automl_log.txt
+├── cache
 ├── catboost_1739013006.920883
 │   ├── catboost_training.json
 │   ├── learn
@@ -23,29 +24,39 @@
 │   ├── test_error.tsv
 │   ├── time_left.tsv
 │   └── tmp
+├── catboost_1739799455.1800692
+│   └── tmp
+├── catboost_1739799558.1977952
+│   └── tmp
 ├── data
 │   ├── Cash 2024-06.csv
 │   ├── Cash 2024-07.csv
 │   ├── Cash 2024-08.csv
 │   ├── Cash 2024-09.csv
 │   ├── Cash 2024-10 to 12.csv
-│   ├── Kitty Categories.csv
-│   ├── Kitty Transactions for automl 2019-2023 - Sheet1.csv
 │   ├── corrected_cash_2024-07_v5_20250209.csv
 │   ├── corrected_cash_2024-08.csv
 │   ├── corrected_cash_2024-09.csv
 │   ├── corrected_cash_2024-10 to 12.csv
+│   ├── Kitty Categories.csv
+│   ├── Kitty Transactions for automl 2019-2023 - Sheet1.csv
 │   ├── old
 │   ├── processed_Cash 2024-07_v5_20250209_180514.csv
 │   ├── processed_Cash 2024-08_vlgbmv9_xgboostv5_catboostv7_20250212_084728.csv
 │   ├── processed_Cash 2024-09 to 12_vlgbmv11_xgboostv7_catboostv9_20250215_173046.csv
 │   ├── processed_Cash 2024-09_vlgbmv10_xgboostv6_catboostv8_20250215_153714.csv
 │   ├── processed_cash_2024-06.csv
+│   ├── processed_Statement UNIONBANK Visa 7152 2025-01 - Sheet2_v1.0_20250219_000130.csv
+│   ├── processed_Statement UNIONBANK Visa 7152 2025-01 - Sheet2_v1.0_20250219_011457.csv
+│   ├── Statement UNIONBANK Visa 7152 2025-01 - Sheet2.csv
+│   ├── training_data_credit_card_v1_20250217.csv
+│   ├── training_data_household_v5_20250216.csv
 │   ├── training_data_v1_initial_2025-02-01.csv
 │   ├── training_data_v2_20250209.csv
 │   ├── training_data_v3_20250213.csv
 │   ├── training_data_v4_20250215.csv
 │   └── valid_categories.txt
+├── Future_plans.md
 ├── logs
 │   ├── batch_predict_20250209_173714.log
 │   ├── batch_predict_20250209_180501.log
@@ -66,28 +77,53 @@
 │   ├── batch_predict_20250212_084716.log
 │   ├── batch_predict_20250215_153656.log
 │   ├── batch_predict_20250215_173012.log
-│   ├── classification_report_catboost.txt
+│   ├── batch_predict_20250216_122052.log
+│   ├── batch_predict_20250218_225531.log
+│   ├── batch_predict_20250218_234646.log
+│   ├── batch_predict_20250218_235140.log
+│   ├── batch_predict_20250218_235628.log
+│   ├── batch_predict_20250218_235752.log
+│   ├── batch_predict_20250219_000121.log
+│   ├── batch_predict_20250219_010222.log
+│   ├── batch_predict_20250219_011405.log
+│   ├── batch_predict_20250219_011448.log
 │   ├── classification_report_catboost_v4.txt
-│   ├── classification_report_lgbm.txt
+│   ├── classification_report_catboost.txt
 │   ├── classification_report_lgbm_v4.txt
-│   ├── classification_report_xgboost.txt
+│   ├── classification_report_lgbm.txt
 │   ├── classification_report_xgboost_v4.txt
-│   ├── correction_validation.log
+│   ├── classification_report_xgboost.txt
 │   ├── correction_validation_20250212_231648.log
 │   ├── correction_validation_20250213_001249.log
 │   ├── correction_validation_20250213_001900.log
 │   ├── correction_validation_20250215_160110.log
 │   ├── correction_validation_20250215_160403.log
+│   ├── correction_validation_20250216_174630.log
+│   ├── correction_validation_20250216_175206.log
+│   ├── correction_validation_20250216_180042.log
+│   ├── correction_validation_20250216_180745.log
+│   ├── correction_validation_20250216_195541.log
+│   ├── correction_validation_20250216_200004.log
+│   ├── correction_validation_20250216_200323.log
+│   ├── correction_validation_20250216_200505.log
+│   ├── correction_validation.log
+│   ├── debug_log.md
 │   ├── prediction_metrics.jsonl
-│   ├── training.log
 │   ├── training_error_lgbm_20250210_231310.log
 │   ├── training_error_xgboost_20250210_233215.log
-│   └── training_logs.csv
+│   ├── training_logs.csv
+│   └── training.log
+├── metrics
+│   ├── baseline_v1.json
+│   └── history
+├── ML_Pipeline_Advanced.md
+├── ML_Pipeline.md
 ├── models
-│   ├── X_train_tfidf_v5.pkl
 │   ├── cache
-│   ├── catboost_model.pkl
 │   ├── catboost_model_v1.pkl
+│   ├── catboost_model_v10.pkl
+│   ├── catboost_model_v11.pkl
+│   ├── catboost_model_v12.pkl
 │   ├── catboost_model_v2.pkl
 │   ├── catboost_model_v3.pkl
 │   ├── catboost_model_v4.pkl
@@ -96,15 +132,28 @@
 │   ├── catboost_model_v7.pkl
 │   ├── catboost_model_v8.pkl
 │   ├── catboost_model_v9.pkl
+│   ├── catboost_model.pkl
 │   ├── category_mapping.pkl
-│   ├── label_encoder.pkl
+│   ├── credit_card_catboost_model_v1.pkl
+│   ├── credit_card_label_encoder_model_v1.pkl
+│   ├── credit_card_lgbm_model_v1.pkl
+│   ├── credit_card_tfidf_vectorizer_model_v1.pkl
+│   ├── credit_card_xgboost_model_v1.pkl
 │   ├── label_encoder_model_v1.pkl
 │   ├── label_encoder_model_v2.pkl
 │   ├── label_encoder_model_v3.pkl
-│   ├── lgbm_model.pkl
+│   ├── label_encoder_model_v4.pkl
+│   ├── label_encoder_model_v5.pkl
+│   ├── label_encoder_model_v6.pkl
+│   ├── label_encoder_model_v7.pkl
+│   ├── label_encoder_model_v8.pkl
+│   ├── label_encoder.pkl
 │   ├── lgbm_model_v1.pkl
 │   ├── lgbm_model_v10.pkl
 │   ├── lgbm_model_v11.pkl
+│   ├── lgbm_model_v12.pkl
+│   ├── lgbm_model_v13.pkl
+│   ├── lgbm_model_v14.pkl
 │   ├── lgbm_model_v2.pkl
 │   ├── lgbm_model_v3.pkl
 │   ├── lgbm_model_v4.pkl
@@ -113,9 +162,13 @@
 │   ├── lgbm_model_v7.pkl
 │   ├── lgbm_model_v8.pkl
 │   ├── lgbm_model_v9.pkl
+│   ├── lgbm_model.pkl
 │   ├── registry
-│   ├── tfidf_vectorizer.pkl
 │   ├── tfidf_vectorizer_model_v1.pkl
+│   ├── tfidf_vectorizer_model_v10.pkl
+│   ├── tfidf_vectorizer_model_v11.pkl
+│   ├── tfidf_vectorizer_model_v12.pkl
+│   ├── tfidf_vectorizer_model_v13.pkl
 │   ├── tfidf_vectorizer_model_v2.pkl
 │   ├── tfidf_vectorizer_model_v3.pkl
 │   ├── tfidf_vectorizer_model_v4.pkl
@@ -129,17 +182,24 @@
 │   ├── tfidf_vectorizer_v3.pkl
 │   ├── tfidf_vectorizer_v4.pkl
 │   ├── tfidf_vectorizer_v5.pkl
-│   ├── xgboost_model.pkl
+│   ├── tfidf_vectorizer.pkl
+│   ├── X_train_tfidf_v5.pkl
 │   ├── xgboost_model_v1.pkl
+│   ├── xgboost_model_v10.pkl
 │   ├── xgboost_model_v2.pkl
 │   ├── xgboost_model_v3.pkl
 │   ├── xgboost_model_v4.pkl
 │   ├── xgboost_model_v5.pkl
 │   ├── xgboost_model_v6.pkl
-│   └── xgboost_model_v7.pkl
+│   ├── xgboost_model_v7.pkl
+│   ├── xgboost_model_v8.pkl
+│   ├── xgboost_model_v9.pkl
+│   └── xgboost_model.pkl
 ├── plots
 │   ├── category_distribution.png
 │   └── description_length_distribution.png
+├── project_file_dependencies.md
+├── README.md
 ├── requirements.txt
 ├── setup.py
 ├── src
@@ -147,12 +207,16 @@
 │   ├── __pycache__
 │   ├── auto_model_ensemble.py
 │   ├── batch_predict_ensemble.py
+│   ├── improvements
 │   ├── merge_training_data.py
+│   ├── metrics
 │   ├── model_registry.py
 │   ├── model_storage.py
 │   ├── models
 │   ├── old
+│   ├── transaction_types.py
 │   └── verify_models.py
+├── test_data
 ├── tree.txt
 └── venv
     ├── bin
@@ -162,4 +226,4 @@
     ├── pyvenv.cfg
     └── share
 
-27 directories, 136 files
+37 directories, 190 files
