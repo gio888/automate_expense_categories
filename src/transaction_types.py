@@ -77,21 +77,3 @@ class TransactionSource(Enum):
         }
         
         return source_configs.get(self, source_configs[self.HOUSEHOLD])
-
-# Example usage
-if __name__ == "__main__":
-    # Create from enum
-    source = TransactionSource.HOUSEHOLD
-    print(f"Source: {source}")
-    print(f"Display name: {TransactionSource.get_source_display_name(source)}")
-    
-    # Create from string
-    source_str = "credit_card"
-    source = TransactionSource.from_string(source_str)
-    if source:
-        print(f"\nSource from string: {source}")
-        print(f"Config: {source.get_source_config()}")
-    
-    # Test invalid source
-    invalid_source = TransactionSource.from_string("invalid_source")
-    print(f"\nInvalid source result: {invalid_source}")
