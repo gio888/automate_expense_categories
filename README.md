@@ -58,6 +58,8 @@ pip install -r requirements.txt
 
 ## 🛠️ Usage
 
+For a complete step-by-step guide on using the entire pipeline (prediction, correction, training), see the [Quick Reference Guide](docs/quick_reference.md).
+
 ### Training Models
 
 Run the automated model training pipeline:
