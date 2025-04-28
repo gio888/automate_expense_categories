@@ -141,8 +141,13 @@ class CorrectionValidator:
         errors = []
         
         if 'Category' not in df.columns:
-            errors.append("Missing Category column")
-            return errors
+            # Check if there's a "Corrected Category" column instead
+            if 'Corrected Category' in df.columns:
+                self.logger.info("Found 'Corrected Category' column, will use it as 'Category'")
+                df['Category'] = df['Corrected Category']
+            else:
+                errors.append("Missing Category column")
+                return errors
 
         # Check for invalid categories
         invalid_categories = set(df['Category'].unique()) - self.valid_categories
@@ -237,6 +242,73 @@ class CorrectionValidator:
             
         return max(training_files, key=os.path.getmtime)
 
+    def _ensure_columns_match(self, corrections_df: pd.DataFrame, existing_data: pd.DataFrame, source: TransactionSource) -> pd.DataFrame:
+        """
+        Ensure the corrections dataframe has all the same columns as the existing training data
+        """
+        # Make a copy to avoid modifying the original
+        formatted_df = corrections_df.copy()
+        
+        # If Corrected Category exists, use it as Category
+        if 'Corrected Category' in formatted_df.columns and 'Category' not in formatted_df.columns:
+            self.logger.info("Using 'Corrected Category' as 'Category'")
+            formatted_df['Category'] = formatted_df['Corrected Category']
+            formatted_df.drop('Corrected Category', axis=1, inplace=True)
+        
+        # Get missing columns
+        existing_columns = set(existing_data.columns)
+        corrections_columns = set(formatted_df.columns)
+        missing_columns = existing_columns - corrections_columns
+        
+        self.logger.info(f"Adding {len(missing_columns)} missing columns to match training data structure")
+        
+        # Add each missing column with appropriate defaults
+        for col in missing_columns:
+            if col == 'Account':
+                if source.value == 'credit_card':
+                    formatted_df[col] = "Liabilities:Credit Card"
+                else:
+                    formatted_df[col] = "Assets:Current Assets:Cash Local:Cash for Groceries"
+                self.logger.info(f"Added '{col}' with default value for {source.value}")
+                
+            elif col == 'Amount (Raw)':
+                if 'Amount' in formatted_df.columns:
+                    formatted_df[col] = formatted_df['Amount']
+                else:
+                    formatted_df[col] = 0
+                self.logger.info(f"Added '{col}' based on 'Amount' column")
+                
+            elif col == 'Entered':
+                formatted_df[col] = True
+                self.logger.info(f"Added '{col}' with default True")
+
+            elif col == 'Reconciled':
+                formatted_df[col] = False
+                self.logger.info(f"Added '{col}' with default False")
+                
+            elif col == 'correction_timestamp' or col == 'source_model_version':
+                # These will be added later, skip for now
+                pass
+                
+            else:
+                # Generic handling for any other columns
+                formatted_df[col] = None
+                self.logger.info(f"Added '{col}' with default None")
+        
+        # Convert column types to match expected types
+        for col in formatted_df.columns:
+            if col in existing_data.columns:
+                try:
+                    # Try to convert the column to the same dtype as in existing data
+                    orig_dtype = existing_data[col].dtype
+                    if orig_dtype != formatted_df[col].dtype:
+                        self.logger.info(f"Converting '{col}' from {formatted_df[col].dtype} to {orig_dtype}")
+                        formatted_df[col] = formatted_df[col].astype(orig_dtype)
+                except Exception as e:
+                    self.logger.warning(f"Could not convert '{col}' to dtype {existing_data[col].dtype}: {str(e)}")
+        
+        return formatted_df
+
     def validate_and_prepare(self, corrections_df: pd.DataFrame) -> str:
         """
         Validate corrections and merge into latest training dataset with source-specific handling
@@ -269,7 +341,23 @@ class CorrectionValidator:
                     if col in source_corrections.columns:
                         source_corrections[col] = pd.to_numeric(source_corrections[col], errors='coerce').fillna(0)
             
-                # Perform all validations
+                # Load existing training data for this source
+                latest_training_file = self._get_latest_training_data(source)
+                existing_data = None
+                
+                if latest_training_file is not None:
+                    existing_data = pd.read_csv(latest_training_file)
+                    self._log_data_summary(existing_data, f"Existing {source.value.capitalize()} Training Data")
+                    
+                    # Check if transaction_source column exists in existing data
+                    if 'transaction_source' not in existing_data.columns:
+                        self.logger.warning(f"Adding missing transaction_source column to existing {source.value} data")
+                        existing_data['transaction_source'] = source.value
+                    
+                    # Format corrections to match existing data structure
+                    source_corrections = self._ensure_columns_match(source_corrections, existing_data, source)
+                
+                # Now perform validations on the corrected data
                 validation_errors = []
                 validation_errors.extend(self._validate_amounts(source_corrections))
                 validation_errors.extend(self._validate_dates(source_corrections))
@@ -288,18 +376,8 @@ class CorrectionValidator:
                 # Log summary of corrections
                 self._log_data_summary(source_corrections, f"{source.value.capitalize()} Corrections")
             
-                # Load existing training data for this source
-                latest_training_file = self._get_latest_training_data(source)
-                if latest_training_file is not None:
-                    existing_data = pd.read_csv(latest_training_file)
-                    self._log_data_summary(existing_data, f"Existing {source.value.capitalize()} Training Data")
-                    
-                    # Check if transaction_source column exists in existing data
-                    if 'transaction_source' not in existing_data.columns:
-                        self.logger.warning(f"Adding missing transaction_source column to existing {source.value} data")
-                        existing_data['transaction_source'] = source.value
-                    
-                    # Merge without deduplication
+                # Merge with existing data or use corrections as new training data
+                if existing_data is not None:
                     combined_data = pd.concat([existing_data, source_corrections], ignore_index=True)
                 else:
                     combined_data = source_corrections
