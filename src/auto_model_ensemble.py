@@ -403,24 +403,23 @@ def main():
                 logger.info(f"  {metric}: {value:.4f}")
 
         # ✅ Check and log model registry status (only if models were trained)
-    # ✅ Check and log model registry status (only if models were trained)
-    if models:
-        logger.info("\n📦 Model Registry Status:")
-        for model_name in models.keys():
-            source_model_name = f"{source.value}_{model_name}"
-            version = model_registry.get_latest_version(source_model_name)
-            if version is not None:
-                locations = model_registry.get_model_locations(source_model_name, version)
-                if locations:
-                    logger.info(f"\n{source_model_name} v{version}:")
-                    for loc_type, path in locations.items():
-                        logger.info(f"  {loc_type}: {path}")
+        if models:
+            logger.info("\n📦 Model Registry Status:")
+            for model_name in models.keys():
+                source_model_name = f"{source.value}_{model_name}"
+                version = model_registry.get_latest_version(source_model_name)
+                if version is not None:
+                    locations = model_registry.get_model_locations(source_model_name, version)
+                    if locations:
+                        logger.info(f"\n{source_model_name} v{version}:")
+                        for loc_type, path in locations.items():
+                            logger.info(f"  {loc_type}: {path}")
+                    else:
+                        logger.warning(f"No locations found for {source_model_name} v{version}")
                 else:
-                    logger.warning(f"No locations found for {source_model_name} v{version}")
-            else:
-                logger.warning(f"No version found for {source_model_name}")
+                    logger.warning(f"No version found for {source_model_name}")
 
-    logger.info("\n✅ Training pipeline completed successfully!")
+        logger.info("\n✅ Training pipeline completed successfully!")
 
     except Exception as e:
         logger.error(f"❌ Unexpected failure in training pipeline: {str(e)}")
