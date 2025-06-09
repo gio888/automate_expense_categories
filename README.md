@@ -1,239 +1,152 @@
 # Expense Categorization ML Pipeline
 
-An automated machine learning pipeline for categorizing financial transactions using ensemble models and active learning. The system employs FLAML AutoML for model training and supports both local and cloud-based model storage with Google Cloud Storage integration.
+## Overview
+Automated machine learning pipeline for categorizing financial transactions from household expenses and credit card statements. Uses ensemble ML models (LightGBM, XGBoost, CatBoost) with human-in-the-loop feedback for continuous improvement.
 
-## 🌟 Features
+## Key Features
+- **Source-specific models**: Separate trained models for household vs credit card transactions
+- **Ensemble predictions**: Combines multiple algorithms for better accuracy
+- **Human feedback loop**: Incorporates manual corrections to continuously improve model performance
+- **Cloud backup**: Automatic model backup to Google Cloud Storage
+- **Version tracking**: Complete audit trail of models, training data, and performance metrics
 
-- Automated model training using FLAML AutoML
-- Ensemble approach combining LightGBM, XGBoost, and CatBoost models
-- Model versioning and registry system
-- Google Cloud Storage integration for model backup
-- Batch prediction capabilities with confidence scoring
-- Performance monitoring and alerting system
-- SHAP-based model interpretability
-- Active learning workflow with human feedback incorporation
-
-## 🏗️ Project Structure
-
+## Project Structure
 ```
-├── data/                      # Data storage
-├── logs/                      # Training and prediction logs
-├── models/                    # Model storage
-│   └── registry/             # Model registry files
-├── plots/                    # Visualization outputs
-├── src/                      # Source code
-└── venv/                     # Virtual environment
+automate_expense_categories/
+├── README.md                          # This file
+├── quick_reference.md                 # Daily command reference
+├── project_file_dependencies.md       # Technical dependencies
+├── workflows/                         # Detailed step-by-step guides
+│   ├── household_workflow.md          # Complete household expense workflow
+│   └── credit_card_workflow.md        # Complete credit card workflow
+├── src/                              # Core ML pipeline scripts
+│   ├── transform_monthly_household_transactions.py
+│   ├── batch_predict_ensemble.py      # Main prediction engine
+│   ├── merge_training_data.py         # Correction integration
+│   ├── auto_model_ensemble.py         # Model training
+│   ├── model_registry.py             # Model version management
+│   ├── model_storage.py              # Local/cloud storage handling
+│   ├── transaction_types.py          # Source type definitions
+│   └── verify_models.py              # Model availability checker
+├── data/                             # Training data and predictions
+├── models/                           # Trained models and registry
+├── logs/                            # Training and prediction logs
+└── docs/                            # Technical documentation
 ```
 
-## 🚀 Getting Started
+## Quick Start
 
 ### Prerequisites
+- Python 3.8+
+- Install dependencies: `pip install -r requirements.txt`
+- Ensure `data/valid_categories.txt` exists with approved expense categories
+- Google Cloud Storage credentials configured (for model backup)
 
-- Python 3.9+
-- Google Cloud Storage account (optional)
-- Virtual environment (recommended)
-
-### Installation
-
-1. Clone the repository:
+### Household Expenses (5-step workflow)
 ```bash
-git clone [repository-url]
-cd [repository-name]
-```
+cd /Users/gio/Code/automate_expense_categories
 
-2. Create and activate virtual environment:
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
+# 1. Transform monthly Google Sheets export
+python src/transform_monthly_household_transactions.py
 
-3. Install dependencies:
-```bash
-pip install -r requirements.txt
-```
-
-4. Set up Google Cloud credentials (optional):
-- Place your GCP service account JSON file in a secure location
-- Update the `CREDENTIALS_PATH` in relevant configuration files
-
-## 🛠️ Usage
-
-For a complete step-by-step guide on using the entire pipeline (prediction, correction, training), see the [Quick Reference Guide](docs/quick_reference.md).
-
-### Training Models
-
-Run the automated model training pipeline:
-
-```bash
-python src/auto_model_ensemble.py
-```
-
-This will:
-- Load and preprocess training data
-- Train ensemble models using FLAML AutoML
-- Generate SHAP explanations
-- Save models locally and to GCS
-- Update the model registry
-
-### Batch Predictions
-
-Process new transactions:
-
-```bash
+# 2. Predict categories using ensemble models
 python src/batch_predict_ensemble.py
+
+# 3. [Manual step] Review and correct predictions
+
+# 4. Merge corrections with training data
+python src/merge_training_data.py
+
+# 5. Retrain models with new data
+python src/auto_model_ensemble.py --source household
 ```
 
-Features:
-- Efficient batch processing
-- Confidence scoring
-- Performance monitoring
-- Automated alerting for low-confidence predictions
+### Credit Card Transactions (4-step workflow)
+```bash
+cd /Users/gio/Code/automate_expense_categories
 
-### Manually Correct Predictions
+# 1. Predict categories using ensemble models
+python src/batch_predict_ensemble.py
 
-Here we manually correct the predictions which we will import to our accounting system.
+# 2. [Manual step] Review and correct predictions
 
-We will:
-- Manually correct the predictions
-- Import to our accounting system
-- Merge to current training data
+# 3. Merge corrections with training data
+python src/merge_training_data.py
 
+# 4. Retrain models with new data
+python src/auto_model_ensemble.py --source credit_card
+```
 
-### New Training Data
+## How It Works
 
-Merge corrected data with current training data to become new training data
+### 1. **Data Processing**
+- **Household**: Google Sheets exports → Transform → Predict
+- **Credit Card**: Bank CSV exports → Predict directly
 
-## 🔄 ML Pipeline Components
+### 2. **Machine Learning**
+- **Text Vectorization**: TF-IDF with source-specific optimizations
+- **Ensemble Models**: LightGBM + XGBoost + CatBoost per transaction source
+- **Prediction**: Majority voting with confidence scores
 
-### 1. Data Management
-- Training data versioning
-- Data validation checks
-- Category distribution analysis
+### 3. **Continuous Improvement**
+- Manual correction of predictions
+- Automatic integration of corrections into training data
+- Retraining with accumulated feedback
+- Version tracking of all models and data
 
-### 2. Model Training
-- Text vectorization using TF-IDF
-- Ensemble model training (LightGBM, XGBoost, CatBoost)
-- Cross-validation
-- Performance metric optimization
+### 4. **Model Management**
+- Local storage with cloud backup
+- Version registry with performance metrics
+- Automatic model loading with fallback strategies
 
-### 3. Model Registry
-- Version tracking
-- Model metadata storage
-- Performance metrics logging
-- Cloud backup integration
+## File Types & Naming Conventions
 
-### 4. Prediction System
-- Batch processing
-- Confidence scoring
-- Performance monitoring
-- Alert system for low-confidence predictions
+### Input Files
+- **Household**: `"House Kitty Transactions - Cash YYYY-MM.csv"`
+- **Credit Card**: `"For Automl Statement UNIONBANK Visa YYYY-MM.csv"`
 
-### 5. Feedback Loop
-- Manual review and correction in Google Sheets
-- Correction file validation and processing
-- Automated merger of corrections into training data
-- Training dataset versioning
+### Output Files
+- **Predictions**: `processed_{filename}_v{version}_{timestamp}.csv`
+- **Training Data**: `training_data_{source}_v{version}_{date}.csv`
+- **Models**: `{source}_{algorithm}_model_v{version}.pkl`
 
-## 📊 Performance Monitoring
+## Documentation
 
-The system tracks:
-- Overall accuracy
-- Per-category F1 scores
-- Prediction confidence distribution
-- Category distribution drift
-- Correction rates
+### Daily Usage
+- **[Quick Reference](docs/quick_reference.md)**: Essential commands
+- **[Household Workflow](workflows/household_workflow.md)**: Complete step-by-step guide
+- **[Credit Card Workflow](workflows/credit_card_workflow.md)**: Complete step-by-step guide
 
-## 🔒 Best Practices
+### Technical Details
+- **[File Dependencies](docs/project_file_dependencies.md)**: Technical architecture  
+- **[Output Files](docs/ML_Pipeline_Output_Files.md)**: File reference
 
-- Comprehensive version control
-- Model and data versioning
-- Extensive logging
-- Error handling
-- Performance monitoring
-- Cloud backup
-- Security considerations
+## Troubleshooting
 
-## 🚧 Future Improvements
+### Common Issues
+| Problem | Solution |
+|---------|----------|
+| "Models not found" error | Run `python src/verify_models.py` |
+| Validation failures | Check categories match `data/valid_categories.txt` |
+| Training failures | Review `logs/training.log` for details |
+| Low prediction confidence | Focus manual corrections on these transactions |
 
-1. Feature Engineering
-   - Amount-based features
-   - Temporal features
-   - Merchant name extraction
+### Performance Indicators
+- **High confidence**: >70% (usually correct)
+- **Medium confidence**: 50-70% (review recommended)
+- **Low confidence**: <50% (likely needs correction)
 
-2. Model Enhancements
-   - Neural network integration
-   - Active learning implementation
-   - Enhanced uncertainty estimation
+## System Requirements
+- **Storage**: ~500MB for models and training data
+- **Memory**: 4GB RAM minimum for training
+- **Processing**: Training takes 15-20 minutes per source
+- **Network**: Required for Google Cloud Storage backup
 
-3. Pipeline Optimization
-   - Automated retraining triggers
-   - Enhanced data validation
-   - Improved confidence estimation
+## Data Sources
+- **Household Expenses**: Monthly Google Sheets exports
+- **Credit Card**: UnionBank statement CSV downloads
+- **Categories**: Maintained in `data/valid_categories.txt`
 
-## 📝 License
+---
 
-MIT License
-
-Copyright (c) 2025
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-## 🤝 Contributing
-
-We welcome contributions to improve the expense categorization ML pipeline! Here's how you can help:
-
-### Contributing Guidelines
-
-1. **Fork the Repository**
-   - Create your own fork of the code
-   - Make the changes in your fork
-
-2. **Make Your Changes**
-   - Create a new branch for your feature or fix
-   - Write clear, concise commit messages
-   - Include tests if applicable
-   - Update documentation as needed
-
-3. **Code Style**
-   - Follow PEP 8 guidelines for Python code
-   - Use meaningful variable and function names
-   - Add comments for complex logic
-   - Maintain existing code formatting
-
-4. **Testing**
-   - Ensure all tests pass
-   - Add new tests for new features
-   - Test your changes with different data scenarios
-
-5. **Submit a Pull Request**
-   - Provide a clear description of the changes
-   - Link any relevant issues
-   - Update the README if needed
-   - Fill out the pull request template
-
-6. **Code Review**
-   - Be responsive to feedback
-   - Make requested changes promptly
-   - Keep discussions constructive
-
-### Reporting Issues
-
-- Use the issue tracker to report bugs
-- Include detailed steps to reproduce the issue
-- Provide system information and stack traces if applicable
-- Tag issues appropriately
-
-### Feature Requests
-
-- Use the issue tracker for feature requests
-- Clearly describe the proposed functionality
-- Explain the use case and benefits
-- Be open to discussion and feedback
-
-## 📫 Contact
-
-[your-email]
+**For detailed workflows and step-by-step instructions, see the `workflows/` directory.**

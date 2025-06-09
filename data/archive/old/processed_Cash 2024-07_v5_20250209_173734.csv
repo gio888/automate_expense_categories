@@ -1,0 +1,128 @@
+Date,Description,Category,Prediction_Confidence,Amount (Negated),Amount
+7/1/2024,rolly salary,Expenses:Professional Fees,0.4146740646915614,3000.0,3000.0
+7/3/2024,withdraw,Assets:Current Assets:Banks Local:BPI ATM House,0.5840672974627652,20000.0,20000.0
+7/5/2024,bamboo diffuser,Expenses:Food:Groceries,0.5924523540346852,522.0,522.0
+7/5/2024,cupling,Expenses:Food:Groceries,0.5924523540346852,250.0,250.0
+7/5/2024,willy labor,Expenses:Professional Fees,0.5005076545221684,500.0,500.0
+7/5/2024,mam B,Expenses:Transportation:Parking,0.3883036069432881,60.0,60.0
+7/5/2024,elmer,Expenses:Housing:Gardening,0.32982721475893134,1000.0,1000.0
+7/5/2024,santis rider,Expenses:Professional Fees,0.6082954488492883,250.0,250.0
+7/5/2024,yoghurt,Expenses:Food:Groceries,0.5924523540346852,228.0,228.0
+7/5/2024,milk,Expenses:Food:Groceries,0.6581732737363323,690.0,690.0
+7/5/2024,truffle,Expenses:Food:Groceries,0.5924523540346852,334.0,334.0
+7/5/2024,ham,Expenses:Food:Groceries,0.6381585435097096,242.0,242.0
+7/5/2024,ground beef,Expenses:Food:Groceries,0.63028428414777,1350.0,1350.0
+7/5/2024,pork neck,Expenses:Food:Groceries,0.6359681426163365,938.0,938.0
+7/5/2024,strawberry,Expenses:Food:Groceries,0.611823456748144,280.0,280.0
+7/5/2024,grapes,Expenses:Food:Groceries,0.6318125419372487,250.0,250.0
+7/5/2024,white onion,Expenses:Food:Groceries,0.49166059409097346,160.0,160.0
+7/5/2024,leeks,Expenses:Food:Groceries,0.6249245719964497,65.0,65.0
+7/5/2024,ampalaya,Expenses:Food:Groceries,0.595336583037689,90.0,90.0
+7/5/2024,betroot,Expenses:Food:Groceries,0.595336583037689,180.0,180.0
+7/5/2024,potato,Expenses:Food:Groceries,0.6422482561315049,250.0,250.0
+7/5/2024,papaya,Expenses:Food:Groceries,0.6185820225931172,120.0,120.0
+7/5/2024,mushroom,Expenses:Food:Groceries,0.5924523540346852,180.0,180.0
+7/5/2024,french beans,Expenses:Food:Groceries,0.6371198335166683,120.0,120.0
+7/5/2024,bokchoy,Expenses:Food:Groceries,0.6038410567447209,70.0,70.0
+7/5/2024,snow peas,Expenses:Food:Groceries,0.6320688818169689,90.0,90.0
+7/5/2024,basil,Expenses:Food:Groceries,0.6382201934697517,100.0,100.0
+7/5/2024,mint,Expenses:Food:Groceries,0.6371048666091966,100.0,100.0
+7/5/2024,alugbati,Expenses:Food:Groceries,0.6320756034554432,45.0,45.0
+7/5/2024,spring onion,Expenses:Food:Groceries,0.6460692393299275,45.0,45.0
+7/5/2024,mango,Expenses:Food:Groceries,0.6383831355677004,160.0,160.0
+7/5/2024,romaine,Expenses:Food:Groceries,0.6381910941511871,560.0,560.0
+7/5/2024,cucumber,Expenses:Food:Groceries,0.6363742061727651,320.0,320.0
+7/5/2024,celery,Expenses:Food:Groceries,0.6412761117381017,180.0,180.0
+7/5/2024,apple,Expenses:Food:Groceries,0.5331196049042378,150.0,150.0
+7/5/2024,broccoli,Expenses:Food:Groceries,0.6376039867565829,360.0,360.0
+7/5/2024,egg,Expenses:Food:Groceries,0.6489006359244262,250.0,250.0
+7/5/2024,prawn,Expenses:Food:Groceries,0.5924523540346852,1480.0,1480.0
+7/5/2024,asparagus,Expenses:Food:Groceries,0.6364435440143089,450.0,450.0
+7/5/2024,wansoy,Expenses:Food:Groceries,0.6322049800030323,210.0,210.0
+7/5/2024,flowers,Expenses:Food:Groceries,0.45044621873335516,550.0,550.0
+7/5/2024,tilapia,Expenses:Food:Groceries,0.6038410567447209,420.0,420.0
+7/5/2024,talakitok,Expenses:Food:Groceries,0.5924523540346852,750.0,750.0
+7/5/2024,pampano,Expenses:Food:Groceries,0.6252822794539807,580.0,580.0
+7/5/2024,ara food allowance,Liabilities:Other:Ara Loan:Allowance,0.5611199053677839,1000.0,1000.0
+7/5/2024,michelle food allowance,Liabilities:Other:Michelle Loan:Allowance,0.5612781665356757,1000.0,1000.0
+7/5/2024,knife sharpening,Expenses:Professional Fees,0.6340039084947334,750.0,750.0
+7/5/2024,ARC,Expenses:Utilities:Drinking Water,0.6407363408356618,480.0,480.0
+7/6/2024,withdraw,Assets:Current Assets:Banks Local:BPI ATM House,0.5840672974627652,9000.0,9000.0
+7/6/2024,shadow food & litter,Expenses:Household Supplies:Pet Expenses,0.5995707239625471,3420.0,3420.0
+7/6/2024,soda stream + delfee,Expenses:Professional Fees,0.33635530358162447,1890.0,1890.0
+7/6/2024,bernard berries ,Expenses:Food:Groceries,0.6302538266578473,900.0,900.0
+7/6/2024,nuts ,Expenses:Food:Groceries,0.6316959121836884,1350.0,1350.0
+7/6/2024,nuts del fee,Expenses:Professional Fees,0.42658685995618867,300.0,300.0
+7/7/2024,withdraw,Assets:Current Assets:Banks Local:BPI ATM House,0.5840672974627652,6000.0,6000.0
+7/7/2024,arguilla LCD phone change,Expenses:Food:Groceries,0.43044907008021843,2000.0,2000.0
+7/8/2024,EPS Healthy Option,Assets:Current Assets:Cash Local:EPS,0.48562856542463106,3019.0,3019.0
+7/8/2024,EPS Healthy Option,Assets:Current Assets:Cash Local:EPS,0.48562856542463106,3019.0,3019.0
+7/8/2024,healthy option alessi,Expenses:Health:Alternative,0.49931888018381726,2120.0,2120.0
+7/8/2024,taxi,Expenses:Transportation:Public,0.6392320491484723,100.0,100.0
+7/8/2024,summit water,Expenses:Utilities:Drinking Water,0.6465248417155145,2015.0,2015.0
+7/8/2024,EPS Mercury Drug,Expenses:Health:Medicines,0.4577594956736459,1160.0,1160.0
+7/8/2024,EPS Mercury Drug,Expenses:Health:Medicines,0.4577594956736459,1160.0,1160.0
+7/8/2024,SM supermarket veggies,Expenses:Food:Groceries,0.5924523540346852,820.0,820.0
+7/9/2024,mam B Handihaler,Expenses:Transportation:Parking,0.3883036069432881,305.0,305.0
+7/9/2024,del fee,Expenses:Professional Fees,0.6300617423654198,150.0,150.0
+7/9/2024,shopee container,Expenses:Food:Groceries,0.29849039349630363,160.0,160.0
+7/9/2024,mam B tip,Expenses:Food:Groceries,0.2134639315740534,1000.0,1000.0
+7/11/2024,withdraw,Assets:Current Assets:Banks Local:BPI ATM House,0.5840672974627652,10000.0,10000.0
+7/11/2024,albert couch,Expenses:Food:Groceries,0.5924523540346852,10000.0,10000.0
+7/12/2024,withdraw,Assets:Current Assets:Banks Local:BPI ATM House,0.5840672974627652,18000.0,18000.0
+7/12/2024,true value sponge cloth,Expenses:Household Supplies,0.5907114825849832,1020.0,1020.0
+7/12/2024,elmer x3,Expenses:Food:Groceries,0.39897605104609585,3000.0,3000.0
+7/12/2024,michelle food allowance,Liabilities:Other:Michelle Loan:Allowance,0.5612781665356757,3000.0,3000.0
+7/12/2024,pomelo,Expenses:Food:Groceries,0.6369720964470865,189.0,189.0
+7/12/2024,orange,Expenses:Food:Groceries,0.6391385150699627,100.0,100.0
+7/12/2024,banana,Expenses:Food:Groceries,0.6406178881980913,159.0,159.0
+7/12/2024,romaine,Expenses:Food:Groceries,0.6381910941511871,720.0,720.0
+7/12/2024,pipino,Expenses:Food:Groceries,0.6299748458072685,391.0,391.0
+7/12/2024,celery,Expenses:Food:Groceries,0.6412761117381017,260.0,260.0
+7/12/2024,apple,Expenses:Food:Groceries,0.5331196049042378,150.0,150.0
+7/12/2024,prawn,Expenses:Food:Groceries,0.5924523540346852,1500.0,1500.0
+7/12/2024,tilapya,Expenses:Food:Groceries,0.6185930199065388,510.0,510.0
+7/12/2024,talakitok,Expenses:Food:Groceries,0.5924523540346852,760.0,760.0
+7/12/2024,pampano,Expenses:Food:Groceries,0.6252822794539807,610.0,610.0
+7/12/2024,arguilla charger,Expenses:Food:Groceries,0.5924523540346852,420.0,420.0
+7/16/2024,withdraw,Assets:Current Assets:Banks Local:BPI ATM House,0.5840672974627652,16000.0,16000.0
+7/16/2024,albert couch ,Expenses:Food:Groceries,0.5924523540346852,4000.0,4000.0
+7/16/2024,willy salary,Expenses:Professional Fees,0.5804169113646417,500.0,500.0
+7/16/2024,seams stress,Expenses:Food:Groceries,0.5924523540346852,1000.0,1000.0
+7/16/2024,aircon cleaning,Expenses:Housing:Repairs,0.43884347353384784,5100.0,5100.0
+7/18/2024,lalamove vacuum,Expenses:Professional Fees,0.6027412839393982,250.0,250.0
+7/19/2024,lalamove seamstress,Expenses:Professional Fees,0.6027412839393982,120.0,120.0
+7/19/2024,shadow grab,Expenses:Household Supplies:Pet Expenses,0.47682176766659173,800.0,800.0
+7/31/2024,withdraw,Assets:Current Assets:Banks Local:BPI ATM House,0.5840672974627652,15000.0,15000.0
+7/31/2024,shadow cat hotel extra fee,Expenses:Household Supplies:Pet Expenses,0.32140807380803355,2400.0,2400.0
+7/31/2024,honey,Expenses:Food:Groceries,0.6196704404274344,2250.0,2250.0
+7/31/2024,dry cat food,Expenses:Childcare:Toys,0.4565531914879701,1157.0,1157.0
+7/31/2024,landmark ,Expenses:Household Supplies,0.48438886263690106,1324.0,1324.0
+7/31/2024,ara angkas,Expenses:Transportation:Public,0.6280715356689689,200.0,200.0
+7/31/2024,alessi healthy option,Expenses:Health:Alternative,0.49931888018381726,2160.0,2160.0
+7/31/2024,santis rider,Expenses:Professional Fees,0.6082954488492883,250.0,250.0
+7/31/2024,ground pork,Expenses:Food:Groceries,0.6359681426163365,920.0,920.0
+7/31/2024,ground beef,Expenses:Food:Groceries,0.63028428414777,515.0,515.0
+7/31/2024,yoghurt,Expenses:Food:Groceries,0.5924523540346852,420.0,420.0
+7/31/2024,gouda cheese,Expenses:Food:Groceries,0.6412673503945413,370.0,370.0
+7/31/2024,amlife amplodipine,Expenses:Food:Groceries,0.5924523540346852,735.0,735.0
+7/31/2024,crestor,Expenses:Food:Groceries,0.5924523540346852,1028.0,1028.0
+7/31/2024,rolly salary,Expenses:Professional Fees,0.4146740646915614,3000.0,3000.0
+7/31/2024,car van tip,Expenses:Transportation:Registration,0.5842220599133902,500.0,500.0
+7/31/2024,santis rider,Expenses:Professional Fees,0.6082954488492883,250.0,250.0
+7/31/2024,tomatoes,Expenses:Food:Groceries,0.5924523540346852,83.0,83.0
+7/31/2024,pork neck,Expenses:Food:Groceries,0.6359681426163365,1033.0,1033.0
+7/31/2024,milk,Expenses:Food:Groceries,0.6581732737363323,276.0,276.0
+7/31/2024,romaine,Expenses:Food:Groceries,0.6381910941511871,164.0,164.0
+7/31/2024,farmers ham,Expenses:Food:Groceries,0.6381585435097096,79.0,79.0
+7/31/2024,manchego,Expenses:Food:Groceries,0.6165888140325886,333.0,333.0
+7/31/2024,youghurt,Expenses:Food:Groceries,0.5924523540346852,228.0,228.0
+7/31/2024,parmesan,Expenses:Food:Groceries,0.5924523540346852,414.0,414.0
+7/31/2024,mozarella,Expenses:Food:Groceries,0.5924523540346852,392.0,392.0
+7/31/2024,calamansi,Expenses:Food:Groceries,0.6425132450633156,1020.0,1020.0
+7/31/2024,cucumber,Expenses:Food:Groceries,0.6363742061727651,180.0,180.0
+7/31/2024,tomatoes,Expenses:Food:Groceries,0.5924523540346852,90.0,90.0
+7/31/2024,romaine,Expenses:Food:Groceries,0.6381910941511871,250.0,250.0
+7/31/2024,hotdog bread,Expenses:Food:Groceries,0.6295404716942298,180.0,180.0
+7/31/2024,nasonex alessi,Expenses:Childcare:Clothes,0.33098401852970905,1994.0,1994.0
+7/31/2024,medicol,Expenses:Food:Groceries,0.5924523540346852,130.0,130.0
