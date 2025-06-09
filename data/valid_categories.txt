@@ -127,6 +127,7 @@ Liabilities:Other:Marie
 Liabilities:Other:Michelle Loan
 Liabilities:Other:Michelle Loan:Allowance
 Liabilities:Other:Michelle Loan:OT
+Liabilities:Other:Michelle Loan:Others
 Liabilities:Other:Michelle Loan:Salary
 Liabilities:Test Multi Liability 1
 Income

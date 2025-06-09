@@ -1,0 +1,671 @@
+Date,Description,Amount (Negated),Amount,Category,Amount (Raw),Entered,Reconciled
+10/2/2024,soda stream,1000.00,,Expenses:Professional Fees,-1000.00,FALSE,FALSE
+10/2/2024,soda del fee,350.00,,Expenses:Professional Fees,-350.00,FALSE,FALSE
+10/3/2024,del fee mam B,100.00,,Expenses:Professional Fees,-100.00,FALSE,FALSE
+10/4/2024,withdraw,,19000.00,Assets:Current Assets:Banks Local:BPI ATM House,19000.00,FALSE,FALSE
+10/4/2024,rolly salary,3000.00,,Expenses:Professional Fees,-3000.00,FALSE,FALSE
+10/4/2024,milk,552.00,,Expenses:Food:Groceries,-552.00,FALSE,FALSE
+10/4/2024,tuna,588.00,,Expenses:Food:Groceries,-588.00,FALSE,FALSE
+10/4/2024,farmers ham,308.00,,Expenses:Food:Groceries,-308.00,FALSE,FALSE
+10/4/2024,basil,60.00,,Expenses:Food:Groceries,-60.00,FALSE,FALSE
+10/4/2024,asparagus,267.00,,Expenses:Food:Groceries,-267.00,FALSE,FALSE
+10/4/2024,mixed salad,225.00,,Expenses:Food:Groceries,-225.00,FALSE,FALSE
+10/4/2024,rider,250.00,,Expenses:Professional Fees,-250.00,FALSE,FALSE
+10/4/2024,flower,550.00,,Expenses:Food:Groceries,-550.00,FALSE,FALSE
+10/4/2024,romaine,680.00,,Expenses:Food:Groceries,-680.00,FALSE,FALSE
+10/4/2024,talong,120.00,,Expenses:Food:Groceries,-120.00,FALSE,FALSE
+10/4/2024,saging,180.00,,Expenses:Food:Groceries,-180.00,FALSE,FALSE
+10/4/2024,mais,180.00,,Expenses:Food:Groceries,-180.00,FALSE,FALSE
+10/4/2024,carrots,210.00,,Expenses:Food:Groceries,-210.00,FALSE,FALSE
+10/4/2024,saba,150.00,,Expenses:Food:Groceries,-150.00,FALSE,FALSE
+10/4/2024,broccoli,420.00,,Expenses:Food:Groceries,-420.00,FALSE,FALSE
+10/4/2024,apple,150.00,,Expenses:Food:Groceries,-150.00,FALSE,FALSE
+10/4/2024,onion,210.00,,Expenses:Food:Groceries,-210.00,FALSE,FALSE
+10/4/2024,tomato,180.00,,Expenses:Food:Groceries,-180.00,FALSE,FALSE
+10/4/2024,lemon,150.00,,Expenses:Food:Groceries,-150.00,FALSE,FALSE
+10/4/2024,bell pepper,260.00,,Expenses:Food:Groceries,-260.00,FALSE,FALSE
+10/4/2024,pipino,320.00,,Expenses:Food:Groceries,-320.00,FALSE,FALSE
+10/4/2024,ponkan,150.00,,Expenses:Food:Groceries,-150.00,FALSE,FALSE
+10/4/2024,french beans,160.00,,Expenses:Food:Groceries,-160.00,FALSE,FALSE
+10/4/2024,grapes,320.00,,Expenses:Food:Groceries,-320.00,FALSE,FALSE
+10/4/2024,wansoy,240.00,,Expenses:Food:Groceries,-240.00,FALSE,FALSE
+10/4/2024,cauliflower,410.00,,Expenses:Food:Groceries,-410.00,FALSE,FALSE
+10/4/2024,monggo,70.00,,Expenses:Food:Groceries,-70.00,FALSE,FALSE
+10/4/2024,potato,340.00,,Expenses:Food:Groceries,-340.00,FALSE,FALSE
+10/4/2024,egg,250.00,,Expenses:Food:Groceries,-250.00,FALSE,FALSE
+10/4/2024,magic sarap,70.00,,Expenses:Food:Groceries,-70.00,FALSE,FALSE
+10/4/2024,pinya,190.00,,Expenses:Food:Groceries,-190.00,FALSE,FALSE
+10/4/2024,dragon fruit,185.00,,Expenses:Food:Groceries,-185.00,FALSE,FALSE
+10/4/2024,blueberry,390.00,,Expenses:Food:Groceries,-390.00,FALSE,FALSE
+10/4/2024,strawberry,350.00,,Expenses:Food:Groceries,-350.00,FALSE,FALSE
+10/4/2024,ginger,100.00,,Expenses:Food:Groceries,-100.00,FALSE,FALSE
+10/4/2024,garlic,130.00,,Expenses:Food:Groceries,-130.00,FALSE,FALSE
+10/4/2024,snow peas,90.00,,Expenses:Food:Groceries,-90.00,FALSE,FALSE
+10/4/2024,mint,70.00,,Expenses:Food:Groceries,-70.00,FALSE,FALSE
+10/4/2024,cherry tomato,150.00,,Expenses:Food:Groceries,-150.00,FALSE,FALSE
+10/4/2024,tilapiya,420.00,,Expenses:Food:Groceries,-420.00,FALSE,FALSE
+10/4/2024,pampano,690.00,,Expenses:Food:Groceries,-690.00,FALSE,FALSE
+10/4/2024,salmon,880.00,,Expenses:Food:Groceries,-880.00,FALSE,FALSE
+10/4/2024,talakitok,710.00,,Expenses:Food:Groceries,-710.00,FALSE,FALSE
+10/4/2024,elmer,1000.00,,Expenses:Professional Fees,-1000.00,FALSE,FALSE
+10/5/2024,ARC,660.00,,Expenses:Utilities:Drinking Water,-660.00,FALSE,FALSE
+10/5/2024,Mam B Herbycin,272.00,,Expenses:Health:Medicines,-272.00,FALSE,FALSE
+10/5/2024,Nadixa Cream (michelle),1900.00,,Expenses:Household Staff:Michelle:Others,-1900.00,FALSE,FALSE
+10/5/2024,Angkas Michelle,200.00,,Expenses:Transportation:Public,-200.00,FALSE,FALSE
+10/5/2024,Withdraw,,10000.00,Assets:Current Assets:Banks Local:BPI ATM House,10000.00,FALSE,FALSE
+10/5/2024,ara food allowance,1000.00,,Liabilities:Other:Ara Loan:Allowance,-1000.00,FALSE,FALSE
+10/5/2024,michelle food allowance,1000.00,,Liabilities:Other:Michelle Loan:Allowance,-1000.00,FALSE,FALSE
+10/5/2024,Alessi Vitamins,1095.00,,Expenses:Health:Medicines,-1095.00,FALSE,FALSE
+10/5/2024,H.O Cereal,590.00,,Expenses:Food:Groceries,-590.00,FALSE,FALSE
+10/5/2024,Canberries,455.00,,Expenses:Food:Groceries,-455.00,FALSE,FALSE
+10/5/2024,Golden Raisins,350.00,,Expenses:Food:Groceries,-350.00,FALSE,FALSE
+10/5/2024,Almond,490.00,,Expenses:Food:Groceries,-490.00,FALSE,FALSE
+10/5/2024,Chia Seed,380.00,,Expenses:Food:Groceries,-380.00,FALSE,FALSE
+10/5/2024,Flax Seed,280.00,,Expenses:Food:Groceries,-280.00,FALSE,FALSE
+10/5/2024,Raisins,300.00,,Expenses:Food:Groceries,-300.00,FALSE,FALSE
+10/5/2024,del fee,250.00,,Expenses:Professional Fees,-250.00,FALSE,FALSE
+10/7/2024,frozen vegetable,285.00,,Expenses:Food:Groceries,-285.00,FALSE,FALSE
+10/7/2024,frozen fruits,520.00,,Expenses:Food:Groceries,-520.00,FALSE,FALSE
+10/7/2024,greek yougurt,199.00,,Expenses:Food:Groceries,-199.00,FALSE,FALSE
+10/7/2024,mixed berries,520.00,,Expenses:Food:Groceries,-520.00,FALSE,FALSE
+10/7/2024,del fee,150.00,,Expenses:Professional Fees,-150.00,FALSE,FALSE
+10/7/2024,kale,321.00,,Expenses:Food:Groceries,-321.00,FALSE,FALSE
+10/7/2024,rider,250.00,,Expenses:Professional Fees,-250.00,FALSE,FALSE
+10/7/2024,asparagus,340.00,,Expenses:Food:Groceries,-340.00,FALSE,FALSE
+10/7/2024,sinupret,379.00,,Expenses:Health:Medicines,-379.00,FALSE,FALSE
+10/7/2024,biogesic,170.00,,Expenses:Health:Medicines,-170.00,FALSE,FALSE
+10/7/2024,dulcolax,440.00,,Expenses:Health:Medicines,-440.00,FALSE,FALSE
+10/7/2024,fluimucil,323.00,,Expenses:Health:Medicines,-323.00,FALSE,FALSE
+10/8/2024,withdraw,,10000.00,Assets:Current Assets:Banks Local:BPI ATM House,10000.00,FALSE,FALSE
+10/8/2024,gouda,260.00,,Expenses:Food:Groceries,-260.00,FALSE,FALSE
+10/8/2024,truffle,410.00,,Expenses:Food:Groceries,-410.00,FALSE,FALSE
+10/8/2024,mozarella,418.00,,Expenses:Food:Groceries,-418.00,FALSE,FALSE
+10/8/2024,ground beef,870.00,,Expenses:Food:Groceries,-870.00,FALSE,FALSE
+10/8/2024,ham,220.00,,Expenses:Food:Groceries,-220.00,FALSE,FALSE
+10/8/2024,manchego,460.00,,Expenses:Food:Groceries,-460.00,FALSE,FALSE
+10/8/2024,rider,250.00,,Expenses:Professional Fees,-250.00,FALSE,FALSE
+10/8/2024,pineapple,200.00,,Expenses:Food:Groceries,-200.00,FALSE,FALSE
+10/8/2024,ice cream,448.00,,Expenses:Food:Groceries,-448.00,FALSE,FALSE
+10/8/2024,bacon,720.00,,Expenses:Food:Groceries,-720.00,FALSE,FALSE
+10/8/2024,lalamove,150.00,,Expenses:Professional Fees,-150.00,FALSE,FALSE
+10/8/2024,mam B,50.00,,Expenses:Transportation:Parking,-50.00,FALSE,FALSE
+10/8/2024,Avamys,2025.00,,Expenses:Health:Medicines,-2025.00,FALSE,FALSE
+10/8/2024,montair,1440.00,,Expenses:Food:Groceries,-1440.00,FALSE,FALSE
+10/8/2024,bilastine,1237.00,,Expenses:Health:Medicines,-1237.00,FALSE,FALSE
+10/11/2024,withdraw,,20000.00,Assets:Current Assets:Banks Local:BPI ATM House,20000.00,FALSE,FALSE
+10/11/2024,andy maluche,1770.00,,Expenses:Food:Groceries,-1770.00,FALSE,FALSE
+10/11/2024,honey x3,1390.00,,Expenses:Food:Groceries,-1390.00,FALSE,FALSE
+10/11/2024,milk,690.00,,Expenses:Food:Groceries,-690.00,FALSE,FALSE
+10/11/2024,rider,150.00,,Expenses:Professional Fees,-150.00,FALSE,FALSE
+10/11/2024,norgesic,1440.00,,Expenses:Health:Medicines,-1440.00,FALSE,FALSE
+10/11/2024,allerzet,1012.00,,Expenses:Health:Medicines,-1012.00,FALSE,FALSE
+10/11/2024,difflam,600.00,,Expenses:Health:Medicines,-600.00,FALSE,FALSE
+10/11/2024,elmer,1000.00,,Expenses:Professional Fees,-1000.00,FALSE,FALSE
+10/11/2024,fertilizer,800.00,,Expenses:Food:Groceries,-800.00,FALSE,FALSE
+10/11/2024,small pots,350.00,,Expenses:Household Supplies,-350.00,FALSE,FALSE
+10/11/2024,shadows food,2500.00,,Expenses:Household Supplies:Pet Expenses,-2500.00,FALSE,FALSE
+10/11/2024,ARC,660.00,,Expenses:Utilities:Drinking Water,-660.00,FALSE,FALSE
+10/11/2024,flourescent x4 bulb,1900.00,,Expenses:Household Supplies,-1900.00,FALSE,FALSE
+10/11/2024,ara food allowance,1000.00,,Liabilities:Other:Ara Loan:Allowance,-1000.00,FALSE,FALSE
+10/11/2024,michelle food allowance,1000.00,,Liabilities:Other:Michelle Loan:Allowance,-1000.00,FALSE,FALSE
+10/12/2024,withdraw,,10000.00,Assets:Current Assets:Banks Local:BPI ATM House,10000.00,FALSE,FALSE
+10/12/2024,summit,1180.00,,Expenses:Utilities:Drinking Water,-1180.00,FALSE,FALSE
+10/12/2024,Hasa,650.00,,Expenses:Professional Fees,-650.00,FALSE,FALSE
+10/12/2024,bike repair mentainance,680.00,,Expenses:Professional Fees,-680.00,FALSE,FALSE
+10/14/2024,baking flour,410.00,,Expenses:Food:Groceries,-410.00,FALSE,FALSE
+10/14/2024,almond flour,534.00,,Expenses:Food:Groceries,-534.00,FALSE,FALSE
+10/14/2024,coconut flour,370.00,,Expenses:Food:Groceries,-370.00,FALSE,FALSE
+10/14/2024,buckwheat flour,525.00,,Expenses:Food:Groceries,-525.00,FALSE,FALSE
+10/14/2024,gluten flour,572.00,,Expenses:Food:Groceries,-572.00,FALSE,FALSE
+10/14/2024,bega cheese,1847.00,,Expenses:Food:Groceries,-1847.00,FALSE,FALSE
+10/14/2024,michelle angkas,200.00,,Expenses:Transportation:Public,-200.00,FALSE,FALSE
+10/14/2024,tennis ball,4700.00,,Expenses:Childcare:Extracurricular Activities,-4700.00,FALSE,FALSE
+10/14/2024,del fee,300.00,,Expenses:Professional Fees,-300.00,FALSE,FALSE
+10/16/2024,Mam B,100.00,,Expenses:Transportation:Parking,-100.00,FALSE,FALSE
+10/16/2024,gasul,1050.00,,Expenses:Utilities:Gas,-1050.00,FALSE,FALSE
+10/17/2024,withdraw,,20000.00,Assets:Current Assets:Banks Local:BPI ATM House,20000.00,FALSE,FALSE
+10/17/2024,salt lamp,328.00,,Expenses:Household Supplies,-328.00,FALSE,FALSE
+10/18/2024,rider,250.00,,Expenses:Professional Fees,-250.00,FALSE,FALSE
+10/18/2024,milk,828.00,,Expenses:Food:Groceries,-828.00,FALSE,FALSE
+10/18/2024,olives,490.00,,Expenses:Food:Groceries,-490.00,FALSE,FALSE
+10/18/2024,goat cheese,322.00,,Expenses:Food:Groceries,-322.00,FALSE,FALSE
+10/18/2024,mozarella,233.00,,Expenses:Food:Groceries,-233.00,FALSE,FALSE
+10/18/2024,ham,169.00,,Expenses:Food:Groceries,-169.00,FALSE,FALSE
+10/18/2024,pork neck,525.00,,Expenses:Food:Groceries,-525.00,FALSE,FALSE
+10/18/2024,tennis,1850.00,,Expenses:Health:Sports,-1850.00,FALSE,FALSE
+10/18/2024,mam B gym,1500.00,,Expenses:Health:Sports,-1500.00,FALSE,FALSE
+10/18/2024,sir gio,500.00,,Expenses:Miscellaneous:Unaccounted,-500.00,FALSE,FALSE
+10/18/2024,rheyson,1000.00,,Expenses:Health:Sports,-1000.00,FALSE,FALSE
+10/18/2024,withdraw,,10000.00,Assets:Current Assets:Banks Local:BPI ATM House,10000.00,FALSE,FALSE
+10/18/2024,flower,550.00,,Expenses:Food:Groceries,-550.00,FALSE,FALSE
+10/18/2024,spinach,380.00,,Expenses:Food:Groceries,-380.00,FALSE,FALSE
+10/18/2024,broccoli,420.00,,Expenses:Food:Groceries,-420.00,FALSE,FALSE
+10/18/2024,tomato,230.00,,Expenses:Food:Groceries,-230.00,FALSE,FALSE
+10/18/2024,egg,300.00,,Expenses:Food:Groceries,-300.00,FALSE,FALSE
+10/18/2024,carrots,260.00,,Expenses:Food:Groceries,-260.00,FALSE,FALSE
+10/18/2024,sukini,260.00,,Expenses:Food:Groceries,-260.00,FALSE,FALSE
+10/18/2024,lemon,150.00,,Expenses:Food:Groceries,-150.00,FALSE,FALSE
+10/18/2024,white onion,280.00,,Expenses:Food:Groceries,-280.00,FALSE,FALSE
+10/18/2024,luya,160.00,,Expenses:Food:Groceries,-160.00,FALSE,FALSE
+10/18/2024,basil,120.00,,Expenses:Food:Groceries,-120.00,FALSE,FALSE
+10/18/2024,potato,380.00,,Expenses:Food:Groceries,-380.00,FALSE,FALSE
+10/18/2024,mint,100.00,,Expenses:Food:Groceries,-100.00,FALSE,FALSE
+10/18/2024,wansoy,280.00,,Expenses:Food:Groceries,-280.00,FALSE,FALSE
+10/18/2024,cherry tomato,260.00,,Expenses:Food:Groceries,-260.00,FALSE,FALSE
+10/18/2024,apple,250.00,,Expenses:Food:Groceries,-250.00,FALSE,FALSE
+10/18/2024,strawberry,360.00,,Expenses:Food:Groceries,-360.00,FALSE,FALSE
+10/18/2024,grapes,380.00,,Expenses:Food:Groceries,-380.00,FALSE,FALSE
+10/18/2024,bell pepper,320.00,,Expenses:Food:Groceries,-320.00,FALSE,FALSE
+10/18/2024,mango,180.00,,Expenses:Food:Groceries,-180.00,FALSE,FALSE
+10/18/2024,blueberry,420.00,,Expenses:Food:Groceries,-420.00,FALSE,FALSE
+10/18/2024,saba,280.00,,Expenses:Food:Groceries,-280.00,FALSE,FALSE
+10/18/2024,upo,150.00,,Expenses:Food:Groceries,-150.00,FALSE,FALSE
+10/18/2024,cauliflower,380.00,,Expenses:Food:Groceries,-380.00,FALSE,FALSE
+10/18/2024,asparagus,480.00,,Expenses:Food:Groceries,-480.00,FALSE,FALSE
+10/18/2024,avocado,380.00,,Expenses:Food:Groceries,-380.00,FALSE,FALSE
+10/18/2024,sitaw,120.00,,Expenses:Food:Groceries,-120.00,FALSE,FALSE
+10/18/2024,orange,200.00,,Expenses:Food:Groceries,-200.00,FALSE,FALSE
+10/18/2024,dragon fruit,190.00,,Expenses:Food:Groceries,-190.00,FALSE,FALSE
+10/18/2024,garlic,220.00,,Expenses:Food:Groceries,-220.00,FALSE,FALSE
+10/18/2024,alugbati,50.00,,Expenses:Food:Groceries,-50.00,FALSE,FALSE
+10/18/2024,romaine,360.00,,Expenses:Food:Groceries,-360.00,FALSE,FALSE
+10/18/2024,cucumber,260.00,,Expenses:Food:Groceries,-260.00,FALSE,FALSE
+10/18/2024,celery,100.00,,Expenses:Food:Groceries,-100.00,FALSE,FALSE
+10/18/2024,pinya,200.00,,Expenses:Food:Groceries,-200.00,FALSE,FALSE
+10/18/2024,banana,200.00,,Expenses:Food:Groceries,-200.00,FALSE,FALSE
+10/18/2024,snow peas,100.00,,Expenses:Food:Groceries,-100.00,FALSE,FALSE
+10/18/2024,french beans,150.00,,Expenses:Food:Groceries,-150.00,FALSE,FALSE
+10/18/2024,talong,120.00,,Expenses:Food:Groceries,-120.00,FALSE,FALSE
+10/18/2024,tanglad,80.00,,Expenses:Food:Groceries,-80.00,FALSE,FALSE
+10/18/2024,mushroom,160.00,,Expenses:Food:Groceries,-160.00,FALSE,FALSE
+10/18/2024,walis,180.00,,Expenses:Household Supplies,-180.00,FALSE,FALSE
+10/18/2024,kalabasa,280.00,,Expenses:Food:Groceries,-280.00,FALSE,FALSE
+10/18/2024,salmon,980.00,,Expenses:Food:Groceries,-980.00,FALSE,FALSE
+10/18/2024,pampano,670.00,,Expenses:Food:Groceries,-670.00,FALSE,FALSE
+10/18/2024,tilapiya,420.00,,Expenses:Food:Groceries,-420.00,FALSE,FALSE
+10/18/2024,bangus,460.00,,Expenses:Food:Groceries,-460.00,FALSE,FALSE
+10/18/2024,prawn,1650.00,,Expenses:Food:Groceries,-1650.00,FALSE,FALSE
+10/18/2024,elmer,1000.00,,Expenses:Professional Fees,-1000.00,FALSE,FALSE
+10/18/2024,soil,1200.00,,Expenses:Household Supplies,-1200.00,FALSE,FALSE
+10/18/2024,ara food allowance,1000.00,,Liabilities:Other:Ara Loan:Allowance,-1000.00,FALSE,FALSE
+10/18/2024,michelle food allowance,1000.00,,Liabilities:Other:Michelle Loan:Allowance,-1000.00,FALSE,FALSE
+10/19/2024,ARC,660.00,,Expenses:Utilities:Drinking Water,-660.00,FALSE,FALSE
+10/19/2024,Summit,775.00,,Expenses:Utilities:Drinking Water,-775.00,FALSE,FALSE
+10/20/2024,strainer for shower drain,50.00,,Expenses:Household Supplies,-50.00,FALSE,FALSE
+10/21/2024,Alessi Donation Treats,3000.00,,Expenses:Gifts,-3000.00,FALSE,FALSE
+10/23/2024,EPS Healthy Option,,7942.00,Expenses:Health:Alternative,7942.00,FALSE,FALSE
+10/23/2024,Gluten Flour,525.00,,Expenses:Food:Groceries,-525.00,FALSE,FALSE
+10/23/2024,crunches bar,1485.00,,Expenses:Food:Groceries,-1485.00,FALSE,FALSE
+10/23/2024,kimmie chocolate,1107.00,,Expenses:Food:Groceries,-1107.00,FALSE,FALSE
+10/23/2024,Orange shampoo,475.00,,Expenses:Personal Care,-475.00,FALSE,FALSE
+10/23/2024,zinc vitamins,975.00,,Expenses:Health:Medicines,-975.00,FALSE,FALSE
+10/23/2024,Alter Eco Chocolate,1540.00,,Expenses:Food:Groceries,-1540.00,FALSE,FALSE
+10/23/2024,Vanilla Extract,1470.00,,Expenses:Food:Groceries,-1470.00,FALSE,FALSE
+10/23/2024,Sour Cream,365.00,,Expenses:Food:Groceries,-365.00,FALSE,FALSE
+10/23/2024,Withdraw,,15000.00,Assets:Current Assets:Banks Local:BPI ATM House,15000.00,FALSE,FALSE
+10/23/2024,Magnolia Cream,119.00,,Expenses:Health:Medicines,-119.00,FALSE,FALSE
+10/23/2024,Chicken Wings,262.00,,Expenses:Food:Groceries,-262.00,FALSE,FALSE
+10/23/2024,Parsley,88.00,,Expenses:Food:Groceries,-88.00,FALSE,FALSE
+10/23/2024,Dark Chocolate,786.00,,Expenses:Food:Groceries,-786.00,FALSE,FALSE
+10/23/2024,Crispy Fry,64.00,,Expenses:Food:Groceries,-64.00,FALSE,FALSE
+10/23/2024,Sponge Cloth,495.00,,Expenses:Household Supplies,-495.00,FALSE,FALSE
+10/23/2024,Butter,780.00,,Expenses:Food:Groceries,-780.00,FALSE,FALSE
+10/23/2024,Bacon,719.00,,Expenses:Food:Groceries,-719.00,FALSE,FALSE
+10/23/2024,Calamansi Syrup,380.00,,Expenses:Food:Groceries,-380.00,FALSE,FALSE
+10/23/2024,Santis,809.00,,Expenses:Food:Groceries,-809.00,FALSE,FALSE
+10/24/2024,Hasa,700.00,,Expenses:Professional Fees,-700.00,FALSE,FALSE
+10/25/2024,Motillium,703.00,,Expenses:Health:Medicines,-703.00,FALSE,FALSE
+10/25/2024,Sinupret,758.00,,Expenses:Health:Medicines,-758.00,FALSE,FALSE
+10/25/2024,Allerzet,1012.00,,Expenses:Health:Medicines,-1012.00,FALSE,FALSE
+10/25/2024,Berroca,562.00,,Expenses:Health:Medicines,-562.00,FALSE,FALSE
+10/25/2024,Bilastine,1237.50,,Expenses:Health:Medicines,-1237.50,FALSE,FALSE
+10/25/2024,Fluimucil,646.50,,Expenses:Health:Medicines,-646.50,FALSE,FALSE
+10/25/2024,Zykast,945.00,,Expenses:Health:Medicines,-945.00,FALSE,FALSE
+10/25/2024,dulcolax,404.00,,Expenses:Health:Medicines,-404.00,FALSE,FALSE
+10/25/2024,Elmer x2 salary,2000.00,,Expenses:Professional Fees,-2000.00,FALSE,FALSE
+10/26/2024,Santis Milk,138.00,,Expenses:Food:Groceries,-138.00,FALSE,FALSE
+10/26/2024,Rider,100.00,,Expenses:Professional Fees,-100.00,FALSE,FALSE
+10/26/2024,Withdraw,,7000.00,Assets:Current Assets:Banks Local:BPI ATM House,7000.00,FALSE,FALSE
+10/26/2024,Shadow Food,1800.00,,Expenses:Household Supplies:Pet Expenses,-1800.00,FALSE,FALSE
+10/26/2024,Shadow litter,700.00,,Expenses:Household Supplies:Pet Expenses,-700.00,FALSE,FALSE
+10/26/2024,Ara Food Allowance x2 weeks,2000.00,,Liabilities:Other:Ara Loan:Allowance,-2000.00,FALSE,FALSE
+10/26/2024,Michelle food allownce x2 weeks,2000.00,,Liabilities:Other:Michelle Loan:Allowance,-2000.00,FALSE,FALSE
+10/27/2024,Ara Overtime,325.00,,Expenses:Household Staff:Ara:OT,-325.00,FALSE,FALSE
+10/27/2024,Michelle Overtime,325.00,,Expenses:Household Staff:Michelle:OT,-325.00,FALSE,FALSE
+10/27/2024,Adjustment,,860.00,Expenses:Miscellaneous:Adjustment,860.00,FALSE,FALSE
+11/3/2024,withdraw,,1000.00,Assets:Current Assets:Banks Local:BPI ATM House,1000.00,FALSE,FALSE
+11/4/2024,shadow hotel tip,200.00,,Expenses:Household Supplies:Pet Expenses,-200.00,FALSE,FALSE
+11/4/2024,withdraw,,20000.00,Assets:Current Assets:Banks Local:BPI ATM House,20000.00,FALSE,FALSE
+11/4/2024,amlife,735.00,,Expenses:Food:Groceries,-735.00,FALSE,FALSE
+11/4/2024,crestor,1029.00,,Expenses:Health:Medicines,-1029.00,FALSE,FALSE
+11/4/2024,rolly salary,3000.00,,Expenses:Professional Fees,-3000.00,FALSE,FALSE
+11/4/2024,willy salary,1300.00,,Expenses:Professional Fees,-1300.00,FALSE,FALSE
+11/4/2024,receptacle,200.00,,Expenses:Household Supplies,-200.00,FALSE,FALSE
+11/4/2024,sealant,70.00,,Expenses:Food:Groceries,-70.00,FALSE,FALSE
+11/4/2024,house need Landmark,6827.00,,Expenses:Household Supplies,-6827.00,FALSE,FALSE
+11/4/2024,ara'michelle grocery,2363.00,,Expenses:Household Staff:Ara:Others,-2363.00,FALSE,FALSE
+11/4/2024,bega cheese,1700.00,,Expenses:Food:Groceries,-1700.00,FALSE,FALSE
+11/4/2024,santis milk,276.00,,Expenses:Food:Groceries,-276.00,FALSE,FALSE
+11/4/2024,santis rider,150.00,,Expenses:Professional Fees,-150.00,FALSE,FALSE
+11/5/2024,del fee,250.00,,Expenses:Professional Fees,-250.00,FALSE,FALSE
+11/5/2024,pork neck,409.00,,Expenses:Food:Groceries,-409.00,FALSE,FALSE
+11/5/2024,milk,276.00,,Expenses:Food:Groceries,-276.00,FALSE,FALSE
+11/7/2024,rider tip,100.00,,Expenses:Professional Fees,-100.00,FALSE,FALSE
+11/8/2024,withdraw,,20000.00,Assets:Current Assets:Banks Local:BPI ATM House,20000.00,FALSE,FALSE
+11/8/2024,milk,828.00,,Expenses:Food:Groceries,-828.00,FALSE,FALSE
+11/8/2024,ham,142.00,,Expenses:Food:Groceries,-142.00,FALSE,FALSE
+11/8/2024,truffle,333.00,,Expenses:Food:Groceries,-333.00,FALSE,FALSE
+11/8/2024,tuna,483.00,,Expenses:Food:Groceries,-483.00,FALSE,FALSE
+11/8/2024,pork neck,470.00,,Expenses:Food:Groceries,-470.00,FALSE,FALSE
+11/8/2024,del fee,250.00,,Expenses:Professional Fees,-250.00,FALSE,FALSE
+11/8/2024,quark yogurt,690.00,,Expenses:Food:Groceries,-690.00,FALSE,FALSE
+11/8/2024,del fee,150.00,,Expenses:Professional Fees,-150.00,FALSE,FALSE
+11/8/2024,flower,650.00,,Expenses:Food:Groceries,-650.00,FALSE,FALSE
+11/8/2024,betroot,180.00,,Expenses:Food:Groceries,-180.00,FALSE,FALSE
+11/8/2024,cauliflower,320.00,,Expenses:Food:Groceries,-320.00,FALSE,FALSE
+11/8/2024,broccoli,410.00,,Expenses:Food:Groceries,-410.00,FALSE,FALSE
+11/8/2024,white onion,260.00,,Expenses:Food:Groceries,-260.00,FALSE,FALSE
+11/8/2024,red onion,210.00,,Expenses:Food:Groceries,-210.00,FALSE,FALSE
+11/8/2024,lemon,150.00,,Expenses:Food:Groceries,-150.00,FALSE,FALSE
+11/8/2024,blue berries,450.00,,Expenses:Food:Groceries,-450.00,FALSE,FALSE
+11/8/2024,tomato,230.00,,Expenses:Food:Groceries,-230.00,FALSE,FALSE
+11/8/2024,green pepper,210.00,,Expenses:Food:Groceries,-210.00,FALSE,FALSE
+11/8/2024,red bell pepper,190.00,,Expenses:Food:Groceries,-190.00,FALSE,FALSE
+11/8/2024,apple,220.00,,Expenses:Food:Groceries,-220.00,FALSE,FALSE
+11/8/2024,orange,180.00,,Expenses:Food:Groceries,-180.00,FALSE,FALSE
+11/8/2024,avocado,420.00,,Expenses:Food:Groceries,-420.00,FALSE,FALSE
+11/8/2024,pinya,230.00,,Expenses:Food:Groceries,-230.00,FALSE,FALSE
+11/8/2024,banana,230.00,,Expenses:Food:Groceries,-230.00,FALSE,FALSE
+11/8/2024,mint,100.00,,Expenses:Food:Groceries,-100.00,FALSE,FALSE
+11/8/2024,wansoy,220.00,,Expenses:Food:Groceries,-220.00,FALSE,FALSE
+11/8/2024,repolyo,190.00,,Expenses:Food:Groceries,-190.00,FALSE,FALSE
+11/8/2024,cucumber,290.00,,Expenses:Food:Groceries,-290.00,FALSE,FALSE
+11/8/2024,carrots,310.00,,Expenses:Food:Groceries,-310.00,FALSE,FALSE
+11/8/2024,french beans,180.00,,Expenses:Food:Groceries,-180.00,FALSE,FALSE
+11/8/2024,alugbati,60.00,,Expenses:Food:Groceries,-60.00,FALSE,FALSE
+11/8/2024,potato,380.00,,Expenses:Food:Groceries,-380.00,FALSE,FALSE
+11/8/2024,lemon grass,130.00,,Expenses:Food:Groceries,-130.00,FALSE,FALSE
+11/8/2024,grapes,360.00,,Expenses:Food:Groceries,-360.00,FALSE,FALSE
+11/8/2024,romaine,410.00,,Expenses:Food:Groceries,-410.00,FALSE,FALSE
+11/8/2024,upo,150.00,,Expenses:Food:Groceries,-150.00,FALSE,FALSE
+11/8/2024,saba,180.00,,Expenses:Food:Groceries,-180.00,FALSE,FALSE
+11/8/2024,mushroom,180.00,,Expenses:Food:Groceries,-180.00,FALSE,FALSE
+11/8/2024,strawberry,360.00,,Expenses:Food:Groceries,-360.00,FALSE,FALSE
+11/8/2024,egg,280.00,,Expenses:Food:Groceries,-280.00,FALSE,FALSE
+11/8/2024,pomelo,210.00,,Expenses:Food:Groceries,-210.00,FALSE,FALSE
+11/8/2024,mais,120.00,,Expenses:Food:Groceries,-120.00,FALSE,FALSE
+11/8/2024,spring onion,50.00,,Expenses:Food:Groceries,-50.00,FALSE,FALSE
+11/8/2024,pechay,50.00,,Expenses:Food:Groceries,-50.00,FALSE,FALSE
+11/8/2024,cherry tomato,160.00,,Expenses:Food:Groceries,-160.00,FALSE,FALSE
+11/8/2024,squash,150.00,,Expenses:Food:Groceries,-150.00,FALSE,FALSE
+11/8/2024,ginger,150.00,,Expenses:Food:Groceries,-150.00,FALSE,FALSE
+11/8/2024,bawang,160.00,,Expenses:Food:Groceries,-160.00,FALSE,FALSE
+11/8/2024,asparagus,430.00,,Expenses:Food:Groceries,-430.00,FALSE,FALSE
+11/8/2024,celery,150.00,,Expenses:Food:Groceries,-150.00,FALSE,FALSE
+11/8/2024,spinach,260.00,,Expenses:Food:Groceries,-260.00,FALSE,FALSE
+11/8/2024,basil,100.00,,Expenses:Food:Groceries,-100.00,FALSE,FALSE
+11/8/2024,snoe peas,100.00,,Expenses:Food:Groceries,-100.00,FALSE,FALSE
+11/8/2024,calamansi,60.00,,Expenses:Food:Groceries,-60.00,FALSE,FALSE
+11/8/2024,zucchini,120.00,,Expenses:Food:Groceries,-120.00,FALSE,FALSE
+11/8/2024,sayote,100.00,,Expenses:Food:Groceries,-100.00,FALSE,FALSE
+11/8/2024,salmon,910.00,,Expenses:Food:Groceries,-910.00,FALSE,FALSE
+11/8/2024,talakitok,790.00,,Expenses:Food:Groceries,-790.00,FALSE,FALSE
+11/8/2024,tilapiya,460.00,,Expenses:Food:Groceries,-460.00,FALSE,FALSE
+11/8/2024,pampano,610.00,,Expenses:Food:Groceries,-610.00,FALSE,FALSE
+11/8/2024,bangus,460.00,,Expenses:Food:Groceries,-460.00,FALSE,FALSE
+11/8/2024,elmer,1000.00,,Expenses:Professional Fees,-1000.00,FALSE,FALSE
+11/9/2024,withdraw,,15000.00,Assets:Current Assets:Banks Local:BPI ATM House,15000.00,FALSE,FALSE
+11/9/2024,michelle cake,800.00,,Expenses:Gifts,-800.00,FALSE,FALSE
+11/9/2024,ice cream,350.00,,Expenses:Food:Groceries,-350.00,FALSE,FALSE
+11/9/2024,ara food allowance,1000.00,,Liabilities:Other:Ara Loan:Allowance,-1000.00,FALSE,FALSE
+11/9/2024,michelle allowance,1000.00,,Liabilities:Other:Michelle Loan:Allowance,-1000.00,FALSE,FALSE
+11/11/2024,hasa,820.00,,Expenses:Professional Fees,-820.00,FALSE,FALSE
+11/11/2024,ARC,780.00,,Expenses:Utilities:Drinking Water,-780.00,FALSE,FALSE
+11/11/2024,calamansi,560.00,,Expenses:Food:Groceries,-560.00,FALSE,FALSE
+11/11/2024,honey,1520.00,,Expenses:Food:Groceries,-1520.00,FALSE,FALSE
+11/11/2024,del fee,350.00,,Expenses:Professional Fees,-350.00,FALSE,FALSE
+11/12/2024,H.O gluten free flour,572.00,,Expenses:Food:Groceries,-572.00,FALSE,FALSE
+11/12/2024,vanilla extract,720.00,,Expenses:Food:Groceries,-720.00,FALSE,FALSE
+11/12/2024,almond flour,534.00,,Expenses:Food:Groceries,-534.00,FALSE,FALSE
+11/12/2024,buckwheat flour,525.00,,Expenses:Food:Groceries,-525.00,FALSE,FALSE
+11/12/2024,coconut flour,370.00,,Expenses:Food:Groceries,-370.00,FALSE,FALSE
+11/12/2024,baking flour,410.00,,Expenses:Food:Groceries,-410.00,FALSE,FALSE
+11/12/2024,psyllium husk,1150.00,,Expenses:Food:Groceries,-1150.00,FALSE,FALSE
+11/12/2024,cereal,435.00,,Expenses:Food:Groceries,-435.00,FALSE,FALSE
+11/12/2024,milk thistle,1895.00,,Expenses:Food:Groceries,-1895.00,FALSE,FALSE
+11/12/2024,quinoa,545.00,,Expenses:Food:Groceries,-545.00,FALSE,FALSE
+11/12/2024,oatbar,1045.00,,Expenses:Food:Groceries,-1045.00,FALSE,FALSE
+11/14/2024,shopee mop,390.00,,Expenses:Household Supplies,-390.00,FALSE,FALSE
+11/15/2024,shopee cinamon stick,210.00,,Expenses:Food:Groceries,-210.00,FALSE,FALSE
+11/15/2024,shadow food,2800.00,,Expenses:Household Supplies:Pet Expenses,-2800.00,FALSE,FALSE
+11/15/2024,summit,1450.00,,Expenses:Utilities:Drinking Water,-1450.00,FALSE,FALSE
+11/15/2024,rider tip,250.00,,Expenses:Professional Fees,-250.00,FALSE,FALSE
+11/15/2024,striploin,2415.00,,Expenses:Food:Groceries,-2415.00,FALSE,FALSE
+11/15/2024,pork neck,498.00,,Expenses:Food:Groceries,-498.00,FALSE,FALSE
+11/15/2024,feta cheese,216.00,,Expenses:Food:Groceries,-216.00,FALSE,FALSE
+11/15/2024,milk,828.00,,Expenses:Food:Groceries,-828.00,FALSE,FALSE
+11/15/2024,ham,147.00,,Expenses:Food:Groceries,-147.00,FALSE,FALSE
+11/15/2024,withdraw,,19000.00,Assets:Current Assets:Banks Local:BPI ATM House,19000.00,FALSE,FALSE
+11/15/2024,flower,600.00,,Expenses:Food:Groceries,-600.00,FALSE,FALSE
+11/15/2024,cucumber,250.00,,Expenses:Food:Groceries,-250.00,FALSE,FALSE
+11/15/2024,cherry tomato,180.00,,Expenses:Food:Groceries,-180.00,FALSE,FALSE
+11/15/2024,avocado,520.00,,Expenses:Food:Groceries,-520.00,FALSE,FALSE
+11/15/2024,apple,150.00,,Expenses:Food:Groceries,-150.00,FALSE,FALSE
+11/15/2024,orange,150.00,,Expenses:Food:Groceries,-150.00,FALSE,FALSE
+11/15/2024,banana,220.00,,Expenses:Food:Groceries,-220.00,FALSE,FALSE
+11/15/2024,tomato,250.00,,Expenses:Food:Groceries,-250.00,FALSE,FALSE
+11/15/2024,wansoy,230.00,,Expenses:Food:Groceries,-230.00,FALSE,FALSE
+11/15/2024,tanglad,250.00,,Expenses:Food:Groceries,-250.00,FALSE,FALSE
+11/15/2024,white onion,210.00,,Expenses:Food:Groceries,-210.00,FALSE,FALSE
+11/15/2024,red onion,180.00,,Expenses:Food:Groceries,-180.00,FALSE,FALSE
+11/15/2024,garlic,210.00,,Expenses:Food:Groceries,-210.00,FALSE,FALSE
+11/15/2024,turmeric,150.00,,Expenses:Food:Groceries,-150.00,FALSE,FALSE
+11/15/2024,luya,150.00,,Expenses:Food:Groceries,-150.00,FALSE,FALSE
+11/15/2024,lemon,150.00,,Expenses:Food:Groceries,-150.00,FALSE,FALSE
+11/15/2024,egg,280.00,,Expenses:Food:Groceries,-280.00,FALSE,FALSE
+11/15/2024,red bell pepper,150.00,,Expenses:Food:Groceries,-150.00,FALSE,FALSE
+11/15/2024,green pepper,180.00,,Expenses:Food:Groceries,-180.00,FALSE,FALSE
+11/15/2024,carrots,280.00,,Expenses:Food:Groceries,-280.00,FALSE,FALSE
+11/15/2024,potato,380.00,,Expenses:Food:Groceries,-380.00,FALSE,FALSE
+11/15/2024,kangkong,50.00,,Expenses:Food:Groceries,-50.00,FALSE,FALSE
+11/15/2024,spring onion,50.00,,Expenses:Food:Groceries,-50.00,FALSE,FALSE
+11/15/2024,spinach,280.00,,Expenses:Food:Groceries,-280.00,FALSE,FALSE
+11/15/2024,saba,150.00,,Expenses:Food:Groceries,-150.00,FALSE,FALSE
+11/15/2024,ubas,280.00,,Expenses:Food:Groceries,-280.00,FALSE,FALSE
+11/15/2024,broccoli,430.00,,Expenses:Food:Groceries,-430.00,FALSE,FALSE
+11/15/2024,pomelo,220.00,,Expenses:Food:Groceries,-220.00,FALSE,FALSE
+11/15/2024,romaine,430.00,,Expenses:Food:Groceries,-430.00,FALSE,FALSE
+11/15/2024,talong,130.00,,Expenses:Food:Groceries,-130.00,FALSE,FALSE
+11/15/2024,strawberry,380.00,,Expenses:Food:Groceries,-380.00,FALSE,FALSE
+11/15/2024,upo,130.00,,Expenses:Food:Groceries,-130.00,FALSE,FALSE
+11/15/2024,tilapiya,480.00,,Expenses:Food:Groceries,-480.00,FALSE,FALSE
+11/15/2024,tanigui,910.00,,Expenses:Food:Groceries,-910.00,FALSE,FALSE
+11/15/2024,pampano,580.00,,Expenses:Food:Groceries,-580.00,FALSE,FALSE
+11/15/2024,bangus,460.00,,Expenses:Food:Groceries,-460.00,FALSE,FALSE
+11/15/2024,elmer,1000.00,,Expenses:Professional Fees,-1000.00,FALSE,FALSE
+11/15/2024,fertilizer,800.00,,Expenses:Food:Groceries,-800.00,FALSE,FALSE
+11/15/2024,soil,400.00,,Expenses:Household Supplies,-400.00,FALSE,FALSE
+11/15/2024,taxi,150.00,,Expenses:Transportation:Public,-150.00,FALSE,FALSE
+11/16/2024,withdraw,,5000.00,Assets:Current Assets:Banks Local:BPI ATM House,5000.00,FALSE,FALSE
+11/16/2024,withdraw,,5000.00,Assets:Current Assets:Banks Local:BPI ATM House,5000.00,FALSE,FALSE
+11/16/2024,timezone,2000.00,,Expenses:Childcare:Extracurricular Activities,-2000.00,FALSE,FALSE
+11/16/2024,flourescent,599.00,,Expenses:Household Supplies,-599.00,FALSE,FALSE
+11/16/2024,jerry salary,4700.00,,Expenses:Professional Fees,-4700.00,FALSE,FALSE
+11/16/2024,withdraw,,7000.00,Assets:Current Assets:Banks Local:BPI ATM House,7000.00,FALSE,FALSE
+11/16/2024,ara food allowance,1000.00,,Liabilities:Other:Ara Loan:Allowance,-1000.00,FALSE,FALSE
+11/16/2024,michelle food allowance,1000.00,,Liabilities:Other:Michelle Loan:Allowance,-1000.00,FALSE,FALSE
+11/18/2024,Mam B del fee,200.00,,Expenses:Professional Fees,-200.00,FALSE,FALSE
+11/18/2024,sunflower seed,300.00,,Expenses:Food:Groceries,-300.00,FALSE,FALSE
+11/18/2024,pumpkin seed,480.00,,Expenses:Food:Groceries,-480.00,FALSE,FALSE
+11/18/2024,almond nuts,490.00,,Expenses:Food:Groceries,-490.00,FALSE,FALSE
+11/18/2024,cashew nuts,580.00,,Expenses:Food:Groceries,-580.00,FALSE,FALSE
+11/18/2024,chia seeds,370.00,,Expenses:Food:Groceries,-370.00,FALSE,FALSE
+11/18/2024,raisins,340.00,,Expenses:Food:Groceries,-340.00,FALSE,FALSE
+11/18/2024,calamansi,350.00,,Expenses:Food:Groceries,-350.00,FALSE,FALSE
+11/18/2024,grab alessi,210.00,,Expenses:Transportation:Public,-210.00,FALSE,FALSE
+11/18/2024,ara errands Healthy Option,310.00,,Expenses:Health:Alternative,-310.00,FALSE,FALSE
+11/21/2024,shopee BP,640.00,,Expenses:Household Supplies,-640.00,FALSE,FALSE
+11/22/2024,sir Gio/Rheyson Gym,1000.00,,Expenses:Health:Sports,-1000.00,FALSE,FALSE
+11/22/2024,Alessi Allerzet,532.00,,Expenses:Health:Medicines,-532.00,FALSE,FALSE
+11/22/2024,withdraw,,20000.00,Assets:Current Assets:Banks Local:BPI ATM House,20000.00,FALSE,FALSE
+11/22/2024,Santis Rider,250.00,,Expenses:Professional Fees,-250.00,FALSE,FALSE
+11/22/2024,milk,828.00,,Expenses:Food:Groceries,-828.00,FALSE,FALSE
+11/22/2024,striploin,1368.00,,Expenses:Food:Groceries,-1368.00,FALSE,FALSE
+11/22/2024,pork neck,486.00,,Expenses:Food:Groceries,-486.00,FALSE,FALSE
+11/22/2024,apple saussage,393.00,,Expenses:Food:Groceries,-393.00,FALSE,FALSE
+11/22/2024,asparagus,264.00,,Expenses:Food:Groceries,-264.00,FALSE,FALSE
+11/22/2024,truffle cheese,320.00,,Expenses:Food:Groceries,-320.00,FALSE,FALSE
+11/22/2024,Ham,190.00,,Expenses:Food:Groceries,-190.00,FALSE,FALSE
+11/22/2024,goat cheese,310.00,,Expenses:Food:Groceries,-310.00,FALSE,FALSE
+11/22/2024,parmesan,340.00,,Expenses:Food:Groceries,-340.00,FALSE,FALSE
+11/22/2024,smoke gouda,420.00,,Expenses:Food:Groceries,-420.00,FALSE,FALSE
+11/22/2024,chocolate coins,480.00,,Expenses:Food:Groceries,-480.00,FALSE,FALSE
+11/22/2024,manchego cheese,390.00,,Expenses:Food:Groceries,-390.00,FALSE,FALSE
+11/22/2024,flower,600.00,,Expenses:Food:Groceries,-600.00,FALSE,FALSE
+11/22/2024,sitaw,70.00,,Expenses:Food:Groceries,-70.00,FALSE,FALSE
+11/22/2024,cherry tomato,320.00,,Expenses:Food:Groceries,-320.00,FALSE,FALSE
+11/22/2024,apple,150.00,,Expenses:Food:Groceries,-150.00,FALSE,FALSE
+11/22/2024,orange,160.00,,Expenses:Food:Groceries,-160.00,FALSE,FALSE
+11/22/2024,pomelo,210.00,,Expenses:Food:Groceries,-210.00,FALSE,FALSE
+11/22/2024,pinya,210.00,,Expenses:Food:Groceries,-210.00,FALSE,FALSE
+11/22/2024,banana,210.00,,Expenses:Food:Groceries,-210.00,FALSE,FALSE
+11/22/2024,romaine,400.00,,Expenses:Food:Groceries,-400.00,FALSE,FALSE
+11/22/2024,basil,100.00,,Expenses:Food:Groceries,-100.00,FALSE,FALSE
+11/22/2024,kinchay,230.00,,Expenses:Food:Groceries,-230.00,FALSE,FALSE
+11/22/2024,lemon,150.00,,Expenses:Food:Groceries,-150.00,FALSE,FALSE
+11/22/2024,spinach,320.00,,Expenses:Food:Groceries,-320.00,FALSE,FALSE
+11/22/2024,cucumber,320.00,,Expenses:Food:Groceries,-320.00,FALSE,FALSE
+11/22/2024,frech beans,150.00,,Expenses:Food:Groceries,-150.00,FALSE,FALSE
+11/22/2024,upo,150.00,,Expenses:Food:Groceries,-150.00,FALSE,FALSE
+11/22/2024,egg,280.00,,Expenses:Food:Groceries,-280.00,FALSE,FALSE
+11/22/2024,tomato,230.00,,Expenses:Food:Groceries,-230.00,FALSE,FALSE
+11/22/2024,mais,120.00,,Expenses:Food:Groceries,-120.00,FALSE,FALSE
+11/22/2024,mustasa,50.00,,Expenses:Food:Groceries,-50.00,FALSE,FALSE
+11/22/2024,parsley,80.00,,Expenses:Food:Groceries,-80.00,FALSE,FALSE
+11/22/2024,pakwan,200.00,,Expenses:Food:Groceries,-200.00,FALSE,FALSE
+11/22/2024,bakuko,730.00,,Expenses:Food:Groceries,-730.00,FALSE,FALSE
+11/22/2024,talakitok,780.00,,Expenses:Food:Groceries,-780.00,FALSE,FALSE
+11/22/2024,pampano,650.00,,Expenses:Food:Groceries,-650.00,FALSE,FALSE
+11/22/2024,bangus,480.00,,Expenses:Food:Groceries,-480.00,FALSE,FALSE
+11/23/2024,elmer,1000.00,,Expenses:Professional Fees,-1000.00,FALSE,FALSE
+11/23/2024,ara food allowance,1000.00,,Liabilities:Other:Ara Loan:Allowance,-1000.00,FALSE,FALSE
+11/23/2024,michelle food allowance,1000.00,,Liabilities:Other:Michelle Loan:Allowance,-1000.00,FALSE,FALSE
+11/23/2024,ARC,940.00,,Expenses:Utilities:Drinking Water,-940.00,FALSE,FALSE
+11/23/2024,Summit,1450.00,,Expenses:Utilities:Drinking Water,-1450.00,FALSE,FALSE
+11/25/2024,H.O Alessi cereal,520.00,,Expenses:Food:Groceries,-520.00,FALSE,FALSE
+11/25/2024,Mam B Yogurt,690.00,,Expenses:Food:Groceries,-690.00,FALSE,FALSE
+11/25/2024,Bega cheese,2380.00,,Expenses:Food:Groceries,-2380.00,FALSE,FALSE
+11/25/2024,lalamove fee,100.00,,Expenses:Professional Fees,-100.00,FALSE,FALSE
+11/26/2024,withdraw,,10000.00,Assets:Current Assets:Banks Local:BPI ATM House,10000.00,FALSE,FALSE
+11/26/2024,Mam B,192.00,,Expenses:Transportation:Parking,-192.00,FALSE,FALSE
+11/27/2024,Messy Pouch shopee,380.00,,Expenses:Household Supplies,-380.00,FALSE,FALSE
+11/27/2024,shopee box,305.00,,Expenses:Household Supplies,-305.00,FALSE,FALSE
+11/27/2024,AC CLeaning,4500.00,,Expenses:Professional Fees,-4500.00,FALSE,FALSE
+11/28/2024,Drying Mat,320.00,,Expenses:Household Supplies,-320.00,FALSE,FALSE
+11/28/2024,fruit juicer,250.00,,Expenses:Food:Groceries,-250.00,FALSE,FALSE
+11/28/2024,shadow medicine,1320.00,,Expenses:Household Supplies:Pet Expenses,-1320.00,FALSE,FALSE
+11/28/2024,wet food,480.00,,Expenses:Professional Fees,-480.00,FALSE,FALSE
+11/28/2024,national book store,1984.00,,Expenses:Household Supplies,-1984.00,FALSE,FALSE
+11/29/2024,withdraw,,19000.00,Assets:Current Assets:Banks Local:BPI ATM House,19000.00,FALSE,FALSE
+11/29/2024,mam B belt,200.00,,Expenses:Professional Fees,-200.00,FALSE,FALSE
+11/29/2024,milk,690.00,,Expenses:Food:Groceries,-690.00,FALSE,FALSE
+11/29/2024,ham,177.00,,Expenses:Food:Groceries,-177.00,FALSE,FALSE
+11/29/2024,manchego cheese,345.00,,Expenses:Food:Groceries,-345.00,FALSE,FALSE
+11/29/2024,rider santis,250.00,,Expenses:Professional Fees,-250.00,FALSE,FALSE
+11/29/2024,goat cheese,210.00,,Expenses:Food:Groceries,-210.00,FALSE,FALSE
+11/29/2024,pork neck,319.00,,Expenses:Food:Groceries,-319.00,FALSE,FALSE
+11/29/2024,flowers,600.00,,Expenses:Food:Groceries,-600.00,FALSE,FALSE
+11/29/2024,pomelo,210.00,,Expenses:Food:Groceries,-210.00,FALSE,FALSE
+11/29/2024,apple,200.00,,Expenses:Food:Groceries,-200.00,FALSE,FALSE
+11/29/2024,orange,200.00,,Expenses:Food:Groceries,-200.00,FALSE,FALSE
+11/29/2024,celery,210.00,,Expenses:Food:Groceries,-210.00,FALSE,FALSE
+11/29/2024,cucumber,350.00,,Expenses:Food:Groceries,-350.00,FALSE,FALSE
+11/29/2024,romaine,650.00,,Expenses:Food:Groceries,-650.00,FALSE,FALSE
+11/29/2024,cherry tomato,350.00,,Expenses:Food:Groceries,-350.00,FALSE,FALSE
+11/29/2024,mint,200.00,,Expenses:Food:Groceries,-200.00,FALSE,FALSE
+11/29/2024,red onion,250.00,,Expenses:Food:Groceries,-250.00,FALSE,FALSE
+11/29/2024,egg,310.00,,Expenses:Food:Groceries,-310.00,FALSE,FALSE
+11/29/2024,mais,190.00,,Expenses:Food:Groceries,-190.00,FALSE,FALSE
+11/29/2024,snow peas,95.00,,Expenses:Food:Groceries,-95.00,FALSE,FALSE
+11/29/2024,kalabasa,150.00,,Expenses:Food:Groceries,-150.00,FALSE,FALSE
+11/29/2024,white onion,210.00,,Expenses:Food:Groceries,-210.00,FALSE,FALSE
+11/29/2024,zucchini,200.00,,Expenses:Food:Groceries,-200.00,FALSE,FALSE
+11/29/2024,banana,210.00,,Expenses:Food:Groceries,-210.00,FALSE,FALSE
+11/29/2024,kiwi,90.00,,Expenses:Food:Groceries,-90.00,FALSE,FALSE
+11/29/2024,pomelo,150.00,,Expenses:Food:Groceries,-150.00,FALSE,FALSE
+11/29/2024,pineapple,120.00,,Expenses:Food:Groceries,-120.00,FALSE,FALSE
+11/29/2024,carrots,280.00,,Expenses:Food:Groceries,-280.00,FALSE,FALSE
+11/29/2024,potato,310.00,,Expenses:Food:Groceries,-310.00,FALSE,FALSE
+11/29/2024,broccoli,380.00,,Expenses:Food:Groceries,-380.00,FALSE,FALSE
+11/29/2024,califlower,290.00,,Expenses:Food:Groceries,-290.00,FALSE,FALSE
+11/29/2024,avocado,350.00,,Expenses:Food:Groceries,-350.00,FALSE,FALSE
+11/29/2024,calamansi,80.00,,Expenses:Food:Groceries,-80.00,FALSE,FALSE
+11/29/2024,lemon,120.00,,Expenses:Food:Groceries,-120.00,FALSE,FALSE
+11/29/2024,salmon,980.00,,Expenses:Food:Groceries,-980.00,FALSE,FALSE
+11/29/2024,bangus,490.00,,Expenses:Food:Groceries,-490.00,FALSE,FALSE
+11/29/2024,tilapya,410.00,,Expenses:Food:Groceries,-410.00,FALSE,FALSE
+11/29/2024,elmer,1000.00,,Expenses:Professional Fees,-1000.00,FALSE,FALSE
+11/29/2024,ara food allowance,1000.00,,Liabilities:Other:Ara Loan:Allowance,-1000.00,FALSE,FALSE
+11/29/2024,michelle food allowance,1000.00,,Liabilities:Other:Michelle Loan:Allowance,-1000.00,FALSE,FALSE
+11/29/2024,adjustment,1323.00,,Expenses:Miscellaneous:Adjustment,-1323.00,FALSE,FALSE
+12/1/2024,withdraw,,8000.00,Assets:Current Assets:Banks Local:BPI ATM House,8000.00,FALSE,FALSE
+12/2/2024,alessi grab,300.00,,Expenses:Transportation:Public,-300.00,FALSE,FALSE
+12/2/2024,rolly salary,3000.00,,Expenses:Professional Fees,-3000.00,FALSE,FALSE
+12/2/2024,national bookstore,1623.00,,Expenses:Childcare:School Supplies,-1623.00,FALSE,FALSE
+12/2/2024,shadow kitcat tuna,570.00,,Expenses:Household Supplies:Pet Expenses,-570.00,FALSE,FALSE
+12/2/2024,catsan litter,410.00,,Expenses:Food:Groceries,-410.00,FALSE,FALSE
+12/2/2024,shadow medicines,1120.00,,Expenses:Household Supplies:Pet Expenses,-1120.00,FALSE,FALSE
+12/2/2024,mam B vocinti,1029.00,,Expenses:Health:Medicines,-1029.00,FALSE,FALSE
+12/2/2024,Norgesic forte,1245.00,,Expenses:Health:Medicines,-1245.00,FALSE,FALSE
+12/2/2024,motillium mam B,1155.00,,Expenses:Health:Medicines,-1155.00,FALSE,FALSE
+12/6/2024,withdraw,,20000.00,Assets:Current Assets:Banks Local:BPI ATM House,20000.00,FALSE,FALSE
+12/6/2024,lemon,100.00,,Expenses:Food:Groceries,-100.00,FALSE,FALSE
+12/6/2024,potato,340.00,,Expenses:Food:Groceries,-340.00,FALSE,FALSE
+12/6/2024,onion white,280.00,,Expenses:Food:Groceries,-280.00,FALSE,FALSE
+12/6/2024,onion red,200.00,,Expenses:Food:Groceries,-200.00,FALSE,FALSE
+12/6/2024,cherry tomato,150.00,,Expenses:Food:Groceries,-150.00,FALSE,FALSE
+12/6/2024,romaine,350.00,,Expenses:Food:Groceries,-350.00,FALSE,FALSE
+12/6/2024,celery,280.00,,Expenses:Food:Groceries,-280.00,FALSE,FALSE
+12/6/2024,saging,180.00,,Expenses:Food:Groceries,-180.00,FALSE,FALSE
+12/6/2024,flowers,550.00,,Expenses:Food:Groceries,-550.00,FALSE,FALSE
+12/6/2024,grapes,240.00,,Expenses:Food:Groceries,-240.00,FALSE,FALSE
+12/6/2024,eggs,360.00,,Expenses:Food:Groceries,-360.00,FALSE,FALSE
+12/6/2024,bell pepper,95.00,,Expenses:Food:Groceries,-95.00,FALSE,FALSE
+12/6/2024,cucumber,150.00,,Expenses:Food:Groceries,-150.00,FALSE,FALSE
+12/6/2024,curry paste,75.00,,Expenses:Food:Groceries,-75.00,FALSE,FALSE
+12/6/2024,wansoy,90.00,,Expenses:Food:Groceries,-90.00,FALSE,FALSE
+12/6/2024,monggo,60.00,,Expenses:Food:Groceries,-60.00,FALSE,FALSE
+12/6/2024,basil,80.00,,Expenses:Food:Groceries,-80.00,FALSE,FALSE
+12/6/2024,cauliflower,180.00,,Expenses:Food:Groceries,-180.00,FALSE,FALSE
+12/6/2024,corn,120.00,,Expenses:Food:Groceries,-120.00,FALSE,FALSE
+12/6/2024,apple,50.00,,Expenses:Food:Groceries,-50.00,FALSE,FALSE
+12/6/2024,orange,70.00,,Expenses:Food:Groceries,-70.00,FALSE,FALSE
+12/6/2024,luya,64.00,,Expenses:Food:Groceries,-64.00,FALSE,FALSE
+12/6/2024,tanglad,30.00,,Expenses:Food:Groceries,-30.00,FALSE,FALSE
+12/6/2024,cilantro,95.00,,Expenses:Food:Groceries,-95.00,FALSE,FALSE
+,parsley,120.00,,Expenses:Food:Groceries,-120.00,FALSE,FALSE
+12/6/2024,mint,150.00,,Expenses:Food:Groceries,-150.00,FALSE,FALSE
+12/6/2024,spinach,90.00,,Expenses:Food:Groceries,-90.00,FALSE,FALSE
+12/6/2024,pampano,670.00,,Expenses:Food:Groceries,-670.00,FALSE,FALSE
+12/6/2024,tilapiya,430.00,,Expenses:Food:Groceries,-430.00,FALSE,FALSE
+12/6/2024,bangus,410.00,,Expenses:Food:Groceries,-410.00,FALSE,FALSE
+12/6/2024,talakitok,690.00,,Expenses:Food:Groceries,-690.00,FALSE,FALSE
+12/6/2024,salmon,960.00,,Expenses:Food:Groceries,-960.00,FALSE,FALSE
+12/6/2024,ara food alllowance,1000.00,,Liabilities:Other:Ara Loan:Allowance,-1000.00,FALSE,FALSE
+12/6/2024,michelle food allowance,1000.00,,Liabilities:Other:Michelle Loan:Allowance,-1000.00,FALSE,FALSE
+12/6/2024,elmer salary,1000.00,,Expenses:Professional Fees,-1000.00,FALSE,FALSE
+12/6/2024,Mam B imigran,4340.00,,Expenses:Health:Medicines,-4340.00,FALSE,FALSE
+12/6/2024,Mam B algina,620.00,,Expenses:Health:Medicines,-620.00,FALSE,FALSE
+12/6/2024,Santis Rider,250.00,,Expenses:Professional Fees,-250.00,FALSE,FALSE
+12/6/2024,pork neck,890.00,,Expenses:Food:Groceries,-890.00,FALSE,FALSE
+12/6/2024,ground beef,995.00,,Expenses:Food:Groceries,-995.00,FALSE,FALSE
+12/6/2024,ham,143.00,,Expenses:Food:Groceries,-143.00,FALSE,FALSE
+12/6/2024,gouda cheese,392.00,,Expenses:Food:Groceries,-392.00,FALSE,FALSE
+12/6/2024,asparagus,360.00,,Expenses:Food:Groceries,-360.00,FALSE,FALSE
+12/7/2024,rider santis,250.00,,Expenses:Professional Fees,-250.00,FALSE,FALSE
+12/7/2024,milk,828.00,,Expenses:Food:Groceries,-828.00,FALSE,FALSE
+12/7/2024,manchego cheese,678.00,,Expenses:Food:Groceries,-678.00,FALSE,FALSE
+12/7/2024,cambozola,583.00,,Expenses:Food:Groceries,-583.00,FALSE,FALSE
+12/7/2024,goat cheese,625.00,,Expenses:Food:Groceries,-625.00,FALSE,FALSE
+12/7/2024,nuts,1120.00,,Expenses:Food:Groceries,-1120.00,FALSE,FALSE
+12/7/2024,del fee,200.00,,Expenses:Professional Fees,-200.00,FALSE,FALSE
+12/12/2024,withdraw,,20000.00,Assets:Current Assets:Banks Local:BPI ATM House,20000.00,FALSE,FALSE
+12/12/2024,summit,1150.00,,Expenses:Utilities:Drinking Water,-1150.00,FALSE,FALSE
+12/12/2024,ARC,850.00,,Expenses:Utilities:Drinking Water,-850.00,FALSE,FALSE
+12/12/2024,andy maluche,1700.00,,Expenses:Food:Groceries,-1700.00,FALSE,FALSE
+12/12/2024,apple saussage,390.00,,Expenses:Food:Groceries,-390.00,FALSE,FALSE
+12/12/2024,tuna fillet,556.00,,Expenses:Food:Groceries,-556.00,FALSE,FALSE
+12/12/2024,green olives,490.00,,Expenses:Food:Groceries,-490.00,FALSE,FALSE
+12/12/2024,Santis Rider,250.00,,Expenses:Professional Fees,-250.00,FALSE,FALSE
+12/13/2024,milk,690.00,,Expenses:Food:Groceries,-690.00,FALSE,FALSE
+12/13/2024,lime,98.00,,Expenses:Food:Groceries,-98.00,FALSE,FALSE
+12/13/2024,pork neck,575.00,,Expenses:Food:Groceries,-575.00,FALSE,FALSE
+12/13/2024,goat cheese,263.00,,Expenses:Food:Groceries,-263.00,FALSE,FALSE
+12/13/2024,farmers ham,184.00,,Expenses:Food:Groceries,-184.00,FALSE,FALSE
+12/13/2024,rider santis,250.00,,Expenses:Professional Fees,-250.00,FALSE,FALSE
+12/13/2024,change charger pin mich. arguilla,850.00,,Expenses:Gadgets,-850.00,FALSE,FALSE
+12/13/2024,withdraw,,10000.00,Assets:Current Assets:Banks Local:BPI ATM House,10000.00,FALSE,FALSE
+12/13/2024,Mam B sinupret,577.00,,Expenses:Health:Medicines,-577.00,FALSE,FALSE
+12/13/2024,flumucil,646.00,,Expenses:Health:Medicines,-646.00,FALSE,FALSE
+12/13/2024,zykast,945.00,,Expenses:Health:Medicines,-945.00,FALSE,FALSE
+12/13/2024,ara food alllowance,1000.00,,Liabilities:Other:Ara Loan:Allowance,-1000.00,FALSE,FALSE
+12/13/2024,michelle food allowance,1000.00,,Liabilities:Other:Michelle Loan:Allowance,-1000.00,FALSE,FALSE
+12/13/2024,elmer salary,1000.00,,Expenses:Professional Fees,-1000.00,FALSE,FALSE
+12/13/2024,apple,90.00,,Expenses:Food:Groceries,-90.00,FALSE,FALSE
+12/13/2024,orange,100.00,,Expenses:Food:Groceries,-100.00,FALSE,FALSE
+12/13/2024,dragon fruit,160.00,,Expenses:Food:Groceries,-160.00,FALSE,FALSE
+12/13/2024,pomelo,160.00,,Expenses:Food:Groceries,-160.00,FALSE,FALSE
+12/13/2024,saging,120.00,,Expenses:Food:Groceries,-120.00,FALSE,FALSE
+12/13/2024,corn,50.00,,Expenses:Food:Groceries,-50.00,FALSE,FALSE
+12/13/2024,lemon,60.00,,Expenses:Food:Groceries,-60.00,FALSE,FALSE
+12/13/2024,cabbage,145.00,,Expenses:Food:Groceries,-145.00,FALSE,FALSE
+12/13/2024,wansoy,100.00,,Expenses:Food:Groceries,-100.00,FALSE,FALSE
+12/13/2024,celery,150.00,,Expenses:Food:Groceries,-150.00,FALSE,FALSE
+12/13/2024,romaine,250.00,,Expenses:Food:Groceries,-250.00,FALSE,FALSE
+12/13/2024,mint,150.00,,Expenses:Food:Groceries,-150.00,FALSE,FALSE
+12/13/2024,basil,150.00,,Expenses:Food:Groceries,-150.00,FALSE,FALSE
+12/13/2024,cucumber,200.00,,Expenses:Food:Groceries,-200.00,FALSE,FALSE
+12/13/2024,carrots,180.00,,Expenses:Food:Groceries,-180.00,FALSE,FALSE
+12/13/2024,bell pepper,145.00,,Expenses:Food:Groceries,-145.00,FALSE,FALSE
+12/13/2024,flowers,550.00,,Expenses:Food:Groceries,-550.00,FALSE,FALSE
+12/13/2024,sigarilyas,60.00,,Expenses:Food:Groceries,-60.00,FALSE,FALSE
+12/13/2024,potato,300.00,,Expenses:Food:Groceries,-300.00,FALSE,FALSE
+12/13/2024,zucchini,109.00,,Expenses:Food:Groceries,-109.00,FALSE,FALSE
+12/13/2024,tomato,180.00,,Expenses:Food:Groceries,-180.00,FALSE,FALSE
+12/13/2024,japanese cucumber,280.00,,Expenses:Food:Groceries,-280.00,FALSE,FALSE
+12/13/2024,alessi orange,280.00,,Expenses:Food:Groceries,-280.00,FALSE,FALSE
+12/13/2024,okra,120.00,,Expenses:Food:Groceries,-120.00,FALSE,FALSE
+12/13/2024,kinchay,110.00,,Expenses:Food:Groceries,-110.00,FALSE,FALSE
+12/13/2024,broccoli,205.00,,Expenses:Food:Groceries,-205.00,FALSE,FALSE
+12/13/2024,onion red,110.00,,Expenses:Food:Groceries,-110.00,FALSE,FALSE
+12/13/2024,onion white,160.00,,Expenses:Food:Groceries,-160.00,FALSE,FALSE
+12/13/2024,pampano,670.00,,Expenses:Food:Groceries,-670.00,FALSE,FALSE
+12/13/2024,tilapiya,430.00,,Expenses:Food:Groceries,-430.00,FALSE,FALSE
+12/13/2024,bangus,410.00,,Expenses:Food:Groceries,-410.00,FALSE,FALSE
+12/13/2024,talakitok,690.00,,Expenses:Food:Groceries,-690.00,FALSE,FALSE
+12/13/2024,tanigue,870.00,,Expenses:Food:Groceries,-870.00,FALSE,FALSE
+12/13/2024,honey,1400.00,,Expenses:Food:Groceries,-1400.00,FALSE,FALSE
+12/13/2024,honey del fee,300.00,,Expenses:Professional Fees,-300.00,FALSE,FALSE
+12/14/2024,mam B del fee,100.00,,Expenses:Professional Fees,-100.00,FALSE,FALSE
+12/14/2024,H.O oatbar,950.00,,Expenses:Food:Groceries,-950.00,FALSE,FALSE
+12/14/2024,H.O milk thistle,1150.00,,Expenses:Food:Groceries,-1150.00,FALSE,FALSE
+12/14/2024,landmark,984.00,,Expenses:Household Supplies,-984.00,FALSE,FALSE
+12/15/2024,ara overtime morning,325.00,,Expenses:Household Staff:Ara:OT,-325.00,FALSE,FALSE
+12/15/2024,michelle overtime,325.00,,Expenses:Household Staff:Michelle:OT,-325.00,FALSE,FALSE
+12/15/2024,withdraw,,2000.00,Assets:Current Assets:Banks Local:BPI ATM House,2000.00,FALSE,FALSE
+12/15/2024,ara over time evening,650.00,,Expenses:Household Staff:Ara:OT,-650.00,FALSE,FALSE
+12/17/2024,withdraw,,16000.00,Assets:Current Assets:Banks Local:BPI ATM House,16000.00,FALSE,FALSE
+12/17/2024,Redmi 13 Phones x2,14998.00,,Expenses:Gadgets,-14998.00,FALSE,FALSE
+12/17/2024,withdraw,,2000.00,Assets:Current Assets:Banks Local:BPI ATM House,2000.00,FALSE,FALSE
+12/17/2024,National bookstore,1420.00,,Expenses:Childcare:School Supplies,-1420.00,FALSE,FALSE
+12/17/2024,Shadows Medicines,1328.00,,Expenses:Household Supplies:Pet Expenses,-1328.00,FALSE,FALSE
+12/19/2024,Twins'Alessi Christmas Party,400.00,,Expenses:Childcare:Extracurricular Activities,-400.00,FALSE,FALSE
+12/19/2024,Pizza Share Party,980.00,,Expenses:Food:Dining,-980.00,FALSE,FALSE
+12/20/2024,withdraw,,20000.00,Assets:Current Assets:Banks Local:BPI ATM House,20000.00,FALSE,FALSE
+12/20/2024,SM gift card,1000.00,,Expenses:Gifts,-1000.00,FALSE,FALSE
+12/20/2024,Healthy Option,2098.00,,Expenses:Health:Alternative,-2098.00,FALSE,FALSE
+12/20/2024,knife sharpening,820.00,,Expenses:Professional Fees,-820.00,FALSE,FALSE
+12/20/2024,Kuya Alvin Christmas Gift,500.00,,Expenses:Gifts,-500.00,FALSE,FALSE
+12/20/2024,Rice & Bread,1400.00,,Expenses:Food:Groceries,-1400.00,FALSE,FALSE
+12/20/2024,tooth fairy,500.00,,Expenses:Childcare:Others,-500.00,FALSE,FALSE
+12/20/2024,garage screen,900.00,,Expenses:Household Supplies,-900.00,FALSE,FALSE
+12/20/2024,news paper,460.00,,Expenses:Household Supplies,-460.00,FALSE,FALSE
+12/20/2024,santis milk & rider,331.00,,Expenses:Food:Groceries,-331.00,FALSE,FALSE
+12/21/2024,withdraw,,20000.00,Assets:Current Assets:Banks Local:BPI ATM House,20000.00,FALSE,FALSE
+12/21/2024,shadow medicines,2980.00,,Expenses:Household Supplies:Pet Expenses,-2980.00,FALSE,FALSE
+12/21/2024,kit cat wet food,420.00,,Expenses:Household Supplies:Pet Expenses,-420.00,FALSE,FALSE
+12/21/2024,hair & skin riyal canin,4430.00,,Expenses:Household Supplies:Pet Expenses,-4430.00,FALSE,FALSE
+12/21/2024,Rolly 13th month pay,3000.00,,Expenses:Professional Fees,-3000.00,FALSE,FALSE
+12/21/2025,Rolly Christmas Gift,1000.00,,Expenses:Gifts,-1000.00,FALSE,FALSE
+12/21/2024,Elmer 13th month pay,4000.00,,Expenses:Professional Fees,-4000.00,FALSE,FALSE
+12/21/2024,Elmer Salary x3 weeks,3000.00,,Expenses:Professional Fees,-3000.00,FALSE,FALSE
+12/21/2024,Elmer Christmas Gift,1000.00,,Expenses:Gifts,-1000.00,FALSE,FALSE
+12/21/2024,Ara food alllowance x3 weeks,3000.00,,Liabilities:Other:Ara Loan:Allowance,-3000.00,FALSE,FALSE
+12/21/2024,Michelle food allowance x3 weeks,3000.00,,Liabilities:Other:Michelle Loan:Allowance,-3000.00,FALSE,FALSE
+12/23/2024,Kitty Liter,2320.00,,Expenses:Household Supplies:Pet Expenses,-2320.00,FALSE,FALSE
+12/23/2024,Gabapentin,342.00,,Expenses:Health:Medicines,-342.00,FALSE,FALSE
+12/23/2024,Coatshine,210.00,,Expenses:Food:Groceries,-210.00,FALSE,FALSE
+12/27/2024,Rolly Salary (January),3000.00,,Expenses:Professional Fees,-3000.00,FALSE,FALSE
+12/27/2024,Jeeves,1950.00,,Expenses:Professional Fees,-1950.00,FALSE,FALSE
+12/27/2024,Bread,320.00,,Expenses:Food:Groceries,-320.00,FALSE,FALSE
+12/27/2024,Coffee,190.00,,Expenses:Food:Groceries,-190.00,FALSE,FALSE
