@@ -200,6 +200,18 @@ flaml_log/
 *.key
 *.crt
 gnucash-predict*.json
+*secret*
+*credential*
+*password*
+*token*
+*.env*
+service-account*.json
+client_secret*.json
+
+# Personal information
+*@gmail.com*
+*@*.com*
+/Users/*/
 
 # Local development
 .env.local

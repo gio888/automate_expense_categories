@@ -4,7 +4,7 @@
 
 - Ensure `data/valid_categories.txt` exists with approved categories
 - Credit Card data folder: `$HOME/Library/CloudStorage/GoogleDrive-[your-email]/My Drive/Money/UnionBank`
-- Code location: `/Users/gio/Code/automate_expense_categories`
+- Code location: `$PROJECT_ROOT` (this repository)
 
 ## Complete Monthly Workflow
 
@@ -21,12 +21,12 @@
 7. Append current transactions to last row of "data" tab
 8. Fill in Statement Date column (export_auto_ml tab should auto-populate)
 9. Download export_auto_ml tab as CSV: "For Automl Statement UNIONBANK Visa YYYY-MM.csv"
-10. Save to: `/Users/gio/Code/automate_expense_categories/data`
+10. Save to: `$PROJECT_ROOT/data`
 
 ### Step 2: Predict Categories (⏱️ 3-5 minutes)
 
 ```bash
-cd /Users/gio/Code/automate_expense_categories
+cd $PROJECT_ROOT
 python batch_predict_ensemble.py
 
 ```
@@ -69,7 +69,7 @@ python batch_predict_ensemble.py
 1. Go back to the Google Sheets correction tab
 2. **for_merge_automl** tab will auto-populate with your corrections
 3. Download CSV: "For Merge Automl Statement UNIONBANK Visa YYYY-MM.csv"
-4. Save to: `/Users/gio/Code/automate_expense_categories/data`
+4. Save to: `$PROJECT_ROOT/data`
 
 ### Step 6: Merge Corrections with Training Data (⏱️ 1 minute)
 
@@ -120,7 +120,7 @@ Process credit card expenses when:
 
 ```bash
 # Navigate to project
-cd /Users/gio/Code/automate_expense_categories
+cd $PROJECT_ROOT
 
 # ML Pipeline commands
 python batch_predict_ensemble.py
