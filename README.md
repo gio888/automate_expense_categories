@@ -44,7 +44,7 @@ automate_expense_categories/
 
 ### Household Expenses (5-step workflow)
 ```bash
-cd /Users/gio/Code/automate_expense_categories
+cd $PROJECT_ROOT
 
 # 1. Transform monthly Google Sheets export
 python src/transform_monthly_household_transactions.py
@@ -63,7 +63,7 @@ python src/auto_model_ensemble.py --source household
 
 ### Credit Card Transactions (4-step workflow)
 ```bash
-cd /Users/gio/Code/automate_expense_categories
+cd $PROJECT_ROOT
 
 # 1. Predict categories using ensemble models
 python src/batch_predict_ensemble.py

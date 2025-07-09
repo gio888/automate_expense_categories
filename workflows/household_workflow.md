@@ -4,7 +4,7 @@
 
 - Ensure `data/valid_categories.txt` exists with approved categories
 - Household data folder: `$HOME/Library/CloudStorage/GoogleDrive-[your-email]/My Drive/Money/House Expenses`
-- Code location: `/Users/gio/Code/automate_expense_categories`
+- Code location: `$PROJECT_ROOT` (this repository)
 
 ## Complete Monthly Workflow
 
@@ -28,7 +28,7 @@
 ### Step 3: Transform Raw Household Data (⏱️ 2-3 minutes)
 
 ```bash
-cd /Users/gio/Code/automate_expense_categories
+cd $PROJECT_ROOT
 python src/transform_monthly_household_transactions.py --source-dir "$HOME/Library/CloudStorage/GoogleDrive-[your-email]/My Drive/Money/House Expenses"
 
 ```
@@ -128,7 +128,7 @@ Process household expenses when:
 
 ```bash
 # Navigate to project
-cd /Users/gio/Code/automate_expense_categories
+cd $PROJECT_ROOT
 
 # ML Pipeline commands
 python src/transform_monthly_household_transactions.py --source-dir "$HOME/Library/CloudStorage/GoogleDrive-[your-email]/My Drive/Money/House Expenses"

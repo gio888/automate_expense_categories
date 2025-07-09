@@ -12,7 +12,10 @@
       "Bash(git filter-branch:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(FILTER_BRANCH_SQUELCH_WARNING=1 git filter-branch --force --tree-filter 'if [ -f workflows/credit_card_workflow.md ]; then sed -i \"\"\"\" \"\"s/gbacareza@gmail.com/[your-email]/g\"\" workflows/credit_card_workflow.md; fi; if [ -f workflows/household_workflow.md ]; then sed -i \"\"\"\" \"\"s/gbacareza@gmail.com/[your-email]/g\"\" workflows/household_workflow.md; fi' --prune-empty --tag-name-filter cat -- --all)"
+      "Bash(FILTER_BRANCH_SQUELCH_WARNING=1 git filter-branch --force --tree-filter 'if [ -f workflows/credit_card_workflow.md ]; then sed -i \"\"\"\" \"\"s/gbacareza@gmail.com/[your-email]/g\"\" workflows/credit_card_workflow.md; fi; if [ -f workflows/household_workflow.md ]; then sed -i \"\"\"\" \"\"s/gbacareza@gmail.com/[your-email]/g\"\" workflows/household_workflow.md; fi' --prune-empty --tag-name-filter cat -- --all)",
+      "Bash(rm:*)",
+      "Bash(git gc:*)",
+      "Bash(git push:*)"
     ],
     "deny": []
   }
