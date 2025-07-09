@@ -3,7 +3,7 @@
 ## Prerequisites
 
 - Ensure `data/valid_categories.txt` exists with approved categories
-- Household data folder: `/Users/gio/Library/CloudStorage/GoogleDrive-[your-email]/My Drive/Money/House Expenses`
+- Household data folder: `$HOME/Library/CloudStorage/GoogleDrive-[your-email]/My Drive/Money/House Expenses`
 - Code location: `/Users/gio/Code/automate_expense_categories`
 
 ## Complete Monthly Workflow
@@ -23,13 +23,13 @@
 **Manual Step - Outside ML Pipeline**
 
 - Download CSV from Google Sheets with naming: "House Kitty Transactions - Cash YYYY-MM.csv"
-- Save to: `/Users/gio/Library/CloudStorage/GoogleDrive-[your-email]/My Drive/Money/House Expenses`
+- Save to: `$HOME/Library/CloudStorage/GoogleDrive-[your-email]/My Drive/Money/House Expenses`
 
 ### Step 3: Transform Raw Household Data (⏱️ 2-3 minutes)
 
 ```bash
 cd /Users/gio/Code/automate_expense_categories
-python src/transform_monthly_household_transactions.py --source-dir "/Users/gio/Library/CloudStorage/GoogleDrive-[your-email]/My Drive/Money/House Expenses"
+python src/transform_monthly_household_transactions.py --source-dir "$HOME/Library/CloudStorage/GoogleDrive-[your-email]/My Drive/Money/House Expenses"
 
 ```
 
@@ -43,7 +43,7 @@ python src/transform_monthly_household_transactions.py --source-dir "/Users/gio/
 ### Step 4: Predict Categories (⏱️ 3-5 minutes)
 
 ```bash
-python src/batch_predict_ensemble.py --input-dir "/Users/gio/Library/CloudStorage/GoogleDrive-[your-email]/My Drive/Money/House Expenses"
+python src/batch_predict_ensemble.py --input-dir "$HOME/Library/CloudStorage/GoogleDrive-[your-email]/My Drive/Money/House Expenses"
 
 ```
 
@@ -131,8 +131,8 @@ Process household expenses when:
 cd /Users/gio/Code/automate_expense_categories
 
 # ML Pipeline commands
-python src/transform_monthly_household_transactions.py --source-dir "/Users/gio/Library/CloudStorage/GoogleDrive-[your-email]/My Drive/Money/House Expenses"
-python src/batch_predict_ensemble.py --input-dir "/Users/gio/Library/CloudStorage/GoogleDrive-[your-email]/My Drive/Money/House Expenses"
+python src/transform_monthly_household_transactions.py --source-dir "$HOME/Library/CloudStorage/GoogleDrive-[your-email]/My Drive/Money/House Expenses"
+python src/batch_predict_ensemble.py --input-dir "$HOME/Library/CloudStorage/GoogleDrive-[your-email]/My Drive/Money/House Expenses"
 python src/merge_training_data.py
 python src/auto_model_ensemble.py --source household
 

@@ -3,7 +3,7 @@
 ## Prerequisites
 
 - Ensure `data/valid_categories.txt` exists with approved categories
-- Credit Card data folder: `/Users/gio/Library/CloudStorage/GoogleDrive-[your-email]/My Drive/Money/UnionBank`
+- Credit Card data folder: `$HOME/Library/CloudStorage/GoogleDrive-[your-email]/My Drive/Money/UnionBank`
 - Code location: `/Users/gio/Code/automate_expense_categories`
 
 ## Complete Monthly Workflow
