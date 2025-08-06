@@ -118,10 +118,16 @@ class ModelStorage:
 # Example usage in auto_model_ensemble.py:
 def get_model_storage():
     """Get configured ModelStorage instance"""
+    from config import get_config
+    
+    config = get_config()
+    gcp_config = config.get_gcp_config()
+    paths_config = config.get_paths_config()
+    
     return ModelStorage(
-        bucket_name="expense-categorization-ml-models-backup",
-        credentials_path="***CREDENTIALS-REMOVED***",
-        models_dir=os.path.join(PROJECT_ROOT, "models")
+        bucket_name=gcp_config['bucket_name'],
+        credentials_path=gcp_config['credentials_path'],
+        models_dir=paths_config['models_dir']
     )
 
 def save_model(model, name):

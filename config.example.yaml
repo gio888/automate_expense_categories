@@ -1,0 +1,69 @@
+# Configuration Template for Expense Categorization ML Pipeline
+# Copy this file to 'config.yaml' and customize with your personal settings
+
+# Google Cloud Platform Settings
+gcp:
+  # REQUIRED: Path to your GCP service account JSON key file
+  # Get this from: GCP Console > IAM & Admin > Service Accounts
+  credentials_path: "/path/to/your/service-account-key.json"
+  
+  # GCS bucket name for model backup (change to your own bucket)
+  bucket_name: "your-expense-ml-models-backup"
+  
+  # Optional: GCP project ID
+  project_id: "your-gcp-project-id"
+
+# File System Paths
+paths:
+  # Directory for training data and input files
+  data_dir: "./data"
+  
+  # Directory for trained ML models  
+  models_dir: "./models"
+  
+  # Directory for log files
+  logs_dir: "./logs"
+  
+  # Directory for cached models downloaded from cloud
+  cache_dir: "./cache"
+
+# Machine Learning Settings
+ml:
+  # Number of transactions to process in each batch
+  batch_size: 1000
+  
+  # Minimum samples required per category for training
+  min_samples_household: 5
+  min_samples_credit_card: 3
+  
+  # Confidence thresholds for predictions (0.0 to 1.0)
+  confidence_threshold_household: 0.6
+  confidence_threshold_credit_card: 0.7
+
+# Logging Configuration
+logging:
+  # Log level: DEBUG, INFO, WARNING, ERROR, CRITICAL
+  level: "INFO"
+  
+  # Log message format
+  format: "%(asctime)s - %(levelname)s - %(message)s"
+
+# =============================================================================
+# SETUP INSTRUCTIONS:
+# =============================================================================
+# 1. Copy this file: cp config.example.yaml config.yaml
+# 2. Edit config.yaml with your personal settings
+# 3. Set up GCP credentials:
+#    - Go to GCP Console > IAM & Admin > Service Accounts
+#    - Create a service account with Storage Admin role
+#    - Download JSON key file
+#    - Update 'credentials_path' above
+# 4. Create your own GCS bucket and update 'bucket_name'
+# 5. Test configuration: python src/config.py
+#
+# ALTERNATIVE: Use environment variables instead of config file:
+# export GCP_CREDENTIALS_PATH="/path/to/your/key.json"
+# export GCP_BUCKET_NAME="your-bucket-name"
+# 
+# Environment variables take precedence over config file settings.
+# =============================================================================

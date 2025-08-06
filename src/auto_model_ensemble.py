@@ -22,21 +22,28 @@ from flaml import AutoML
 from google.cloud import storage
 
 # Import our custom classes
+from src.config import get_config
 from src.model_storage import ModelStorage
 from src.model_registry import ModelRegistry
 
 #Import transacion source to handle different types of transactions
 from src.transaction_types import TransactionSource
 
-# ✅ Define Paths and Configuration
-DATA_DIR = PROJECT_ROOT / "data"
-MODELS_DIR = PROJECT_ROOT / "models"
-LOGS_DIR = PROJECT_ROOT / "logs"
-REGISTRY_DIR = MODELS_DIR / "registry"
+# ✅ Load Configuration
+config = get_config()
+if not config.validate_required():
+    logger.error("Configuration validation failed. Please check your settings.")
+    sys.exit(1)
 
-# GCS Configuration
-BUCKET_NAME = "expense-categorization-ml-models-backup"
-CREDENTIALS_PATH = "***CREDENTIALS-REMOVED***"
+# Get configuration values
+gcp_config = config.get_gcp_config()
+paths_config = config.get_paths_config()
+
+# ✅ Define Paths from Configuration
+DATA_DIR = Path(paths_config['data_dir'])
+MODELS_DIR = Path(paths_config['models_dir'])
+LOGS_DIR = Path(paths_config['logs_dir'])
+REGISTRY_DIR = MODELS_DIR / "registry"
 
 # Create directories if they don't exist
 os.makedirs(MODELS_DIR, exist_ok=True)
@@ -54,9 +61,17 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Initialize storage and registry
-model_storage = ModelStorage(BUCKET_NAME, CREDENTIALS_PATH, MODELS_DIR)
-model_registry = ModelRegistry(REGISTRY_DIR, BUCKET_NAME, CREDENTIALS_PATH)
+# Initialize storage and registry with configuration
+model_storage = ModelStorage(
+    bucket_name=gcp_config['bucket_name'],
+    credentials_path=gcp_config['credentials_path'],
+    models_dir=str(MODELS_DIR)
+)
+model_registry = ModelRegistry(
+    registry_dir=str(REGISTRY_DIR),
+    bucket_name=gcp_config['bucket_name'],
+    credentials_path=gcp_config['credentials_path']
+)
 
 def save_model(model, name: str, metrics: dict, training_data: str) -> dict:
     """

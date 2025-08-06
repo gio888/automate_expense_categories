@@ -1,28 +1,40 @@
 import sys
 import os
 import logging
+from pathlib import Path
 
 # Ensure src directory is in the system path
-sys.path.append(os.path.join(os.path.dirname(__file__), "src"))
+PROJECT_ROOT = Path(__file__).parent.parent
+sys.path.insert(0, str(PROJECT_ROOT))
 
-from model_registry import ModelRegistry
-from model_storage import ModelStorage
+from src.config import get_config
+from src.model_registry import ModelRegistry
+from src.model_storage import ModelStorage
 
-# Define paths
-PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-MODELS_DIR = os.path.abspath(os.path.join(PROJECT_ROOT, "models"))
-REGISTRY_DIR = os.path.abspath(os.path.join(PROJECT_ROOT, "models", "registry"))
+# Load configuration
+config = get_config()
+if not config.validate_required():
+    print("Configuration validation failed. Please check your settings.")
+    sys.exit(1)
+
+# Get configuration values
+gcp_config = config.get_gcp_config()
+paths_config = config.get_paths_config()
+
+# Define paths from configuration
+MODELS_DIR = Path(paths_config['models_dir'])
+REGISTRY_DIR = MODELS_DIR / "registry"
 
 # Initialize logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
-# Initialize model registry and storage
-model_registry = ModelRegistry(REGISTRY_DIR)
+# Initialize model registry and storage with configuration
+model_registry = ModelRegistry(str(REGISTRY_DIR))
 model_storage = ModelStorage(
-    bucket_name="expense-categorization-ml-models-backup",
-    credentials_path="***CREDENTIALS-REMOVED***",
-    models_dir=MODELS_DIR
+    bucket_name=gcp_config['bucket_name'],
+    credentials_path=gcp_config['credentials_path'],
+    models_dir=str(MODELS_DIR)
 )
 
 def verify_latest_model():

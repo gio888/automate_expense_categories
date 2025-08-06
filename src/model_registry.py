@@ -157,11 +157,18 @@ class ModelRegistry:
 
 # Example usage:
 if __name__ == "__main__":
-    # Initialize registry
+    from config import get_config
+    
+    # Load configuration
+    config = get_config()
+    gcp_config = config.get_gcp_config()
+    paths_config = config.get_paths_config()
+    
+    # Initialize registry with configuration
     registry = ModelRegistry(
-        registry_dir="models/registry",
-        bucket_name="expense-categorization-ml-models-backup",
-        credentials_path="***CREDENTIALS-REMOVED***"
+        registry_dir=str(Path(paths_config['models_dir']) / "registry"),
+        bucket_name=gcp_config['bucket_name'],
+        credentials_path=gcp_config['credentials_path']
     )
     
     # Example: Register a model

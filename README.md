@@ -39,8 +39,42 @@ automate_expense_categories/
 ### Prerequisites
 - Python 3.8+
 - Install dependencies: `pip install -r requirements.txt`
-- Ensure `data/valid_categories.txt` exists with approved expense categories
-- Google Cloud Storage credentials configured (for model backup)
+- Configure your personal settings (see **Configuration Setup** below)
+
+### Configuration Setup
+**IMPORTANT**: This project requires personal configuration before use.
+
+1. **Copy the configuration template:**
+   ```bash
+   cp config.example.yaml config.yaml
+   ```
+
+2. **Set up Google Cloud Storage:**
+   - Create a GCP project and enable Cloud Storage API
+   - Create a service account with "Storage Admin" role
+   - Download the service account key JSON file
+   - Create your own GCS bucket for model backups
+
+3. **Edit `config.yaml` with your settings:**
+   ```yaml
+   gcp:
+     credentials_path: "/path/to/your/service-account-key.json"
+     bucket_name: "your-expense-ml-models-backup"
+   ```
+
+4. **Alternative: Use environment variables:**
+   ```bash
+   export GCP_CREDENTIALS_PATH="/path/to/your/service-account-key.json"
+   export GCP_BUCKET_NAME="your-bucket-name"
+   ```
+
+5. **Validate configuration:**
+   ```bash
+   python src/config.py
+   ```
+
+6. **Ensure required data files exist:**
+   - `data/valid_categories.txt` - List of approved expense categories
 
 ### Household Expenses (5-step workflow)
 ```bash
