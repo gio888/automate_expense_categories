@@ -1,8 +1,15 @@
+import os
+import sys
+from pathlib import Path
+
+# Setup the path BEFORE any other imports
+PROJECT_ROOT = Path(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, str(PROJECT_ROOT))
+
 import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
 import logging
-import os
 import glob
 import re
 from typing import Optional, Dict, List, Tuple

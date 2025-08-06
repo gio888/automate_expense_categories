@@ -159,14 +159,28 @@ class Config:
                 missing.append('.'.join(field_path))
         
         if missing:
-            logger.error(f"Missing required configuration: {', '.join(missing)}")
-            logger.error("Please set these via environment variables or config.yaml")
+            logger.error("❌ Configuration validation failed!")
+            logger.error(f"Missing required settings: {', '.join(missing)}")
+            logger.error("")
+            logger.error("💡 How to fix this:")
+            logger.error("1. Copy template: cp config.example.yaml config.yaml")
+            logger.error("2. Edit config.yaml with your GCP credentials path")
+            logger.error("3. Or set environment variable: export GCP_CREDENTIALS_PATH=/path/to/key.json")
+            logger.error("4. Run setup validation: python setup_validator.py")
             return False
         
         # Validate credentials file exists
         creds_path = self.get('gcp', 'credentials_path')
         if creds_path and not Path(creds_path).exists():
-            logger.error(f"GCP credentials file not found: {creds_path}")
+            logger.error("❌ GCP credentials file not found!")
+            logger.error(f"Looking for: {creds_path}")
+            logger.error("")
+            logger.error("💡 How to fix this:")
+            logger.error("1. Go to Google Cloud Console > IAM & Admin > Service Accounts")
+            logger.error("2. Create service account with 'Storage Admin' role")
+            logger.error("3. Download JSON key file")
+            logger.error("4. Update config.yaml with correct path to the key file")
+            logger.error("5. Or set GCP_CREDENTIALS_PATH environment variable")
             return False
         
         return True

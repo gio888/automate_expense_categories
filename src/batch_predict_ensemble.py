@@ -1,4 +1,12 @@
 import os
+import sys
+import argparse
+from pathlib import Path
+
+# Setup the path BEFORE any other imports
+PROJECT_ROOT = Path(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, str(PROJECT_ROOT))
+
 import pandas as pd
 import numpy as np
 import joblib
@@ -10,9 +18,6 @@ from typing import List, Tuple, Dict, Any
 from src.transaction_types import TransactionSource  # Import the enum
 from src.model_registry import ModelRegistry
 from src.model_storage import ModelStorage
-
-# Define paths and setup logging
-PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MODELS_DIR = os.path.join(PROJECT_ROOT, "models")
 DATA_DIR = os.path.join(PROJECT_ROOT, "data")
 LOGS_DIR = os.path.join(PROJECT_ROOT, "logs")
@@ -298,41 +303,140 @@ class PredictionMonitor:
             for alert in alerts:
                 logger.warning(f"- {alert}")
 
+def interactive_file_selection():
+    """Interactive file selection with improved UX"""
+    csv_files = [f for f in os.listdir(DATA_DIR) if f.endswith('.csv')]
+    
+    if not csv_files:
+        print("❌ No CSV files found in data/ directory")
+        return None
+    
+    print(f"\nAvailable CSV files in {DATA_DIR}:")
+    for i, file in enumerate(csv_files, 1):
+        file_path = os.path.join(DATA_DIR, file)
+        size = os.path.getsize(file_path)
+        print(f"  {i}. 📄 {file} ({size:,} bytes)")
+    
+    while True:
+        try:
+            choice = input(f"\nSelect file (1-{len(csv_files)}) or 'q' to quit: ").strip()
+            if choice.lower() == 'q':
+                return None
+            
+            file_index = int(choice) - 1
+            if 0 <= file_index < len(csv_files):
+                return csv_files[file_index]
+            else:
+                print(f"❌ Please enter a number between 1 and {len(csv_files)}")
+        except ValueError:
+            print("❌ Please enter a valid number or 'q' to quit")
+
 def main():
-    """Main entry point with improved error handling"""
+    """Main entry point with CLI argument support"""
+    parser = argparse.ArgumentParser(
+        description="Predict expense categories for financial transactions using ensemble ML models",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  python %(prog)s --file transactions.csv                    # Process specific file
+  python %(prog)s --list                                     # List available files
+  python %(prog)s --interactive                              # Interactive file selection
+  python %(prog)s --file data.csv --source household        # Specify transaction source
+
+Files are processed from the data/ directory and results saved as:
+processed_[filename]_v[version]_[timestamp].csv
+        """
+    )
+    
+    parser.add_argument(
+        '--file', '-f',
+        help='CSV file to process (relative to data/ directory)'
+    )
+    
+    parser.add_argument(
+        '--source', '-s',
+        choices=['household', 'credit_card'],
+        help='Transaction source type (auto-detected if not specified)'
+    )
+    
+    parser.add_argument(
+        '--list', '-l',
+        action='store_true',
+        help='List available CSV files in data directory'
+    )
+    
+    parser.add_argument(
+        '--interactive', '-i',
+        action='store_true',
+        help='Interactive file selection mode'
+    )
+    
+    parser.add_argument(
+        '--verbose', '-v',
+        action='store_true',
+        help='Enable verbose logging'
+    )
+    
+    args = parser.parse_args()
+    
+    # Set logging level
+    if args.verbose:
+        logging.getLogger().setLevel(logging.DEBUG)
+    
     try:
-        # Show available CSV files
-        csv_files = [f for f in os.listdir(DATA_DIR) if f.endswith('.csv')]
-        
-        print("\nAvailable CSV files in data directory:")
-        for i, file in enumerate(csv_files, 1):
-            print(f"{i}. {file}")
-        
-        # Get user input with improved error handling
-        while True:
-            try:
-                choice = input("\nEnter the number of the file to process (or 'q' to quit): ")
-                if choice.lower() == 'q':
-                    return
-                
-                file_index = int(choice) - 1
-                if 0 <= file_index < len(csv_files):
-                    input_file = csv_files[file_index]
-                    break
-                else:
-                    print("❌ Invalid selection. Please try again.")
-            except ValueError:
-                print("❌ Please enter a valid number.")
-        
-        # Process the selected file
-        input_path = os.path.join(DATA_DIR, input_file)
-        print(f"\n📂 Selected file: {input_file}")
-        
-        confirm = input("Proceed with processing? (y/n): ")
-        if confirm.lower() != 'y':
-            print("Operation cancelled.")
+        # List files mode
+        if args.list:
+            csv_files = [f for f in os.listdir(DATA_DIR) if f.endswith('.csv')]
+            print(f"\nAvailable CSV files in {DATA_DIR}:")
+            for file in csv_files:
+                file_path = os.path.join(DATA_DIR, file)
+                size = os.path.getsize(file_path)
+                print(f"  📄 {file} ({size:,} bytes)")
             return
         
+        # Determine input file
+        input_file = None
+        
+        if args.file:
+            # Direct file specification
+            if not args.file.endswith('.csv'):
+                args.file += '.csv'
+            input_file = args.file
+            
+        elif args.interactive:
+            # Interactive mode
+            input_file = interactive_file_selection()
+            
+        else:
+            # Default: try interactive or show help
+            csv_files = [f for f in os.listdir(DATA_DIR) if f.endswith('.csv')]
+            if len(csv_files) == 0:
+                print("❌ No CSV files found in data/ directory")
+                print("💡 Add your transaction files to the data/ folder and try again")
+                return
+            elif len(csv_files) == 1:
+                input_file = csv_files[0]
+                print(f"📄 Auto-selected only file: {input_file}")
+            else:
+                print("Multiple files found. Use --interactive or specify --file")
+                print("Run with --list to see available files")
+                return
+        
+        if not input_file:
+            return
+            
+        # Validate file exists
+        input_path = os.path.join(DATA_DIR, input_file)
+        if not os.path.exists(input_path):
+            print(f"❌ File not found: {input_path}")
+            print("💡 Run with --list to see available files")
+            return
+        
+        print(f"\n🚀 Processing: {input_file}")
+        if args.source:
+            print(f"📊 Transaction source: {args.source}")
+        
+        # Process the file
         process_file(input_path)
         
     except Exception as e:
