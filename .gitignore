@@ -195,18 +195,40 @@ flaml_log/
 *.swp
 *.swo
 
-# Credentials and secrets
+# Credentials and secrets - ENHANCED PROTECTION
 *.pem
 *.key
 *.crt
-gnucash-predict*.json
+*.p12
+*.pfx
+*gnucash*.json
+*service-account*.json
+*gcp*.json
+*gcloud*.json
 *secret*
 *credential*
 *password*
 *token*
+*auth*
 *.env*
+.env
+.env.local
+.env.*.local
 service-account*.json
 client_secret*.json
+google-cloud*.json
+firebase*.json
+aws-*.json
+azure-*.json
+
+# Personal configuration
+config.yaml
+config.local.yaml
+.config/
+*-config.yaml
+*-config.json
+personal-*.yaml
+personal-*.json
 
 # Personal information
 *@gmail.com*
