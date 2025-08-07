@@ -84,12 +84,25 @@ class SetupValidator:
                 package = line.split('>=')[0].split('==')[0].split('<')[0].strip()
                 required_packages.append((package, line))
         
+        # Map package names to their import names
+        package_import_map = {
+            'scikit-learn': 'sklearn',
+            'google-cloud-storage': 'google.cloud.storage', 
+            'pyyaml': 'yaml',
+            'pillow': 'PIL',
+            'python-dateutil': 'dateutil',
+            'fonttools': 'fontTools'
+        }
+        
         missing_packages = []
         installed_packages = []
         
         for package, requirement in required_packages:
+            # Get the correct import name
+            import_name = package_import_map.get(package, package.replace('-', '_'))
+            
             try:
-                __import__(package.replace('-', '_'))
+                __import__(import_name)
                 installed_packages.append(package)
             except ImportError:
                 missing_packages.append(requirement)
@@ -100,7 +113,9 @@ class SetupValidator:
                 'fail',
                 f"Missing: {', '.join(missing_packages)}"
             )
-            self.issues.append(f"Install missing packages: pip install {' '.join(missing_packages)}")
+            quoted_packages = [f"'{pkg}'" for pkg in missing_packages]
+            self.issues.append(f"Install missing packages: pip install {' '.join(quoted_packages)}")
+            self.issues.append("OR simply run: pip install -r requirements.txt")
             return False
         else:
             self.print_status(

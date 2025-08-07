@@ -4,8 +4,9 @@
 # Google Cloud Platform Settings
 gcp:
   # REQUIRED: Path to your GCP service account JSON key file
+  # RECOMMENDED: Store in ~/.config/gcp/ directory for security
   # Get this from: GCP Console > IAM & Admin > Service Accounts
-  credentials_path: "/path/to/your/service-account-key.json"
+  credentials_path: "~/.config/gcp/service-account-key.json"
   
   # GCS bucket name for model backup (change to your own bucket)
   bucket_name: "your-expense-ml-models-backup"
@@ -57,12 +58,15 @@ logging:
 #    - Go to GCP Console > IAM & Admin > Service Accounts
 #    - Create a service account with Storage Admin role
 #    - Download JSON key file
+#    - Create directory: mkdir -p ~/.config/gcp/
+#    - Move key file: mv ~/Downloads/key.json ~/.config/gcp/service-account-key.json
+#    - Set secure permissions: chmod 600 ~/.config/gcp/service-account-key.json
 #    - Update 'credentials_path' above
 # 4. Create your own GCS bucket and update 'bucket_name'
 # 5. Test configuration: python src/config.py
 #
 # ALTERNATIVE: Use environment variables instead of config file:
-# export GCP_CREDENTIALS_PATH="/path/to/your/key.json"
+# export GCP_CREDENTIALS_PATH="~/.config/gcp/service-account-key.json"
 # export GCP_BUCKET_NAME="your-bucket-name"
 # 
 # Environment variables take precedence over config file settings.
