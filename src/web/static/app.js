@@ -215,6 +215,12 @@ class ExpensePipeline {
         }
     }
     
+    
+    // FIXED: Safe data access method
+    safeGetValue(obj, key, defaultValue = '') {
+        return obj && obj[key] !== undefined && obj[key] !== null ? obj[key] : defaultValue;
+    }
+    
     async loadResults() {
         try {
             const response = await fetch(`/results/${this.currentJobId}`);
@@ -252,8 +258,8 @@ class ExpensePipeline {
                     <button onclick="pipeline.showCorrectionInterface()" class="upload-button">
                         ✏️ Review & Correct Categories
                     </button>
-                    <button onclick="pipeline.downloadResults('predictions')" class="upload-button" style="background: blue; margin-left: 10px;">
-                        📥 Download Predictions
+                    <button onclick="pipeline.downloadResults('predictions')" class="upload-button" style="background: blue; margin-left: 10px;" title="All columns including confidence scores and metadata">
+                        📥 Download Full Predictions
                     </button>
                 </div>
             </div>
@@ -268,6 +274,7 @@ class ExpensePipeline {
                         <tr>
                             <th>Date</th>
                             <th>Description</th>
+                            <th>Amount (Negated)</th>
                             <th>Amount</th>
                             <th>Predicted Category</th>
                             <th>Confidence</th>
@@ -276,17 +283,25 @@ class ExpensePipeline {
                     <tbody>
         `;
         
+                // FIXED: Add ID if missing for correction interface
+        results.predictions.forEach((pred, index) => {
+            if (!pred.id) {
+                pred.id = index;
+            }
+        });
+        
         results.predictions.slice(0, 20).forEach(pred => {
             const confidenceClass = pred.confidence > 0.7 ? 'confidence-high' : 
                                    pred.confidence >= 0.5 ? 'confidence-medium' : 'confidence-low';
             
             html += `
                 <tr class="${confidenceClass}">
-                    <td>${pred.date}</td>
-                    <td>${pred.description}</td>
-                    <td>$${parseFloat(pred.amount || 0).toFixed(2)}</td>
-                    <td>${pred.predicted_category}</td>
-                    <td>${(pred.confidence * 100).toFixed(1)}%</td>
+                    <td>${this.safeGetValue(pred, "Date", "N/A")}</td>
+                    <td>${this.safeGetValue(pred, "Description", "N/A")}</td>
+                    <td>${parseFloat(this.safeGetValue(pred, "Amount (Negated)", 0)).toFixed(2)}</td>
+                    <td>${parseFloat(this.safeGetValue(pred, "Amount", 0)).toFixed(2)}</td>
+                    <td>${this.safeGetValue(pred, "predicted_category", "Unknown")}</td>
+                    <td>${(parseFloat(this.safeGetValue(pred, "confidence", 0)) * 100).toFixed(1)}%</td>
                 </tr>
             `;
         });
@@ -304,169 +319,139 @@ class ExpensePipeline {
     showCorrectionInterface() {
         const resultsDiv = document.getElementById('results');
         
-        // Show all predictions, not just low confidence
+        // Expand container for correction interface
+        const container = document.querySelector('.container');
+        container.classList.add('expanded');
+        
         let html = `
             <div class="status warning">
                 <h3>✏️ Review & Correct Categories</h3>
-                <p>Review all ${this.predictions.length} predictions. Most should be correct already.</p>
-                <div style="margin-top: 15px;">
-                    <button onclick="pipeline.submitCorrections()" class="upload-button">💾 Save Corrections & Export</button>
-                    <button onclick="pipeline.goBackToResults()" class="upload-button" style="background: gray; margin-left: 10px;">Cancel</button>
+                <p>Review all ${this.predictions.length} predictions. The table below is fully responsive and adapts to your screen size.</p>
+                <div style="margin-top: 1rem; display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                    <button onclick="pipeline.submitCorrections()" class="upload-button" aria-label="Save corrections and export data">
+                        💾 Save Corrections & Export
+                    </button>
+                    <button onclick="pipeline.goBackToResults()" class="upload-button" style="background: #6c757d;" aria-label="Cancel corrections and go back">
+                        ← Cancel
+                    </button>
                 </div>
             </div>
             
-            <div style="max-height: 600px; overflow-y: auto; margin-top: 20px;">
-                <table class="predictions-table" id="correctionsTable">
+            <div class="responsive-table-container">
+                <table class="responsive-table" id="correctionsTable" role="table" aria-label="Transaction corrections table">
                     <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Description</th>
-                            <th>Debit</th>
-                            <th>Credit</th>
-                            <th>ML Prediction</th>
-                            <th>Confidence</th>
-                            <th>Corrected Category</th>
+                        <tr role="row">
+                            <th scope="col" class="col-date sortable" data-column="Date" aria-sort="none" role="button" tabindex="0">
+                                Date
+                                <span class="sort-indicator" aria-hidden="true"></span>
+                            </th>
+                            <th scope="col" class="col-description sortable" data-column="Description" aria-sort="none" role="button" tabindex="0">
+                                Description
+                                <span class="sort-indicator" aria-hidden="true"></span>
+                            </th>
+                            <th scope="col" class="col-debit sortable" data-column="Amount (Negated)" aria-sort="none" role="button" tabindex="0">
+                                Debit
+                                <span class="sort-indicator" aria-hidden="true"></span>
+                            </th>
+                            <th scope="col" class="col-credit sortable" data-column="Amount" aria-sort="none" role="button" tabindex="0">
+                                Credit
+                                <span class="sort-indicator" aria-hidden="true"></span>
+                            </th>
+                            <th scope="col" class="col-prediction sortable" data-column="predicted_category" aria-sort="none" role="button" tabindex="0">
+                                ML Prediction
+                                <span class="sort-indicator" aria-hidden="true"></span>
+                            </th>
+                            <th scope="col" class="col-confidence sortable" data-column="confidence" aria-sort="none" role="button" tabindex="0">
+                                Confidence
+                                <span class="sort-indicator" aria-hidden="true"></span>
+                            </th>
+                            <th scope="col" class="col-correction">Corrected Category</th>
                         </tr>
                     </thead>
                     <tbody>
         `;
         
-        this.predictions.forEach(pred => {
+        this.predictions.forEach((pred, index) => {
             const confidenceClass = pred.confidence > 0.7 ? 'confidence-high' : 
                                    pred.confidence >= 0.5 ? 'confidence-medium' : 'confidence-low';
             
+            const confidencePercent = Math.round(pred.confidence * 100);
+            
             // Format amounts for debit/credit display
-            const debitAmount = parseFloat(pred['Amount (Negated)'] || 0);
-            const creditAmount = parseFloat(pred['Amount'] || 0);
+            const debitAmount = parseFloat(this.safeGetValue(pred, "Amount (Negated)", 0));
+            const creditAmount = parseFloat(this.safeGetValue(pred, "Amount", 0));
             
             html += `
-                <tr class="${confidenceClass}">
-                    <td>${pred.Date}</td>
-                    <td title="${pred.Description}" style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;">${pred.Description}</td>
-                    <td>${debitAmount ? debitAmount.toFixed(2) : ''}</td>
-                    <td>${creditAmount ? creditAmount.toFixed(2) : ''}</td>
-                    <td><span style="font-size: 0.9em; color: #666;">${pred.predicted_category}</span></td>
-                    <td>${(pred.confidence * 100).toFixed(0)}%</td>
-                    <td>
-                        <select id="correction_${pred.id}" class="category-dropdown" style="width: 100%; padding: 4px;" onchange="pipeline.onCategoryChange(${pred.id})">
-                            <option value="${pred.predicted_category}" selected>${pred.predicted_category}</option>
-                        </select>
+                <tr class="${confidenceClass}" role="row" tabindex="0" aria-rowindex="${index + 2}">
+                    <td class="col-date" role="gridcell">${this.safeGetValue(pred, "Date", "N/A")}</td>
+                    <td class="col-description" role="gridcell" title="${this.safeGetValue(pred, "Description", "N/A")}">${this.safeGetValue(pred, "Description", "N/A")}</td>
+                    <td class="col-debit" role="gridcell">${debitAmount ? debitAmount.toFixed(2) : ''}</td>
+                    <td class="col-credit" role="gridcell">${creditAmount ? creditAmount.toFixed(2) : ''}</td>
+                    <td class="col-prediction" role="gridcell" title="${this.safeGetValue(pred, "predicted_category", "Unknown")}">${this.safeGetValue(pred, "predicted_category", "Unknown")}</td>
+                    <td class="col-confidence" role="gridcell">
+                        <span class="confidence-badge">${confidencePercent}%</span>
+                    </td>
+                    <td class="col-correction" role="gridcell">
+                        <div class="searchable-dropdown" role="combobox" aria-expanded="false" aria-haspopup="listbox">
+                            <input 
+                                type="text" 
+                                id="search_${pred.id}" 
+                                value="${this.safeGetValue(pred, "predicted_category", "Unknown")}"
+                                placeholder="Type to search categories..."
+                                aria-label="Search and select category for ${this.safeGetValue(pred, "Description", "transaction")}"
+                                autocomplete="off"
+                                role="textbox"
+                            />
+                            <div id="dropdown_${pred.id}" class="dropdown-list" role="listbox" aria-label="Category options"></div>
+                        </div>
                     </td>
                 </tr>
             `;
         });
         
-        html += '</tbody></table></div>';
+        html += `
+                </tbody>
+            </table>
+        </div>
+        <div style="margin-top: 1.5rem; padding: 1rem; background: #f8f9fa; border-radius: 8px; text-align: center; color: #6c757d; font-size: 0.875rem;">
+            <p style="margin: 0;"><strong>✨ Responsive Design:</strong> This table adapts to your screen size. All columns are visible without horizontal scrolling on desktop screens.</p>
+            <p style="margin: 0.5rem 0 0 0;"><strong>Tip:</strong> Use Tab key to navigate between fields for keyboard accessibility.</p>
+        </div>
+        `;
         
         resultsDiv.innerHTML = html;
         
-        // Initialize searchable dropdowns after HTML is inserted
-        setTimeout(() => this.initializeCategoryDropdowns(), 100);
+        // Initialize enhanced functionality after HTML is inserted
+        setTimeout(() => {
+            this.initializeCategoryDropdowns();
+            this.initializeSortableColumns();
+        }, 100);
+        
+        // Add keyboard navigation
+        this.addKeyboardNavigation();
     }
     
     initializeCategoryDropdowns() {
-        // Add searchable functionality to each dropdown
+        // Initialize enhanced category selectors for each prediction
         this.predictions.forEach(pred => {
-            const dropdown = document.getElementById(`correction_${pred.id}`);
-            if (dropdown) {
-                this.makeDropdownSearchable(dropdown, pred.id);
+            const inputElement = document.getElementById(`search_${pred.id}`);
+            if (inputElement) {
+                new CategorySelector(inputElement, this.validCategories, pred.id, this);
             }
         });
     }
     
-    makeDropdownSearchable(dropdown, predId) {
-        // Replace select with searchable input + dropdown
-        const wrapper = document.createElement('div');
-        wrapper.className = 'searchable-dropdown';
-        wrapper.style.position = 'relative';
-        
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.id = `search_${predId}`;
-        input.value = dropdown.value;
-        input.style = 'width: 100%; padding: 4px; border: 1px solid #ddd;';
-        input.placeholder = 'Type to search categories...';
-        
-        const dropdownList = document.createElement('div');
-        dropdownList.id = `dropdown_${predId}`;
-        dropdownList.className = 'dropdown-list';
-        dropdownList.style = `
-            position: absolute; 
-            top: 100%; 
-            left: 0; 
-            right: 0; 
-            background: white; 
-            border: 1px solid #ddd; 
-            max-height: 200px; 
-            overflow-y: auto; 
-            z-index: 1000;
-            display: none;
-        `;
-        
-        wrapper.appendChild(input);
-        wrapper.appendChild(dropdownList);
-        
-        // Replace the original dropdown
-        dropdown.parentNode.replaceChild(wrapper, dropdown);
-        
-        // Add search functionality
-        input.addEventListener('input', (e) => {
-            this.filterCategories(predId, e.target.value);
-        });
-        
-        input.addEventListener('focus', () => {
-            this.showCategoryDropdown(predId, input.value);
-        });
-        
-        // Hide dropdown when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!wrapper.contains(e.target)) {
-                dropdownList.style.display = 'none';
-            }
-        });
-    }
-    
-    filterCategories(predId, searchTerm) {
-        const dropdownList = document.getElementById(`dropdown_${predId}`);
-        const filteredCategories = this.validCategories.filter(cat => 
-            cat.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-        
-        let html = '';
-        filteredCategories.slice(0, 10).forEach(category => { // Limit to 10 results
-            html += `
-                <div class="dropdown-item" style="padding: 8px; cursor: pointer; hover: background-color: #f5f5f5;" 
-                     onclick="pipeline.selectCategory(${predId}, '${category.replace(/'/g, "\\'")}')">
-                    ${category}
-                </div>
-            `;
-        });
-        
-        if (filteredCategories.length === 0) {
-            html = '<div style="padding: 8px; color: #666;">No categories found</div>';
+    initializeSortableColumns() {
+        const table = document.getElementById('correctionsTable');
+        if (table) {
+            this.tableSorter = new TableSorter(table, this);
         }
-        
-        dropdownList.innerHTML = html;
-        dropdownList.style.display = 'block';
     }
     
-    showCategoryDropdown(predId, currentValue = '') {
-        this.filterCategories(predId, currentValue);
-    }
-    
+    // Enhanced category selection handled by CategorySelector class
     selectCategory(predId, category) {
-        const input = document.getElementById(`search_${predId}`);
-        const dropdown = document.getElementById(`dropdown_${predId}`);
-        
-        if (input) {
-            input.value = category;
-        }
-        
-        if (dropdown) {
-            dropdown.style.display = 'none';
-        }
-        
-        // Update the prediction in memory
+        // This method is now handled by the CategorySelector class
+        // Keeping for backward compatibility
         const prediction = this.predictions.find(p => p.id === predId);
         if (prediction) {
             prediction.corrected_category = category;
@@ -483,7 +468,42 @@ class ExpensePipeline {
         }
     }
     
+    addKeyboardNavigation() {
+        const table = document.getElementById('correctionsTable');
+        if (!table) return;
+        
+        // Add keyboard navigation for table rows
+        const rows = table.querySelectorAll('tbody tr');
+        rows.forEach((row, index) => {
+            row.addEventListener('keydown', (e) => {
+                switch(e.key) {
+                    case 'ArrowDown':
+                        e.preventDefault();
+                        if (index < rows.length - 1) {
+                            rows[index + 1].focus();
+                        }
+                        break;
+                    case 'ArrowUp':
+                        e.preventDefault();
+                        if (index > 0) {
+                            rows[index - 1].focus();
+                        }
+                        break;
+                    case 'Enter':
+                    case ' ':
+                        e.preventDefault();
+                        const input = row.querySelector('input');
+                        if (input) input.focus();
+                        break;
+                }
+            });
+        });
+    }
+
     goBackToResults() {
+        const container = document.querySelector('.container');
+        container.classList.remove('expanded');
+        
         // Recreate results view
         const results = {
             total_rows: this.predictions.length,
@@ -560,10 +580,10 @@ class ExpensePipeline {
                 <p>Your corrected data is ready for download in accounting system format.</p>
                 
                 <div style="margin-top: 20px;">
-                    <button onclick="pipeline.downloadResults('accounting')" class="upload-button">
+                    <button onclick="pipeline.downloadResults('accounting')" class="upload-button" title="5 columns: Date, Description, Amount (Negated), Amount, Classification - Ready for direct import">
                         📥 Download for Accounting System
                     </button>
-                    <button onclick="pipeline.downloadResults('predictions')" class="upload-button" style="background: blue; margin-left: 10px;">
+                    <button onclick="pipeline.downloadResults('predictions')" class="upload-button" style="background: blue; margin-left: 10px;" title="All columns including confidence scores and metadata">
                         📥 Download Full Predictions
                     </button>
                     <button onclick="pipeline.retrainModels()" class="upload-button" style="background: green; margin-left: 10px;">
@@ -572,8 +592,10 @@ class ExpensePipeline {
                 </div>
                 
                 <div style="margin-top: 15px; font-size: 0.9em; color: #666;">
-                    <p><strong>Accounting Format:</strong> Date, Description, Amount (Negated), Amount, Classification</p>
-                    <p><strong>Ready for import:</strong> Your accounting system can import this file directly</p>
+                    <p><strong>📊 Accounting Format:</strong> Date, Description, Amount (Negated), Amount, Classification (5 columns)</p>
+                    <p><strong>✅ Ready for import:</strong> Your accounting system can import this file directly</p>
+                    <p><strong>📋 Full Predictions:</strong> Includes confidence scores, transaction source, and all metadata</p>
+                    <p><strong>📁 File Naming:</strong> Files use standardized names: {source}_{period}_{stage}_{timestamp}.csv</p>
                 </div>
             </div>
         `;
@@ -623,17 +645,19 @@ class ExpensePipeline {
                 throw new Error('Download failed');
             }
             
+            // Extract filename from Content-Disposition header or fallback to response filename
+            let filename = this.extractFilenameFromResponse(response, format);
+            
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
+            a.download = filename;
             
-            // Set appropriate filename based on format
+            // Show appropriate success message
             if (format === 'accounting') {
-                a.download = `accounting_import_${this.currentJobId}.csv`;
                 this.showStatus('📥 Accounting file downloaded! Ready for import into your accounting system.', 'success');
             } else {
-                a.download = `expense_predictions_${this.currentJobId}.csv`;
                 this.showStatus('📥 Predictions file downloaded!', 'success');
             }
             
@@ -645,6 +669,38 @@ class ExpensePipeline {
         } catch (error) {
             this.showStatus(`Download failed: ${error.message}`, 'error');
         }
+    }
+    
+    extractFilenameFromResponse(response, format) {
+        // Try to extract filename from Content-Disposition header
+        const contentDisposition = response.headers.get('Content-Disposition');
+        if (contentDisposition) {
+            const filenameMatch = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
+            if (filenameMatch && filenameMatch[1]) {
+                let filename = filenameMatch[1].replace(/['"]/g, '');
+                if (filename) {
+                    return filename;
+                }
+            }
+        }
+        
+        // Fallback: try to get filename from response URL or generate generic name
+        const url = response.url;
+        if (url && url.includes('/download/')) {
+            // Extract job ID for fallback naming
+            const jobIdMatch = url.match(/\/download\/([^?]+)/);
+            if (jobIdMatch) {
+                const jobId = jobIdMatch[1];
+                if (format === 'accounting') {
+                    return `accounting_${jobId}.csv`;
+                } else {
+                    return `predictions_${jobId}.csv`;
+                }
+            }
+        }
+        
+        // Final fallback
+        return format === 'accounting' ? 'accounting_export.csv' : 'predictions_export.csv';
     }
     
     showStatus(message, type) {
@@ -678,6 +734,345 @@ class ExpensePipeline {
         const sizes = ['Bytes', 'KB', 'MB', 'GB'];
         const i = Math.floor(Math.log(bytes) / Math.log(k));
         return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+    }
+}
+
+/**
+ * Enhanced Category Selector with modern UX patterns
+ */
+class CategorySelector {
+    constructor(inputElement, categories, predictionId, pipeline) {
+        this.input = inputElement;
+        this.categories = categories;
+        this.predictionId = predictionId;
+        this.pipeline = pipeline;
+        this.dropdown = document.getElementById(`dropdown_${predictionId}`);
+        this.isOpen = false;
+        this.selectedIndex = -1;
+        this.filteredCategories = [];
+        
+        this.init();
+    }
+    
+    init() {
+        // Enhanced event listeners with modern UX patterns
+        this.input.addEventListener('input', (e) => this.handleInput(e));
+        this.input.addEventListener('focus', () => this.handleFocus());
+        this.input.addEventListener('blur', (e) => this.handleBlur(e));
+        this.input.addEventListener('keydown', (e) => this.handleKeydown(e));
+        
+        // Click to open/close dropdown
+        this.input.addEventListener('click', () => {
+            if (!this.isOpen) {
+                this.showDropdown();
+            }
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!this.input.closest('.searchable-dropdown').contains(e.target)) {
+                this.hideDropdown();
+            }
+        });
+    }
+    
+    handleInput(e) {
+        const searchTerm = e.target.value;
+        this.input.classList.add('searching');
+        this.filterAndShowCategories(searchTerm);
+        this.selectedIndex = -1; // Reset selection on new input
+    }
+    
+    handleFocus() {
+        this.showDropdown();
+    }
+    
+    handleBlur(e) {
+        // Delay hiding to allow for item clicks
+        setTimeout(() => {
+            if (!this.dropdown.contains(document.activeElement)) {
+                this.hideDropdown();
+            }
+        }, 150);
+    }
+    
+    handleKeydown(e) {
+        switch(e.key) {
+            case 'ArrowDown':
+                e.preventDefault();
+                this.navigateDown();
+                break;
+            case 'ArrowUp':
+                e.preventDefault();
+                this.navigateUp();
+                break;
+            case 'Enter':
+                e.preventDefault();
+                if (this.selectedIndex >= 0 && this.filteredCategories[this.selectedIndex]) {
+                    this.selectCategory(this.filteredCategories[this.selectedIndex]);
+                }
+                break;
+            case 'Escape':
+                this.hideDropdown();
+                break;
+            case 'Tab':
+                this.hideDropdown();
+                break;
+        }
+    }
+    
+    filterAndShowCategories(searchTerm) {
+        this.filteredCategories = this.categories.filter(cat => 
+            cat.toLowerCase().includes(searchTerm.toLowerCase())
+        ).slice(0, 8); // Limit to 8 results for better UX
+        
+        this.renderDropdown();
+        this.showDropdown();
+    }
+    
+    renderDropdown() {
+        if (this.filteredCategories.length === 0) {
+            this.dropdown.innerHTML = '<div class="dropdown-empty">No matching categories</div>';
+            return;
+        }
+        
+        let html = '';
+        this.filteredCategories.forEach((category, index) => {
+            const isHighlighted = index === this.selectedIndex;
+            const isSelected = this.input.value === category;
+            
+            html += `
+                <div class="dropdown-item ${
+                    isHighlighted ? 'highlighted' : ''
+                } ${
+                    isSelected ? 'selected' : ''
+                }" 
+                     role="option" 
+                     aria-selected="${isSelected}"
+                     data-index="${index}"
+                     data-category="${category.replace(/'/g, '&apos;')}"
+                >
+                    ${category}
+                </div>
+            `;
+        });
+        
+        this.dropdown.innerHTML = html;
+        
+        // Add click handlers to dropdown items
+        this.dropdown.querySelectorAll('.dropdown-item').forEach((item, index) => {
+            item.addEventListener('mousedown', (e) => {
+                e.preventDefault(); // Prevent blur
+                const category = item.getAttribute('data-category').replace(/&apos;/g, "'");
+                this.selectCategory(category);
+            });
+            
+            item.addEventListener('mouseenter', () => {
+                this.selectedIndex = index;
+                this.updateHighlight();
+            });
+        });
+    }
+    
+    navigateDown() {
+        if (this.selectedIndex < this.filteredCategories.length - 1) {
+            this.selectedIndex++;
+            this.updateHighlight();
+            this.scrollToSelected();
+        }
+    }
+    
+    navigateUp() {
+        if (this.selectedIndex > 0) {
+            this.selectedIndex--;
+            this.updateHighlight();
+            this.scrollToSelected();
+        }
+    }
+    
+    updateHighlight() {
+        this.dropdown.querySelectorAll('.dropdown-item').forEach((item, index) => {
+            item.classList.toggle('highlighted', index === this.selectedIndex);
+        });
+    }
+    
+    scrollToSelected() {
+        const selectedItem = this.dropdown.querySelector('.dropdown-item.highlighted');
+        if (selectedItem) {
+            selectedItem.scrollIntoView({ block: 'nearest' });
+        }
+    }
+    
+    selectCategory(category) {
+        this.input.value = category;
+        this.input.classList.remove('searching');
+        this.input.classList.add('selected');
+        
+        // Update the prediction in memory
+        const prediction = this.pipeline.predictions.find(p => p.id === this.predictionId);
+        if (prediction) {
+            prediction.corrected_category = category;
+        }
+        
+        this.hideDropdown();
+        
+        // Visual feedback for successful selection
+        setTimeout(() => {
+            this.input.classList.remove('selected');
+        }, 1000);
+    }
+    
+    showDropdown() {
+        this.dropdown.style.display = 'block';
+        this.isOpen = true;
+        this.input.closest('.searchable-dropdown').setAttribute('aria-expanded', 'true');
+        
+        // Show all categories if no search term
+        if (!this.input.value.trim()) {
+            this.filteredCategories = this.categories.slice(0, 8);
+            this.renderDropdown();
+        }
+    }
+    
+    hideDropdown() {
+        this.dropdown.style.display = 'none';
+        this.isOpen = false;
+        this.selectedIndex = -1;
+        this.input.classList.remove('searching');
+        this.input.closest('.searchable-dropdown').setAttribute('aria-expanded', 'false');
+    }
+}
+
+/**
+ * Sortable columns functionality
+ */
+class TableSorter {
+    constructor(tableElement, pipeline) {
+        this.table = tableElement;
+        this.pipeline = pipeline;
+        this.currentSort = { column: null, direction: null };
+        this.originalData = [...pipeline.predictions];
+        
+        this.init();
+    }
+    
+    init() {
+        const headers = this.table.querySelectorAll('th.sortable');
+        headers.forEach(header => {
+            header.addEventListener('click', () => this.handleSort(header));
+            header.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    this.handleSort(header);
+                }
+            });
+        });
+    }
+    
+    handleSort(header) {
+        const column = header.getAttribute('data-column');
+        let direction = 'asc';
+        
+        // Toggle direction if same column
+        if (this.currentSort.column === column) {
+            direction = this.currentSort.direction === 'asc' ? 'desc' : 'asc';
+        }
+        
+        this.sortTable(column, direction);
+        this.updateSortIndicators(header, direction);
+        
+        this.currentSort = { column, direction };
+    }
+    
+    sortTable(column, direction) {
+        const sortedData = [...this.pipeline.predictions].sort((a, b) => {
+            let aVal = this.pipeline.safeGetValue(a, column, '');
+            let bVal = this.pipeline.safeGetValue(b, column, '');
+            
+            // Handle numeric columns
+            if (['Amount (Negated)', 'Amount', 'confidence'].includes(column)) {
+                aVal = parseFloat(aVal) || 0;
+                bVal = parseFloat(bVal) || 0;
+            }
+            // Handle date columns
+            else if (column === 'Date') {
+                aVal = new Date(aVal);
+                bVal = new Date(bVal);
+            }
+            // Handle string columns
+            else {
+                aVal = String(aVal).toLowerCase();
+                bVal = String(bVal).toLowerCase();
+            }
+            
+            if (aVal < bVal) return direction === 'asc' ? -1 : 1;
+            if (aVal > bVal) return direction === 'asc' ? 1 : -1;
+            return 0;
+        });
+        
+        // Update the pipeline data
+        this.pipeline.predictions = sortedData;
+        
+        // Re-render the table body
+        this.renderTableBody();
+    }
+    
+    renderTableBody() {
+        const tbody = this.table.querySelector('tbody');
+        let html = '';
+        
+        this.pipeline.predictions.forEach((pred, index) => {
+            const confidenceClass = pred.confidence > 0.7 ? 'confidence-high' : 
+                                   pred.confidence >= 0.5 ? 'confidence-medium' : 'confidence-low';
+            
+            const confidencePercent = Math.round(pred.confidence * 100);
+            const debitAmount = parseFloat(this.pipeline.safeGetValue(pred, "Amount (Negated)", 0));
+            const creditAmount = parseFloat(this.pipeline.safeGetValue(pred, "Amount", 0));
+            
+            html += `
+                <tr class="${confidenceClass}" role="row" tabindex="0" aria-rowindex="${index + 2}">
+                    <td class="col-date" role="gridcell">${this.pipeline.safeGetValue(pred, "Date", "N/A")}</td>
+                    <td class="col-description" role="gridcell" title="${this.pipeline.safeGetValue(pred, "Description", "N/A")}">${this.pipeline.safeGetValue(pred, "Description", "N/A")}</td>
+                    <td class="col-debit" role="gridcell">${debitAmount ? debitAmount.toFixed(2) : ''}</td>
+                    <td class="col-credit" role="gridcell">${creditAmount ? creditAmount.toFixed(2) : ''}</td>
+                    <td class="col-prediction" role="gridcell" title="${this.pipeline.safeGetValue(pred, "predicted_category", "Unknown")}">${this.pipeline.safeGetValue(pred, "predicted_category", "Unknown")}</td>
+                    <td class="col-confidence" role="gridcell">
+                        <span class="confidence-badge">${confidencePercent}%</span>
+                    </td>
+                    <td class="col-correction" role="gridcell">
+                        <div class="searchable-dropdown" role="combobox" aria-expanded="false" aria-haspopup="listbox">
+                            <input 
+                                type="text" 
+                                id="search_${pred.id}" 
+                                value="${this.pipeline.safeGetValue(pred, "predicted_category", "Unknown")}"
+                                placeholder="Type to search categories..."
+                                aria-label="Search and select category for ${this.pipeline.safeGetValue(pred, "Description", "transaction")}"
+                                autocomplete="off"
+                                role="textbox"
+                            />
+                            <div id="dropdown_${pred.id}" class="dropdown-list" role="listbox" aria-label="Category options"></div>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        });
+        
+        tbody.innerHTML = html;
+        
+        // Re-initialize category dropdowns after re-rendering
+        setTimeout(() => this.pipeline.initializeCategoryDropdowns(), 50);
+    }
+    
+    updateSortIndicators(activeHeader, direction) {
+        // Clear all sort indicators
+        this.table.querySelectorAll('th.sortable').forEach(header => {
+            header.classList.remove('sort-asc', 'sort-desc');
+            header.setAttribute('aria-sort', 'none');
+        });
+        
+        // Set active sort indicator
+        activeHeader.classList.add(`sort-${direction}`);
+        activeHeader.setAttribute('aria-sort', direction === 'asc' ? 'ascending' : 'descending');
     }
 }
 

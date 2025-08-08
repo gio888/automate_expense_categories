@@ -14,6 +14,15 @@ import logging
 import asyncio
 from io import StringIO
 
+# Import filename utilities
+PROJECT_ROOT = Path(__file__).parent.parent.parent
+sys.path.insert(0, str(PROJECT_ROOT))
+from src.utils.filename_utils import (
+    extract_source_and_period, create_predictions_filename, 
+    create_accounting_filename, create_accounting_from_predictions_filename,
+    create_corrected_filename, generate_filename
+)
+
 # FastAPI and dependencies
 from fastapi import FastAPI, File, UploadFile, HTTPException, BackgroundTasks, Form
 from fastapi.responses import HTMLResponse, FileResponse, JSONResponse
@@ -54,8 +63,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Global state for tracking processing jobs
+# Global state for tracking processing jobs and uploaded files
 processing_jobs = {}
+uploaded_files = {}  # Track uploaded file metadata for naming
 job_counter = 0
 
 # Load valid categories for corrections
@@ -77,6 +87,12 @@ def load_valid_categories():
 
 # Cache categories on startup
 VALID_CATEGORIES = load_valid_categories()
+
+# Mount static files - needs to be done early for start_web_server.py
+from fastapi.staticfiles import StaticFiles
+static_dir = PROJECT_ROOT / "src" / "web" / "static"
+static_dir.mkdir(exist_ok=True)
+app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
 # Pydantic models for API requests/responses
 class FileUploadResponse(BaseModel):
@@ -125,37 +141,403 @@ async def root():
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
-            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
-                   margin: 0; padding: 20px; background: #f5f5f5; }
-            .container { max-width: 800px; margin: 0 auto; background: white; 
-                        border-radius: 8px; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-            .header { text-align: center; margin-bottom: 30px; }
-            .upload-zone { border: 2px dashed #ddd; border-radius: 8px; padding: 40px; 
-                          text-align: center; margin: 20px 0; transition: border-color 0.3s; }
+            /* Modern Responsive CSS */
+            body { 
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+                margin: 0; padding: 1rem; background: #f5f5f5; 
+                line-height: 1.5;
+            }
+
+            /* Dynamic container that expands for correction interface */
+            .container { 
+                max-width: 800px; 
+                margin: 0 auto; 
+                background: white; 
+                border-radius: 8px; 
+                padding: 2rem; 
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                transition: max-width 0.3s ease;
+            }
+
+            /* Expand container for correction interface */
+            .container.expanded {
+                max-width: min(95vw, 1400px);
+            }
+
+            .header { text-align: center; margin-bottom: 2rem; }
+
+            /* Responsive upload zone */
+            .upload-zone { 
+                border: 2px dashed #ddd; 
+                border-radius: 12px; 
+                padding: 2.5rem 1rem; 
+                text-align: center; 
+                margin: 1.5rem 0; 
+                transition: all 0.3s ease;
+            }
             .upload-zone.dragover { border-color: #007bff; background: #f8f9ff; }
             .upload-zone input { display: none; }
-            .upload-button { background: #007bff; color: white; padding: 12px 24px; 
-                           border-radius: 6px; border: none; cursor: pointer; font-size: 16px; }
-            .upload-button:hover { background: #0056b3; }
-            .file-info { background: #f8f9fa; padding: 15px; border-radius: 6px; margin: 10px 0; }
-            .progress-bar { width: 100%; height: 20px; background: #eee; border-radius: 10px; overflow: hidden; }
-            .progress-fill { height: 100%; background: #28a745; transition: width 0.3s; }
-            .status { padding: 10px; border-radius: 4px; margin: 10px 0; }
-            .status.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-            .status.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-            .status.warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
-            .predictions-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-            .predictions-table th, .predictions-table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-            .predictions-table th { background: #f8f9fa; }
-            .confidence-high { background-color: #d4edda; }
-            .confidence-medium { background-color: #fff3cd; }
-            .confidence-low { background-color: #f8d7da; }
-            .searchable-dropdown { position: relative; display: inline-block; width: 100%; }
-            .dropdown-list { position: absolute; top: 100%; left: 0; right: 0; background: white; 
-                           border: 1px solid #ddd; max-height: 200px; overflow-y: auto; z-index: 1000; display: none; }
-            .dropdown-item { padding: 8px; cursor: pointer; border-bottom: 1px solid #f0f0f0; }
-            .dropdown-item:hover { background-color: #f5f5f5; }
-            .dropdown-item:last-child { border-bottom: none; }
+
+            .upload-button { 
+                background: #007bff; 
+                color: white; 
+                padding: 12px 24px; 
+                border-radius: 8px; 
+                border: none; 
+                cursor: pointer; 
+                font-size: 16px; 
+                font-weight: 500;
+                transition: all 0.2s ease;
+            }
+            .upload-button:hover { background: #0056b3; transform: translateY(-1px); }
+            .upload-button:focus { 
+                outline: 3px solid rgba(0, 123, 255, 0.3); 
+                outline-offset: 2px; 
+            }
+
+            .file-info, .status { 
+                padding: 1rem 1.25rem; 
+                border-radius: 8px; 
+                margin: 1rem 0; 
+                border: 1px solid transparent;
+            }
+            .file-info { background: #f8f9fa; }
+            .status.success { background: #d1ecf1; color: #0c5460; border-color: #bee5eb; }
+            .status.error { background: #f8d7da; color: #721c24; border-color: #f5c6cb; }
+            .status.warning { background: #fff3cd; color: #856404; border-color: #ffeaa7; }
+
+            .progress-bar { 
+                width: 100%; 
+                height: 24px; 
+                background: #e9ecef; 
+                border-radius: 12px; 
+                overflow: hidden; 
+                margin: 0.5rem 0;
+            }
+            .progress-fill { 
+                height: 100%; 
+                background: linear-gradient(90deg, #28a745, #20c997); 
+                transition: width 0.4s ease; 
+                border-radius: 12px;
+            }
+
+            /* Responsive Table Design */
+            .responsive-table-container {
+                margin: 2rem 0;
+                background: white;
+                border-radius: 12px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                overflow: hidden;
+                border: 1px solid #e2e8f0;
+            }
+
+            .responsive-table {
+                width: 100%;
+                border-collapse: separate;
+                border-spacing: 0;
+            }
+
+            .responsive-table th {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                font-weight: 600;
+                padding: 1rem 0.75rem;
+                text-align: left;
+                position: sticky;
+                top: 0;
+                z-index: 10;
+                border-bottom: 2px solid #4a5568;
+                font-size: 0.875rem;
+                text-transform: uppercase;
+                letter-spacing: 0.025em;
+            }
+
+            .responsive-table td {
+                padding: 0.875rem 0.75rem;
+                border-bottom: 1px solid #e2e8f0;
+                vertical-align: top;
+                font-size: 0.875rem;
+            }
+
+            .responsive-table tbody tr:hover {
+                background-color: #f7fafc;
+            }
+
+            /* Column sizing for optimal responsive behavior */
+            .col-date { width: 8%; min-width: 90px; }
+            .col-description { width: 25%; min-width: 200px; white-space: normal; }
+            .col-debit { width: 10%; min-width: 80px; text-align: right; }
+            .col-credit { width: 10%; min-width: 80px; text-align: right; }
+            .col-prediction { width: 22%; min-width: 180px; white-space: normal; }
+            .col-confidence { width: 8%; min-width: 70px; text-align: center; }
+            .col-correction { width: 17%; min-width: 200px; }
+
+            /* Confidence indicators */
+            .confidence-high { background-color: rgba(72, 187, 120, 0.1) !important; }
+            .confidence-medium { background-color: rgba(251, 188, 5, 0.1) !important; }
+            .confidence-low { background-color: rgba(245, 101, 101, 0.1) !important; }
+
+            .confidence-badge {
+                display: inline-block;
+                padding: 0.25rem 0.5rem;
+                border-radius: 12px;
+                font-size: 0.75rem;
+                font-weight: 600;
+                text-align: center;
+                min-width: 45px;
+            }
+
+            .confidence-high .confidence-badge {
+                background-color: #48bb78;
+                color: white;
+            }
+
+            .confidence-medium .confidence-badge {
+                background-color: #ed8936;
+                color: white;
+            }
+
+            .confidence-low .confidence-badge {
+                background-color: #f56565;
+                color: white;
+            }
+
+            /* Enhanced dropdown styling with modern UX */
+            .searchable-dropdown {
+                position: relative;
+                width: 100%;
+            }
+
+            .searchable-dropdown input {
+                width: 100%;
+                padding: 0.75rem 2.5rem 0.75rem 0.75rem;
+                border: 2px solid #e2e8f0;
+                border-radius: 8px;
+                font-size: 0.875rem;
+                transition: all 0.2s ease;
+                background: white url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e") no-repeat right 0.75rem center;
+                background-size: 16px 12px;
+                box-sizing: border-box;
+                cursor: pointer;
+            }
+
+            .searchable-dropdown input:focus {
+                outline: none;
+                border-color: #667eea;
+                box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+                background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23667eea' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+            }
+
+            /* Search icon when typing */
+            .searchable-dropdown.searching input {
+                background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='%23667eea' d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'/%3e%3c/svg%3e");
+            }
+
+            /* Selection confirmation visual feedback */
+            .searchable-dropdown input.selected {
+                border-color: #48bb78;
+                background-color: rgba(72, 187, 120, 0.05);
+            }
+
+            .dropdown-list {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                border: 1px solid #e2e8f0;
+                border-radius: 8px;
+                max-height: 200px;
+                overflow-y: auto;
+                z-index: 1000;
+                display: none;
+                box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+                margin-top: 4px;
+            }
+
+            .dropdown-item {
+                padding: 0.875rem 0.75rem;
+                cursor: pointer;
+                border-bottom: 1px solid #f7fafc;
+                font-size: 0.875rem;
+                transition: all 0.15s ease;
+                position: relative;
+            }
+
+            .dropdown-item:hover,
+            .dropdown-item.highlighted {
+                background-color: #667eea;
+                color: white;
+                transform: translateX(4px);
+            }
+
+            .dropdown-item.selected {
+                background-color: #48bb78;
+                color: white;
+                font-weight: 600;
+            }
+
+            .dropdown-item:last-child {
+                border-bottom: none;
+            }
+
+            /* Loading and empty states */
+            .dropdown-loading,
+            .dropdown-empty {
+                padding: 1rem;
+                text-align: center;
+                color: #718096;
+                font-style: italic;
+            }
+
+            .dropdown-loading::before {
+                content: "⏳ ";
+            }
+
+            .dropdown-empty::before {
+                content: "🔍 ";
+            }
+
+            /* Sortable columns styling */
+            .responsive-table th.sortable {
+                cursor: pointer;
+                user-select: none;
+                position: relative;
+                padding-right: 2rem;
+                transition: background-color 0.2s ease;
+            }
+
+            .responsive-table th.sortable:hover {
+                background: linear-gradient(135deg, #5a6fd8 0%, #6b4d94 100%);
+            }
+
+            .responsive-table th.sortable::after {
+                content: '';
+                position: absolute;
+                right: 0.5rem;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 0;
+                height: 0;
+                border-left: 5px solid transparent;
+                border-right: 5px solid transparent;
+                border-bottom: 5px solid rgba(255, 255, 255, 0.5);
+                transition: all 0.2s ease;
+            }
+
+            .responsive-table th.sortable.sort-asc::after {
+                border-bottom: 5px solid white;
+                border-top: none;
+            }
+
+            .responsive-table th.sortable.sort-desc::after {
+                border-top: 5px solid white;
+                border-bottom: none;
+            }
+
+            /* Sort indicator for accessibility */
+            .sort-indicator {
+                position: absolute;
+                left: -9999px;
+            }
+
+            /* Legacy table support for older tables */
+            .predictions-table { 
+                width: 100%; border-collapse: collapse; margin-top: 20px;
+            }
+            .predictions-table th, .predictions-table td { 
+                padding: 8px 12px; border: 1px solid #ddd; text-align: left; 
+            }
+            .predictions-table th { 
+                background: #f8f9fa; font-weight: 600; position: sticky; top: 0; z-index: 5;
+            }
+            .table-container { overflow: auto; border: 1px solid #ddd; border-radius: 4px; }
+
+            /* Mobile Responsive Design */
+            @media (max-width: 1200px) {
+                .container.expanded {
+                    max-width: 98vw;
+                    padding: 1rem;
+                }
+                
+                .responsive-table th,
+                .responsive-table td {
+                    padding: 0.5rem;
+                    font-size: 0.8rem;
+                }
+            }
+
+            @media (max-width: 768px) {
+                body { padding: 0.5rem; }
+                
+                .container.expanded {
+                    max-width: 100vw;
+                    padding: 0.75rem;
+                    border-radius: 0;
+                }
+                
+                /* Stack table for mobile */
+                .responsive-table-container {
+                    overflow-x: auto;
+                    -webkit-overflow-scrolling: touch;
+                }
+                
+                .responsive-table {
+                    min-width: 700px;
+                }
+                
+                .responsive-table th,
+                .responsive-table td {
+                    padding: 0.5rem 0.25rem;
+                    font-size: 0.75rem;
+                }
+                
+                /* Mobile dropdown optimizations */
+                .searchable-dropdown input {
+                    padding: 1rem 3rem 1rem 1rem;
+                    font-size: 1rem; /* Prevent zoom on iOS */
+                    background-size: 20px 15px;
+                    background-position: right 1rem center;
+                }
+                
+                .dropdown-list {
+                    max-height: 200px;
+                    border-radius: 12px;
+                }
+                
+                .dropdown-item {
+                    padding: 1.125rem 1rem;
+                    font-size: 1rem;
+                    min-height: 48px; /* Touch target size */
+                    display: flex;
+                    align-items: center;
+                }
+                
+                /* Mobile sort indicators */
+                .responsive-table th.sortable::after {
+                    right: 0.25rem;
+                    border-left: 4px solid transparent;
+                    border-right: 4px solid transparent;
+                    border-bottom: 4px solid rgba(255, 255, 255, 0.5);
+                }
+                
+                .upload-zone {
+                    padding: 1.5rem 1rem;
+                }
+            }
+
+            /* Focus and keyboard navigation */
+            *:focus {
+                outline: 2px solid #667eea;
+                outline-offset: 2px;
+            }
+
+            /* Print styles */
+            @media print {
+                .upload-zone, .status { display: none; }
+                .container { max-width: none; box-shadow: none; }
+                .responsive-table { font-size: 10px; }
+            }
         </style>
     </head>
     <body>
@@ -181,7 +563,7 @@ async def root():
             <div id="results" style="display: none;"></div>
         </div>
         
-        <script src="/static/app.js"></script>
+        <script src="/static/app.js?v=1754654547"></script>
     </body>
     </html>
     """
@@ -200,13 +582,25 @@ async def upload_file(file: UploadFile = File(...)):
         job_counter += 1
         file_id = f"file_{job_counter}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
         
-        # Save uploaded file
-        file_path = upload_dir / f"{file_id}_{file.filename}"
+        # Extract source and period information for naming
+        original_filename = file.filename
+        source, period = extract_source_and_period(original_filename)
+        
+        # Save uploaded file with original name preserved
+        file_path = upload_dir / f"{file_id}_{original_filename}"
         
         with open(file_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
         
-        logger.info(f"File uploaded: {file_path}")
+        logger.info(f"File uploaded: {file_path} (source: {source}, period: {period})")
+        
+        # Store source and period for later use in filename generation
+        uploaded_files[file_id] = {
+            "original_filename": original_filename,
+            "source": source,
+            "period": period,
+            "file_path": str(file_path)
+        }
         
         # Validate file
         validation_result = file_detector.detect_and_validate(str(file_path))
@@ -345,9 +739,13 @@ async def submit_corrections(job_id: str, corrections: CorrectionRequest):
                 df.loc[row_id, 'confidence'] = 1.0  # User corrections get full confidence
                 updated_rows += 1
         
-        # Save corrected file
-        corrected_path = results_dir / f"corrected_{job_id}.csv"
+        # Generate standardized corrected filename from original predictions file
+        original_predictions_filename = Path(job.result_file).name
+        corrected_filename = create_corrected_filename(original_predictions_filename)
+        corrected_path = results_dir / corrected_filename
         df.to_csv(corrected_path, index=False)
+        
+        logger.info(f"Generated corrected file: {corrected_filename} (from: {original_predictions_filename})")
         
         # Update job with corrected file path
         job.result_file = str(corrected_path)
@@ -409,27 +807,36 @@ async def download_results(job_id: str, format: str = "predictions"):
                 'Classification': df['predicted_category']  # Will be updated by corrections
             })
             
-            # Save temporary accounting format file
-            accounting_file = results_dir / f"accounting_{job_id}.csv"
+            # Generate standardized accounting filename from predictions filename
+            predictions_filename = Path(job.result_file).name
+            accounting_filename = create_accounting_from_predictions_filename(predictions_filename)
+            accounting_file = results_dir / accounting_filename
+            
+            # Save accounting file
             accounting_df.to_csv(accounting_file, index=False)
             
-            filename = f"accounting_import_{job_id}.csv"
+            logger.info(f"Generated accounting file: {accounting_filename}")
+            
             return FileResponse(
                 accounting_file,
                 media_type='text/csv',
-                filename=filename
+                filename=accounting_filename,
+                headers={"Content-Disposition": f"attachment; filename={accounting_filename}"}
             )
         except Exception as e:
             logger.error(f"Error creating accounting format: {e}")
-            raise HTTPException(status_code=500, detail="Failed to create accounting format")
+            raise HTTPException(status_code=500, detail=f"Failed to create accounting format: {str(e)}")
     
     else:
-        # Default: full predictions format
-        filename = f"expense_predictions_{job_id}.csv"
+        # Default: full predictions format with standardized name
+        predictions_filename = Path(job.result_file).name
+        logger.info(f"Downloading predictions file: {predictions_filename}")
+        
         return FileResponse(
             job.result_file,
             media_type='text/csv',
-            filename=filename
+            filename=predictions_filename,
+            headers={"Content-Disposition": f"attachment; filename={predictions_filename}"}
         )
 
 # Background task functions
@@ -488,10 +895,26 @@ async def process_file_background(job_id: str, file_path: str):
         job.message = "Finalizing predictions and saving results"
         processing_jobs[job_id] = job
         
-        # Generate output filename
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        output_filename = f"processed_{job_id}_{timestamp}.csv"
+        # Generate standardized predictions filename by extracting info from file path
+        original_filename = Path(file_path).name
+        # Remove the file_id prefix (e.g., "file_1_20250809_000237_For Automl..." -> "For Automl...")
+        if '_' in original_filename:
+            # Find the original filename after the file_id prefix
+            parts = original_filename.split('_', 3)  # Split into at most 4 parts
+            if len(parts) >= 4:
+                actual_filename = parts[3]  # Everything after file_id_timestamp_
+            else:
+                actual_filename = original_filename
+        else:
+            actual_filename = original_filename
+            
+        source, period = extract_source_and_period(actual_filename)
+        timestamp = datetime.now()
+        
+        output_filename = generate_filename(source, period, "predictions", timestamp)
         output_path = results_dir / output_filename
+        
+        logger.info(f"Generated predictions file: {output_filename} (extracted from: {actual_filename})")
         
         df.to_csv(output_path, index=False)
         
@@ -566,13 +989,6 @@ async def health_check():
 
 if __name__ == "__main__":
     import uvicorn
-    
-    # Create static directory for frontend assets
-    static_dir = PROJECT_ROOT / "src" / "web" / "static"
-    static_dir.mkdir(exist_ok=True)
-    
-    # Mount static files
-    app.mount("/static", StaticFiles(directory=static_dir), name="static")
     
     print("🚀 Starting Expense Categorization Web Server")
     print("📱 Open http://localhost:8000 in your browser")
