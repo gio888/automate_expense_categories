@@ -497,5 +497,45 @@ def main():
         validator.logger.error("Processing failed", exc_info=True)
         raise
 
+class CorrectionValidatorExtended(CorrectionValidator):
+    """Extended CorrectionValidator with additional methods for unified workflow"""
+    
+    def process_corrections_file(self, file_path: str, transaction_source: str, auto_confirm: bool = False) -> bool:
+        """
+        Process corrections file for unified workflow
+        
+        Args:
+            file_path: Path to corrections file
+            transaction_source: 'household' or 'credit_card'
+            auto_confirm: Skip interactive prompts if True
+            
+        Returns:
+            True if processing succeeded, False otherwise
+        """
+        try:
+            # Load corrections
+            corrections_df = pd.read_csv(file_path)
+            
+            # Add transaction source if missing
+            if 'transaction_source' not in corrections_df.columns:
+                corrections_df['transaction_source'] = transaction_source
+                if not auto_confirm:
+                    print(f"Added '{transaction_source}' as transaction_source for all records.")
+            
+            # Validate and process
+            export_files = self.validate_and_prepare(corrections_df)
+            
+            if not auto_confirm:
+                print("\n✅ Training data updated successfully!")
+                print(f"Results saved to: {export_files}")
+            
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"Failed to process corrections: {e}")
+            if not auto_confirm:
+                print(f"❌ Failed to process corrections: {str(e)}")
+            return False
+
 if __name__ == "__main__":
     main()

@@ -197,6 +197,33 @@ class Config:
         """Get ML-specific configuration"""
         return self.get('ml', default={})
     
+    def get_file_handling_config(self) -> Dict[str, Any]:
+        """Get file handling configuration"""
+        config = self.get('file_handling', default={})
+        
+        # Provide sensible defaults if not configured
+        defaults = {
+            'default_directories': ['./data'],
+            'file_patterns': ['*.csv'],
+            'max_files_shown': 20,
+            'sort_by': 'modified_date',
+            'show_all_option': True
+        }
+        
+        # Merge with defaults
+        for key, default_value in defaults.items():
+            if key not in config:
+                config[key] = default_value
+        
+        # Expand home directory paths
+        expanded_dirs = []
+        for directory in config['default_directories']:
+            expanded_path = os.path.expanduser(directory)
+            expanded_dirs.append(expanded_path)
+        config['default_directories'] = expanded_dirs
+        
+        return config
+    
     def print_config(self, hide_sensitive: bool = True):
         """Print current configuration (for debugging)"""
         import json

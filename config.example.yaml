@@ -49,6 +49,30 @@ logging:
   # Log message format
   format: "%(asctime)s - %(levelname)s - %(message)s"
 
+# File Handling Configuration
+file_handling:
+  # Default directories to search for transaction files
+  # Customize these paths to match your file organization
+  default_directories:
+    - "~/Documents/Financial"           # Common financial folder
+    - "~/Downloads"                     # Fresh bank downloads
+    - "./data"                          # Project data folder (fallback)
+    
+  # File name patterns to match transaction CSV files
+  # Customize these patterns to match your bank's file naming
+  file_patterns:
+    - "*statement*.csv"                 # Generic statements
+    - "*transaction*.csv"               # Transaction files
+    - "*UNIONBANK*.csv"                 # UnionBank files (example)
+    - "*Chase*.csv"                     # Chase Bank files (example)
+    - "*expenses*.csv"                  # Expense files
+    - "*Kitty*.csv"                     # Household files (example)
+    
+  # Display settings
+  max_files_shown: 20                   # Limit file list to prevent overwhelming
+  sort_by: "modified_date"              # Sort by: "name", "modified_date", "size"
+  show_all_option: true                 # Allow bypassing pattern filters
+
 # =============================================================================
 # SETUP INSTRUCTIONS:
 # =============================================================================
