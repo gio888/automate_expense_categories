@@ -19,6 +19,7 @@ from src.transaction_types import TransactionSource  # Import the enum
 from src.model_registry import ModelRegistry
 from src.model_storage import ModelStorage
 from src.utils.filename_utils import extract_source_and_period, generate_filename
+from src.utils.excel_processor import ExcelProcessor, is_excel_file
 MODELS_DIR = os.path.join(PROJECT_ROOT, "models")
 DATA_DIR = os.path.join(PROJECT_ROOT, "data")
 LOGS_DIR = os.path.join(PROJECT_ROOT, "logs")
@@ -125,8 +126,19 @@ class BatchPredictor:
             if 'transaction_source' not in df.columns:
                 raise ValueError("DataFrame must contain 'transaction_source' column")
             
-            if 'Description' not in df.columns:
-                raise ValueError("DataFrame must contain 'Description' column")
+            # Handle case-insensitive column names for Description
+            description_col = None
+            for col in df.columns:
+                if col.lower() == 'description':
+                    description_col = col
+                    break
+            
+            if description_col is None:
+                raise ValueError("DataFrame must contain 'Description' or 'description' column")
+            
+            # Standardize column name to 'Description' if needed
+            if description_col != 'Description':
+                df = df.rename(columns={description_col: 'Description'})
                 
             # Group data by transaction source
             for source in [TransactionSource.HOUSEHOLD, TransactionSource.CREDIT_CARD]:
@@ -208,7 +220,13 @@ def process_file(input_file: str) -> None:
         monitor = PredictionMonitor(LOGS_DIR)
         
         logger.info(f"Loading transaction data from: {input_file}")
-        df = pd.read_csv(input_file)
+        
+        # Handle both CSV and Excel files
+        if is_excel_file(input_file):
+            excel_processor = ExcelProcessor()
+            df = excel_processor.process_excel_file(input_file)
+        else:
+            df = pd.read_csv(input_file)
         
         if 'transaction_source' not in df.columns:
             df['transaction_source'] = 'credit_card'
@@ -245,7 +263,7 @@ def process_file(input_file: str) -> None:
         
         logging.info(f"Generated standardized filename: {output_filename} (source: {source}, period: {period})")
         
-        df.to_csv(output_file, index=False)
+        df.to_csv(output_file, index=False, encoding='utf-8')
         
         monitor.log_metrics(df)
         
@@ -311,7 +329,7 @@ class PredictionMonitor:
 
 def interactive_file_selection():
     """Interactive file selection with improved UX"""
-    csv_files = [f for f in os.listdir(DATA_DIR) if f.endswith('.csv')]
+    csv_files = [f for f in os.listdir(DATA_DIR) if f.endswith(('.csv', '.xlsx', '.xls'))]
     
     if not csv_files:
         print("❌ No CSV files found in data/ directory")
@@ -392,7 +410,7 @@ Files are processed from the data/ directory and results saved using standardize
     try:
         # List files mode
         if args.list:
-            csv_files = [f for f in os.listdir(DATA_DIR) if f.endswith('.csv')]
+            csv_files = [f for f in os.listdir(DATA_DIR) if f.endswith(('.csv', '.xlsx', '.xls'))]
             print(f"\nAvailable CSV files in {DATA_DIR}:")
             for file in csv_files:
                 file_path = os.path.join(DATA_DIR, file)
@@ -405,8 +423,11 @@ Files are processed from the data/ directory and results saved using standardize
         
         if args.file:
             # Direct file specification
-            if not args.file.endswith('.csv'):
-                args.file += '.csv'
+            # Support both CSV and Excel files
+            if not (args.file.endswith('.csv') or args.file.endswith('.xlsx') or args.file.endswith('.xls')):
+                # Only add .csv if no extension is provided
+                if '.' not in os.path.basename(args.file):
+                    args.file += '.csv'
             input_file = args.file
             
         elif args.interactive:
@@ -415,7 +436,7 @@ Files are processed from the data/ directory and results saved using standardize
             
         else:
             # Default: try interactive or show help
-            csv_files = [f for f in os.listdir(DATA_DIR) if f.endswith('.csv')]
+            csv_files = [f for f in os.listdir(DATA_DIR) if f.endswith(('.csv', '.xlsx', '.xls'))]
             if len(csv_files) == 0:
                 print("❌ No CSV files found in data/ directory")
                 print("💡 Add your transaction files to the data/ folder and try again")

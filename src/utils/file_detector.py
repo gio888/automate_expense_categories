@@ -19,6 +19,7 @@ PROJECT_ROOT = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
 from src.transaction_types import TransactionSource
+from src.utils.excel_processor import ExcelProcessor, is_excel_file
 
 logger = logging.getLogger(__name__)
 
@@ -111,17 +112,24 @@ class FileDetector:
                     file_size=file_size
                 )
             
-            # Try to read CSV
+            # Try to read file (CSV or Excel)
             try:
-                df = pd.read_csv(file_path)
+                if is_excel_file(file_path):
+                    # Process Excel file
+                    excel_processor = ExcelProcessor()
+                    df = excel_processor.process_excel_file(file_path)
+                else:
+                    # Process CSV file
+                    df = pd.read_csv(file_path)
             except Exception as e:
+                file_type = "Excel" if is_excel_file(file_path) else "CSV"
                 return FileValidationResult(
                     is_valid=False,
                     transaction_source=None,
                     confidence=0.0,
-                    issues=[f"Cannot read CSV file: {str(e)}"],
+                    issues=[f"Cannot read {file_type} file: {str(e)}"],
                     suggestions=[
-                        "Ensure file is in valid CSV format",
+                        f"Ensure file is in valid {file_type} format",
                         "Check for special characters or encoding issues",
                         "Try opening in Excel to verify format"
                     ],
@@ -136,8 +144,8 @@ class FileDetector:
                     is_valid=False,
                     transaction_source=None,
                     confidence=0.0,
-                    issues=["CSV file contains no data rows"],
-                    suggestions=["Ensure CSV has both headers and data rows"],
+                    issues=["File contains no data rows"],
+                    suggestions=["Ensure file has both headers and data rows"],
                     detected_columns={},
                     row_count=0,
                     file_size=file_size
@@ -402,7 +410,7 @@ def get_csv_files_with_metadata(directories: Optional[List[str]] = None, pattern
             seen = set()
             unique_files = []
             for file_path in matched_files:
-                if file_path not in seen and file_path.suffix.lower() == '.csv':
+                if file_path not in seen and file_path.suffix.lower() in ['.csv', '.xlsx', '.xls']:
                     seen.add(file_path)
                     unique_files.append(file_path)
             
@@ -487,10 +495,10 @@ def smart_file_selection(directories: Optional[List[str]] = None, show_all: bool
         file_config = config.get_file_handling_config()
         directories = file_config['default_directories']
         max_files = file_config['max_files_shown']
-        patterns = file_config['file_patterns'] if not show_all else ['*.csv']
+        patterns = file_config['file_patterns'] if not show_all else ['*.csv', '*.xlsx', '*.xls']
     else:
         max_files = 20
-        patterns = ['*.csv']
+        patterns = ['*.csv', '*.xlsx', '*.xls']
     
     files_info = get_csv_files_with_metadata(directories, patterns, max_files)
     
@@ -551,14 +559,14 @@ def smart_file_selection(directories: Optional[List[str]] = None, show_all: bool
         print("❌ No valid transaction files found")
         print("💡 Check file format and ensure proper CSV structure")
         if not show_all:
-            print("💡 Try 'all' to see all CSV files (ignoring patterns)")
+            print("💡 Try 'all' to see all transaction files (ignoring patterns)")
         return None
     
     print("💡 Options:")
     print(f"  • Enter number (1-{len(files_info)}) to select file")
     print("  • 'r' or 'refresh' to rescan files")
     if not show_all:
-        print("  • 'all' to show all CSV files (ignore patterns)")
+        print("  • 'all' to show all transaction files (ignore patterns)")
     print("  • 'q' or 'quit' to exit")
     print()
     

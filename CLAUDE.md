@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is an automated expense categorization ML pipeline that uses ensemble machine learning models (LightGBM, XGBoost, CatBoost) to classify financial transactions from household expenses and credit card statements. The system implements human-in-the-loop feedback for continuous improvement.
+This is an automated expense categorization ML pipeline that uses ensemble machine learning models (LightGBM, XGBoost, CatBoost) to classify financial transactions from household expenses and credit card statements. The system supports both CSV and Excel file formats and implements human-in-the-loop feedback for continuous improvement.
 
 ## Architecture
 
@@ -21,11 +21,14 @@ This is an automated expense categorization ML pipeline that uses ensemble machi
 - `src/model_storage.py` - Local/cloud storage handling with Google Cloud Storage
 - `src/transaction_types.py` - Transaction source definitions and configurations
 - `src/merge_training_data.py` - Integrates human corrections into training data
+- `src/utils/excel_processor.py` - Excel file processing and standardization
+- `src/utils/file_detector.py` - Intelligent file detection for CSV and Excel formats
 
 ### Data Flow
-1. Raw transactions → Transform (household only) → Predict → Manual correction → Merge corrections → Retrain models
-2. Models are versioned and backed up to Google Cloud Storage automatically
-3. Predictions include confidence scores for human review prioritization
+1. **File Processing**: Excel/CSV files → Automatic format detection → Standardized data format
+2. **ML Pipeline**: Raw transactions → Transform (household only) → Predict → Manual correction → Merge corrections → Retrain models
+3. **Storage & Versioning**: Models are versioned and backed up to Google Cloud Storage automatically
+4. **Quality Control**: Predictions include confidence scores for human review prioritization
 
 ## Common Development Commands
 
@@ -35,6 +38,10 @@ This is an automated expense categorization ML pipeline that uses ensemble machi
 python start_web_server.py
 # Then open http://localhost:8000 in browser
 ```
+
+**Supported File Formats:**
+- **Excel files**: `.xlsx`, `.xls` (Direct upload from bank statements)
+- **CSV files**: Legacy format support with full backward compatibility
 
 ### Command Line Interface (Development)
 
@@ -47,11 +54,11 @@ python src/batch_predict_ensemble.py                   # Generate predictions
 python src/merge_training_data.py                      # Integrate corrections
 python src/auto_model_ensemble.py --source household   # Retrain models
 
-# Credit card workflow (4 steps)
-python src/batch_predict_ensemble.py                   # Generate predictions
+# Credit card workflow (4 steps) - now supports Excel files directly
+python src/batch_predict_ensemble.py --file statement.xlsx  # Generate predictions from Excel
 # [Manual review and correction step]  
-python src/merge_training_data.py                      # Integrate corrections
-python src/auto_model_ensemble.py --source credit_card # Retrain models
+python src/merge_training_data.py                           # Integrate corrections
+python src/auto_model_ensemble.py --source credit_card      # Retrain models
 ```
 
 ### Diagnostics
@@ -75,7 +82,12 @@ The system uses a standardized naming convention: `{source}_{period}_{stage}_{ti
 - **Stage**: `input`, `predictions`, `corrected`, `accounting`, `training`
 - **Timestamp**: `YYYYMMDD_HHMMSS` (when processed, for uniqueness)
 
-### Input Files (Legacy Format - Auto-Converted)
+### Input Files - Multiple Formats Supported
+**Excel Files (Recommended):**
+- Credit Card: `"Statement UNIONBANK Visa 8214 YYYY-MM.xlsx"`
+- Household: Excel exports from accounting systems
+
+**CSV Files (Legacy Format - Auto-Converted):**
 - Household: `"House Kitty Transactions - Cash YYYY-MM.csv"`
 - Credit Card: `"For Automl Statement UNIONBANK Visa YYYY-MM.csv"`
 
@@ -98,7 +110,11 @@ The system uses a standardized naming convention: `{source}_{period}_{stage}_{ti
 
 ### Dependencies
 Install via: `pip install -r requirements.txt`
-Key ML libraries: scikit-learn, lightgbm, xgboost, catboost, flaml, shap, pyyaml
+Key libraries:
+- **ML**: scikit-learn, lightgbm, xgboost, catboost, flaml, shap
+- **Data**: pandas, numpy, pyyaml
+- **Excel Support**: openpyxl (for .xlsx/.xls file processing)
+- **Web**: fastapi, uvicorn (for web interface)
 
 ### Personal Configuration System
 The project uses a **personal data architecture** that separates your private data from the public codebase:
@@ -161,17 +177,19 @@ Key environment variables for configuration:
 ### For End Users
 - **Primary interface**: Web interface (`python start_web_server.py`)
 - **Complete workflow**: Upload → Process → Correct → Retrain (all in browser)
-- **File formats**: Drag & drop CSV files, automatic type detection
+- **File formats**: Drag & drop Excel (.xlsx, .xls) and CSV files, automatic format detection
 - **Real-time feedback**: Progress bars, confidence scores, searchable corrections
+- **Direct bank statement upload**: No need for manual Excel to CSV conversion
 
 ### For Developers/Automation
-- **CLI commands**: Use the batch processing scripts for automation
+- **CLI commands**: Use the batch processing scripts for automation (supports both Excel and CSV)
 - **Model development**: Direct access to training and validation scripts
 - **Integration**: FastAPI endpoints available for custom integrations
+- **File processing**: Automatic Excel → standardized format conversion in background
 
 ## Important Notes
 
-- **Web interface dependencies**: Requires `fastapi>=0.104.0` and `uvicorn>=0.24.0`
+- **Web interface dependencies**: Requires `fastapi>=0.104.0`, `uvicorn>=0.24.0`, and `openpyxl>=3.1.0`
 - Models are source-specific (household vs credit_card) with different TF-IDF configurations
 - Training requires minimum samples per category (5 for household, 3 for credit card)
 - **Configuration is required before use** - copy `config.example.yaml` to `config.yaml` and customize

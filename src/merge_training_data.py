@@ -15,6 +15,7 @@ import re
 from typing import Optional, Dict, List, Tuple
 from src.model_registry import ModelRegistry
 from src.transaction_types import TransactionSource  # Import the TransactionSource enum
+from src.utils.excel_processor import ExcelProcessor, is_excel_file
 
 class CorrectionValidator:
     def __init__(self):
@@ -371,7 +372,12 @@ class CorrectionValidator:
                 existing_data = None
                 
                 if latest_training_file is not None:
-                    existing_data = pd.read_csv(latest_training_file)
+                    # Handle both CSV and Excel files
+                    if is_excel_file(latest_training_file):
+                        excel_processor = ExcelProcessor()
+                        existing_data = excel_processor.process_excel_file(latest_training_file)
+                    else:
+                        existing_data = pd.read_csv(latest_training_file)
                     self._log_data_summary(existing_data, f"Existing {source.value.capitalize()} Training Data")
                     
                     # Check if transaction_source column exists in existing data
@@ -424,7 +430,7 @@ class CorrectionValidator:
                 export_filename = f"training_data_{source.value}_v{new_version}_{timestamp}.csv"
                 export_path = os.path.join(self.data_dir, export_filename)
                 
-                combined_data.to_csv(export_path, index=False)
+                combined_data.to_csv(export_path, index=False, encoding='utf-8')
                 self.logger.info(f"✅ Exported new training dataset for {source.value}: {export_filename}")
                 
                 result_files.append(export_filename)
@@ -468,7 +474,12 @@ def main():
         print(f"\n📂 Selected file: {corrections_file}")
         
         # Load and process
-        corrections_df = pd.read_csv(os.path.join(validator.data_dir, corrections_file))
+        file_path = os.path.join(validator.data_dir, corrections_file)
+        if is_excel_file(file_path):
+            excel_processor = ExcelProcessor()
+            corrections_df = excel_processor.process_excel_file(file_path)
+        else:
+            corrections_df = pd.read_csv(file_path)
         
         # Check if transaction_source column exists
         if 'transaction_source' not in corrections_df.columns:
@@ -532,7 +543,11 @@ class CorrectionValidatorExtended(CorrectionValidator):
         """
         try:
             # Load corrections
-            corrections_df = pd.read_csv(file_path)
+            if is_excel_file(file_path):
+                excel_processor = ExcelProcessor()
+                corrections_df = excel_processor.process_excel_file(file_path)
+            else:
+                corrections_df = pd.read_csv(file_path)
             
             # Add transaction source if missing
             if 'transaction_source' not in corrections_df.columns:

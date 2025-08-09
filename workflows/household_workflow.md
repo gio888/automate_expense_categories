@@ -42,15 +42,25 @@ python src/transform_monthly_household_transactions.py --source-dir "$HOME/Libra
 
 ### Step 4: Predict Categories (⏱️ 3-5 minutes)
 
+**🌐 Option A: Web Interface (Recommended)**
+```bash
+cd $PROJECT_ROOT
+python start_web_server.py
+```
+Then open http://localhost:8000 and drag & drop your transformed CSV file. The system will automatically:
+- Detect CSV format and household transaction type
+- Run ensemble ML predictions with confidence scores
+- Show results in an interactive correction interface
+
+**💻 Option B: Command Line Interface**
 ```bash
 python src/batch_predict_ensemble.py --input-dir "$HOME/Library/CloudStorage/GoogleDrive-[your-email]/My Drive/Money/House Expenses"
-
 ```
 
 **What it does**: Uses trained household models to predict expense categories
 
 - Select the transformed file from Step 3
-- **Output**: `processed_[filename]_v[version]_[timestamp].csv` with predicted categories
+- **Output**: `household_cash_2025-08_predictions_YYYYMMDD_HHMMSS.csv` with predicted categories
 - **Recovery**: If "models not found" error, run `python src/verify_models.py` first
 
 ### Step 5: Manual Review & Corrections (⏱️ 15-30 minutes)

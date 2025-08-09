@@ -1,14 +1,18 @@
 # Expense Categorization ML Pipeline
 
 ## Overview
-Automated machine learning pipeline for categorizing financial transactions from household expenses and credit card statements. Uses ensemble ML models (LightGBM, XGBoost, CatBoost) with human-in-the-loop feedback for continuous improvement.
+Automated machine learning pipeline for categorizing financial transactions from household expenses and credit card statements. Supports both Excel (.xlsx/.xls) and CSV file formats with automatic format detection. Uses ensemble ML models (LightGBM, XGBoost, CatBoost) with human-in-the-loop feedback for continuous improvement.
 
 ## Key Features
+- **Multi-format support**: Direct Excel (.xlsx/.xls) and CSV file processing
+- **Automatic currency cleaning**: Removes currency symbols (PHP, $, etc.) from amounts
 - **Source-specific models**: Separate trained models for household vs credit card transactions
 - **Ensemble predictions**: Combines multiple algorithms for better accuracy
+- **Intelligent file detection**: Automatic format and transaction type detection
 - **Human feedback loop**: Incorporates manual corrections to continuously improve model performance
 - **Cloud backup**: Automatic model backup to Google Cloud Storage
 - **Version tracking**: Complete audit trail of models, training data, and performance metrics
+- **Web interface**: User-friendly browser-based interface for all operations
 
 ## Project Structure
 ```
@@ -27,7 +31,13 @@ automate_expense_categories/
 │   ├── model_registry.py             # Model version management
 │   ├── model_storage.py              # Local/cloud storage handling
 │   ├── transaction_types.py          # Source type definitions
-│   └── verify_models.py              # Model availability checker
+│   ├── verify_models.py              # Model availability checker
+│   ├── utils/                        # Utility modules
+│   │   ├── excel_processor.py        # Excel file processing and standardization
+│   │   └── file_detector.py          # Intelligent file format detection
+│   └── web/                          # Web interface components
+│       ├── app.py                    # FastAPI web application
+│       └── static/                   # Frontend assets
 ├── data/                             # Training data and predictions
 ├── models/                           # Trained models and registry
 ├── logs/                            # Training and prediction logs
@@ -38,7 +48,7 @@ automate_expense_categories/
 
 ### Prerequisites
 - Python 3.8+
-- Install dependencies: `pip install -r requirements.txt`
+- Install dependencies: `pip install -r requirements.txt` (includes Excel processing support)
 - Configure your personal settings (see **Configuration Setup** below)
 
 ### Configuration Setup
@@ -76,7 +86,28 @@ automate_expense_categories/
 6. **Ensure required data files exist:**
    - `data/valid_categories.txt` - List of approved expense categories
 
-### Household Expenses (5-step workflow)
+## Usage
+
+### Web Interface (Recommended)
+The easiest way to process your transactions:
+
+```bash
+python start_web_server.py
+```
+
+Then open **http://localhost:8000** in your browser.
+
+**Supports:**
+- Excel files (.xlsx, .xls) - Direct upload from bank statements  
+- CSV files - Legacy format support
+- Automatic currency symbol removal (PHP, $, etc.)
+- Interactive correction interface with searchable categories
+- Multiple download formats (CSV, accounting system format)
+- Automatic model retraining with corrections
+
+### Command Line Interface
+
+#### Household Expenses (5-step workflow)
 ```bash
 cd $PROJECT_ROOT
 
@@ -95,12 +126,12 @@ python src/merge_training_data.py
 python src/auto_model_ensemble.py --source household
 ```
 
-### Credit Card Transactions (4-step workflow)
+#### Credit Card Transactions (4-step workflow)
 ```bash
 cd $PROJECT_ROOT
 
-# 1. Predict categories using ensemble models
-python src/batch_predict_ensemble.py
+# 1. Predict categories using ensemble models (supports Excel and CSV)
+python src/batch_predict_ensemble.py --file your_statement.xlsx
 
 # 2. [Manual step] Review and correct predictions
 

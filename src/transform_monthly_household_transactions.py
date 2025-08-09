@@ -97,7 +97,7 @@ def transform_monthly_log(input_file, output_dir=None):
             output_file = os.path.join(output_dir, f"House Kitty Transactions - Cash - Corrected {timestamp}.csv")
         
         # Save the transformed DataFrame
-        transformed_df.to_csv(output_file, index=False)
+        transformed_df.to_csv(output_file, index=False, encoding='utf-8')
         print(f"Transformed data saved to: {output_file}")
         print(f"Transformation complete! {len(transformed_df)} records processed")
         

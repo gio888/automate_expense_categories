@@ -8,35 +8,46 @@
 
 ## Complete Monthly Workflow
 
-### Step 1: Download Monthly Data (⏱️ 10-15 minutes)
+### Step 1: Download Monthly Data (⏱️ 2-3 minutes) - SIMPLIFIED!
 
-**Manual Step - Outside ML Pipeline**
+**✨ Direct Excel Processing - No conversion needed!**
 
 1. Go to online.unionbankph.com
 2. Click on the credit card on the dashboard → Statements → Select statement date → Download statement → Download Excel
 3. Save as: "Statement UNIONBANK Visa YYYY-MM.xlsx" to default folder
 4. You will receive SMS password to open the Excel file
-5. Open Excel statement from UnionBank and copy all content
-6. Go to: https://docs.google.com/spreadsheets/d/183Bekh9eeOJsDFPnG3DW0rarBzRqgHz_7TolIWf-n7w/edit?gid=40583327#gid=40583327
-7. Append current transactions to last row of "data" tab
-8. Fill in Statement Date column (export_auto_ml tab should auto-populate)
-9. Download export_auto_ml tab as CSV: "For Automl Statement UNIONBANK Visa YYYY-MM.csv"
-10. Save to: `$PROJECT_ROOT/data`
+5. **That's it!** Use the Excel file directly in the ML pipeline
 
-### Step 2: Predict Categories (⏱️ 3-5 minutes)
+**Supported Formats:**
+- ✅ Excel files (.xlsx, .xls) - Direct processing from UnionBank
+- ✅ CSV files - Legacy format still supported
 
+### Step 2: Process Transactions (⏱️ 1-2 minutes)
+
+**🌐 Option A: Web Interface (Recommended)**
 ```bash
 cd $PROJECT_ROOT
-python batch_predict_ensemble.py
+python start_web_server.py
+```
+Then open http://localhost:8000 and drag & drop your Excel or CSV file. The system will automatically:
+- Detect file format (Excel/CSV) and transaction type
+- Remove PHP currency symbols and clean data
+- Run ensemble ML predictions with confidence scores
+- Show results in an interactive correction interface
 
+**💻 Option B: Command Line Interface**
+```bash
+cd $PROJECT_ROOT
+python src/batch_predict_ensemble.py --file "path/to/Statement UNIONBANK Visa 2025-08.xlsx"
 ```
 
 **What it does**: Uses trained credit card models to predict merchant categories
 
-- Script will list available CSV files in the data folder
-- Select your "For Automl Statement UNIONBANK Visa" file from Step 1
-- **Output**: `processed_[filename]_v[version]_[timestamp].csv` with predicted categories
-- **Recovery**: If "models not found" error, run `python verify_models.py` first
+- Script will list available Excel and CSV files in the data folder
+- Select your Excel statement file or CSV file from Step 1
+- Automatically removes PHP currency symbols and processes amounts
+- **Output**: `unionbank_visa_2025-08_predictions_YYYYMMDD_HHMMSS.csv` with predicted categories
+- **Recovery**: If "models not found" error, run `python src/verify_models.py` first
 
 ### Step 3: Manual Review & Corrections (⏱️ 15-25 minutes)
 

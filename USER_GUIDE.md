@@ -12,11 +12,12 @@ python start_web_server.py
 Then open **http://localhost:8000** in your browser.
 
 **Features:**
-- 📁 Drag & drop file upload
-- 🤖 Automatic transaction type detection
+- 📁 Drag & drop file upload (Excel .xlsx/.xls and CSV files)
+- 🤖 Automatic file format and transaction type detection
+- 💱 Automatic currency symbol removal and amount processing
 - 📊 Real-time processing with progress bars
 - ✏️ Interactive correction interface with searchable categories
-- 📥 Download results in multiple formats
+- 📥 Download results in multiple formats (CSV, accounting format)
 - 🔄 Automatic model retraining with corrections
 - 💻 Works on any device with a web browser
 
@@ -110,13 +111,14 @@ python start_web_server.py
 - The interface will guide you through the process
 
 **Step 3: Upload and process**
-1. Drag & drop your CSV file (or click "Choose File")
-2. The system automatically detects if it's household or credit card data
-3. Click "Process" to run ML predictions
-4. Review predictions with confidence scores
-5. Make corrections using the searchable dropdown menus
-6. Download results in your preferred format
-7. Optional: Retrain models with your corrections
+1. Drag & drop your Excel (.xlsx/.xls) or CSV file (or click "Choose File")
+2. The system automatically detects file format and transaction type (household vs credit card)
+3. Currency symbols (like "PHP ") are automatically removed from amounts
+4. Click "Process" to run ML predictions
+5. Review predictions with confidence scores
+6. Make corrections using the searchable dropdown menus
+7. Download results in your preferred format (CSV, accounting system format)
+8. Optional: Retrain models with your corrections
 
 **That's it!** The web interface handles the entire workflow seamlessly.
 
@@ -127,15 +129,17 @@ python start_web_server.py
 #### For Credit Card Transactions (Most Common)
 
 **Step 1: Get your bank data ready**
-- Download your credit card statement as CSV
-- Save it as: `"For Automl Statement UNIONBANK Visa YYYY-MM.csv"`
+- Download your credit card statement as Excel (.xlsx) or CSV
+- Excel files: Use original filename (e.g., `"Statement UNIONBANK Visa 8214 2025-08.xlsx"`)
+- CSV files: Save as `"For Automl Statement UNIONBANK Visa YYYY-MM.csv"`
 - Put it in the `data/` folder
 
 **Step 2: Run prediction**
 ```bash
 python src/batch_predict_ensemble.py
 ```
-- Select your CSV file when prompted
+- Select your Excel or CSV file when prompted
+- Currency symbols are automatically removed
 - Output: `processed_[filename]_v[version]_[timestamp].csv`
 
 **Step 3: Review and correct predictions**

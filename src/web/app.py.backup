@@ -89,45 +89,6 @@ def load_valid_categories():
 # Cache categories on startup
 VALID_CATEGORIES = load_valid_categories()
 
-def get_column_value_flexible(row, primary_key, fallback_keys=None, default=''):
-    """
-    Safely get column value with flexible key matching for Excel/CSV compatibility.
-    
-    Args:
-        row: DataFrame row or dictionary
-        primary_key: Primary column name to look for
-        fallback_keys: List of alternative column names to try
-        default: Default value if no keys are found
-        
-    Returns:
-        Column value or default if not found
-    """
-    if fallback_keys is None:
-        fallback_keys = []
-    
-    # Try primary key first
-    if hasattr(row, 'get'):
-        value = row.get(primary_key)
-        if value is not None and str(value).strip() != '' and str(value).lower() != 'nan':
-            return value
-    elif hasattr(row, primary_key) and getattr(row, primary_key) is not None:
-        value = getattr(row, primary_key)
-        if str(value).strip() != '' and str(value).lower() != 'nan':
-            return value
-    
-    # Try fallback keys
-    for fallback_key in fallback_keys:
-        if hasattr(row, 'get'):
-            value = row.get(fallback_key)
-            if value is not None and str(value).strip() != '' and str(value).lower() != 'nan':
-                return value
-        elif hasattr(row, fallback_key) and getattr(row, fallback_key) is not None:
-            value = getattr(row, fallback_key)
-            if str(value).strip() != '' and str(value).lower() != 'nan':
-                return value
-    
-    return default
-
 # Mount static files - needs to be done early for start_web_server.py
 from fastapi.staticfiles import StaticFiles
 static_dir = PROJECT_ROOT / "src" / "web" / "static"
@@ -725,18 +686,15 @@ async def get_results(job_id: str):
         # Read the results file
         df = pd.read_csv(job.result_file)
         
-        # Log column information for debugging
-        logger.info(f"Results file columns for job {job_id}: {list(df.columns)}")
-        
         # Convert to JSON-friendly format with correction support
         results = []
         for _, row in df.iterrows():
             result_row = {
                 "id": len(results),
-                "Date": get_column_value_flexible(row, 'Date', ['DATE', 'date'], ''),
-                "Description": get_column_value_flexible(row, 'Description', ['DESCRIPTION', 'description'], ''),
-                "Amount (Negated)": get_column_value_flexible(row, 'Amount (Negated)', ['DEBIT', 'debit'], 0),
-                "Amount": get_column_value_flexible(row, 'Amount', ['CREDIT', 'credit'], 0),
+                "Date": row.get('Date', ''),
+                "Description": row.get('Description', ''),
+                "Amount (Negated)": row.get('Amount (Negated)', 0),
+                "Amount": row.get('Amount', 0),
                 "predicted_category": row.get('predicted_category', ''),
                 "corrected_category": row.get('predicted_category', ''),  # Pre-populate with prediction
                 "confidence": row.get('confidence', 0),
@@ -843,20 +801,14 @@ async def download_results(job_id: str, format: str = "predictions"):
         try:
             df = pd.read_csv(job.result_file)
             
-            # Log column information for debugging
-            logger.info(f"Accounting download - available columns: {list(df.columns)}")
-            
-            # Create accounting format with corrected categories using flexible column mapping
-            accounting_data = []
-            for _, row in df.iterrows():
-                accounting_data.append({
-                    'Date': get_column_value_flexible(row, 'Date', ['DATE', 'date'], ''),
-                    'Description': get_column_value_flexible(row, 'Description', ['DESCRIPTION', 'description'], ''),
-                    'Amount (Negated)': get_column_value_flexible(row, 'Amount (Negated)', ['DEBIT', 'debit'], 0),
-                    'Amount': get_column_value_flexible(row, 'Amount', ['CREDIT', 'credit'], 0),
-                    'Classification': row.get('predicted_category', '')
-                })
-            accounting_df = pd.DataFrame(accounting_data)
+            # Create accounting format with corrected categories
+            accounting_df = pd.DataFrame({
+                'Date': df['Date'],
+                'Description': df['Description'], 
+                'Amount (Negated)': df['Amount (Negated)'],
+                'Amount': df['Amount'],
+                'Classification': df['predicted_category']  # Will be updated by corrections
+            })
             
             # Generate standardized accounting filename from predictions filename
             predictions_filename = Path(job.result_file).name
