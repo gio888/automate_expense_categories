@@ -17,7 +17,21 @@
       "Bash(git gc:*)",
       "Bash(git push:*)",
       "Bash(python:*)",
-      "Bash(java:*)"
+      "Bash(java:*)",
+      "Bash(source:*)",
+      "Bash(pip install:*)",
+      "Bash(mkdir:*)",
+      "Bash(chmod:*)",
+      "Bash(timeout:*)",
+      "Bash(true)",
+      "Bash(cp:*)",
+      "Bash(mv:*)",
+      "Bash(curl:*)",
+      "Bash(cat:*)",
+      "Bash(pkill:*)",
+      "Bash(pip3 install:*)",
+      "Bash(pip3 uninstall:*)",
+      "Bash(node:*)"
     ],
     "deny": []
   }

@@ -29,7 +29,16 @@ This is an automated expense categorization ML pipeline that uses ensemble machi
 
 ## Common Development Commands
 
-### Training and Prediction
+### Web Interface (Primary)
+```bash
+# Start the web interface (recommended for users)
+python start_web_server.py
+# Then open http://localhost:8000 in browser
+```
+
+### Command Line Interface (Development)
+
+#### Training and Prediction
 ```bash
 # Household expense workflow (5 steps)
 python src/transform_monthly_household_transactions.py  # Transform raw Google Sheets export
@@ -58,14 +67,32 @@ python -m unittest tests/test_transaction_types.py  # Run unit tests
 
 ## File Naming Conventions
 
-### Input Files
+The system uses a standardized naming convention: `{source}_{period}_{stage}_{timestamp}.csv`
+
+### Components
+- **Source**: `unionbank_visa`, `household_cash`, `bpi_mastercard` (standardized, no spaces)
+- **Period**: `YYYY-MM` (statement period, not processing date)  
+- **Stage**: `input`, `predictions`, `corrected`, `accounting`, `training`
+- **Timestamp**: `YYYYMMDD_HHMMSS` (when processed, for uniqueness)
+
+### Input Files (Legacy Format - Auto-Converted)
 - Household: `"House Kitty Transactions - Cash YYYY-MM.csv"`
 - Credit Card: `"For Automl Statement UNIONBANK Visa YYYY-MM.csv"`
 
-### Output Files
-- Predictions: `processed_{filename}_v{version}_{timestamp}.csv`
-- Training Data: `training_data_{source}_v{version}_{date}.csv`
-- Models: `{source}_{algorithm}_model_v{version}.pkl`
+### Output Files (New Standardized Format)
+- **Predictions**: `unionbank_visa_2025-07_predictions_20250808_194140.csv`
+- **Corrected**: `unionbank_visa_2025-07_corrected_20250808_194140.csv`
+- **Accounting**: `unionbank_visa_2025-07_accounting_20250808_194140.csv` 
+- **Training Data**: `unionbank_visa_2025-07_training_20250808_194140.csv`
+- **Models**: `{source}_{algorithm}_model_v{version}.pkl` (unchanged)
+
+### Benefits
+✅ **Purpose clear** from filename  
+✅ **Source preserved** (Union Bank Visa)  
+✅ **Statement period preserved** (2025-07)  
+✅ **Processing time tracked** (timestamps)  
+✅ **Chronological sorting** works naturally  
+✅ **No spaces or special characters**
 
 ## Environment Setup
 
@@ -106,8 +133,22 @@ Key environment variables for configuration:
 - Medium (50-70%): Review recommended  
 - Low (<50%): Likely needs correction
 
+## Usage Patterns
+
+### For End Users
+- **Primary interface**: Web interface (`python start_web_server.py`)
+- **Complete workflow**: Upload → Process → Correct → Retrain (all in browser)
+- **File formats**: Drag & drop CSV files, automatic type detection
+- **Real-time feedback**: Progress bars, confidence scores, searchable corrections
+
+### For Developers/Automation
+- **CLI commands**: Use the batch processing scripts for automation
+- **Model development**: Direct access to training and validation scripts
+- **Integration**: FastAPI endpoints available for custom integrations
+
 ## Important Notes
 
+- **Web interface dependencies**: Requires `fastapi>=0.104.0` and `uvicorn>=0.24.0`
 - Models are source-specific (household vs credit_card) with different TF-IDF configurations
 - Training requires minimum samples per category (5 for household, 3 for credit card)
 - **Configuration is required before use** - copy `config.example.yaml` to `config.yaml` and customize

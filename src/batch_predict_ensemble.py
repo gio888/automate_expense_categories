@@ -18,6 +18,7 @@ from typing import List, Tuple, Dict, Any
 from src.transaction_types import TransactionSource  # Import the enum
 from src.model_registry import ModelRegistry
 from src.model_storage import ModelStorage
+from src.utils.filename_utils import extract_source_and_period, generate_filename
 MODELS_DIR = os.path.join(PROJECT_ROOT, "models")
 DATA_DIR = os.path.join(PROJECT_ROOT, "data")
 LOGS_DIR = os.path.join(PROJECT_ROOT, "logs")
@@ -235,9 +236,14 @@ def process_file(input_file: str) -> None:
         df = df[["Date", "Description", "Category", "Prediction_Confidence", 
                  "Amount (Negated)", "Amount"]]
         
-        input_basename = os.path.splitext(os.path.basename(input_file))[0]
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        output_file = os.path.join(DATA_DIR, f"processed_{input_basename}_v{predictor.version}_{timestamp}.csv")
+        # Generate standardized output filename
+        original_filename = os.path.basename(input_file)
+        source, period = extract_source_and_period(original_filename)
+        timestamp = datetime.now()
+        output_filename = generate_filename(source, period, "predictions", timestamp)
+        output_file = os.path.join(DATA_DIR, output_filename)
+        
+        logging.info(f"Generated standardized filename: {output_filename} (source: {source}, period: {period})")
         
         df.to_csv(output_file, index=False)
         
@@ -343,8 +349,8 @@ Examples:
   python %(prog)s --interactive                              # Interactive file selection
   python %(prog)s --file data.csv --source household        # Specify transaction source
 
-Files are processed from the data/ directory and results saved as:
-processed_[filename]_v[version]_[timestamp].csv
+Files are processed from the data/ directory and results saved using standardized naming:
+{source}_{period}_{stage}_{timestamp}.csv (e.g., unionbank_visa_2025-07_predictions_20250808_194140.csv)
         """
     )
     

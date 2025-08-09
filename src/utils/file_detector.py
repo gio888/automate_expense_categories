@@ -353,11 +353,9 @@ class FileDetector:
             
             # Check for suspicious values
             if len(numeric_values) > 0:
-                if (numeric_values == 0).sum() > len(numeric_values) * 0.5:
-                    issues.append(f"Amount column contains many zero values")
-                
-                if numeric_values.min() < -10000 or numeric_values.max() > 10000:
-                    suggestions.append("Review unusually large amounts - they may indicate data issues")
+                # Removed zero values check - normal in double-entry accounting
+                # Removed large amounts suggestion - normal in bank statements
+                pass
         except:
             issues.append(f"Cannot validate amount column '{column}'")
 

@@ -1,12 +1,37 @@
 # Complete User Guide
 
+## Choose Your Interface
+
+### 🌐 Web Interface (Recommended)
+The easiest way to use the expense categorization system is through the web interface:
+
+```bash
+python start_web_server.py
+```
+
+Then open **http://localhost:8000** in your browser.
+
+**Features:**
+- 📁 Drag & drop file upload
+- 🤖 Automatic transaction type detection
+- 📊 Real-time processing with progress bars
+- ✏️ Interactive correction interface with searchable categories
+- 📥 Download results in multiple formats
+- 🔄 Automatic model retraining with corrections
+- 💻 Works on any device with a web browser
+
+### 💻 Command Line Interface
+For advanced users or automation, use the CLI commands described below.
+
+---
+
 ## Getting Started
 
 ### 1. Install Dependencies
 
 **If you're starting fresh:**
 ```bash
-cd automate_expense_categories
+cd automate_expense_categories3
 python -m venv .venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 pip install -r requirements.txt
@@ -60,7 +85,33 @@ python setup_validator.py
 
 ## Daily Usage
 
-### For Credit Card Transactions (Most Common)
+### 🌐 Using the Web Interface (Recommended)
+
+**Step 1: Start the web server**
+```bash
+python start_web_server.py
+```
+
+**Step 2: Open your browser**
+- Go to http://localhost:8000
+- The interface will guide you through the process
+
+**Step 3: Upload and process**
+1. Drag & drop your CSV file (or click "Choose File")
+2. The system automatically detects if it's household or credit card data
+3. Click "Process" to run ML predictions
+4. Review predictions with confidence scores
+5. Make corrections using the searchable dropdown menus
+6. Download results in your preferred format
+7. Optional: Retrain models with your corrections
+
+**That's it!** The web interface handles the entire workflow seamlessly.
+
+---
+
+### 💻 Command Line Interface
+
+#### For Credit Card Transactions (Most Common)
 
 **Step 1: Get your bank data ready**
 - Download your credit card statement as CSV
@@ -91,7 +142,7 @@ python src/merge_training_data.py
 python src/auto_model_ensemble.py --source credit_card
 ```
 
-### For Household Transactions
+#### For Household Transactions
 
 **Step 1: Transform data**
 ```bash
@@ -109,6 +160,14 @@ python src/transform_monthly_household_transactions.py
 
 ## Quick Commands
 
+### Web Interface
+```bash
+# Start the web interface
+python start_web_server.py
+# Then open http://localhost:8000
+```
+
+### Command Line
 ```bash
 # Check if everything is working
 python setup_validator.py
@@ -127,13 +186,22 @@ python src/auto_model_ensemble.py --source [credit_card|household]
 
 | Problem | Solution |
 |---------|----------|
+| Web interface won't start | Check `pip install fastapi uvicorn` and virtual environment is active |
 | "Models not found" | Run `python src/verify_models.py` |
 | Import errors | Make sure you're in the project folder and virtual environment is active |
 | Low accuracy | More manual corrections needed, retrain models |
 | File not found | Check file is in `data/` folder with correct naming |
+| Browser shows "Connection refused" | Ensure web server is running with `python start_web_server.py` |
+| File upload fails | Check file is CSV format and less than 50MB |
 
 ## Time Expectations
 
+### Web Interface
+- **Setup**: 15 minutes (one time)
+- **Daily prediction & corrections**: 5-10 minutes
+- **Model retraining**: 1-2 minutes (automatic)
+
+### Command Line Interface
 - **Setup**: 15 minutes (one time)
 - **Daily prediction**: 2-3 minutes
 - **Manual corrections**: 15-25 minutes
