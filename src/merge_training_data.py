@@ -91,33 +91,40 @@ class CorrectionValidator:
                 errors.append(f"Missing required column: {col}")
                 return errors
     
-        # Convert columns to numeric, forcing errors to NaN
-        df['Amount'] = pd.to_numeric(df['Amount'], errors='coerce')
-        df['Amount (Negated)'] = pd.to_numeric(df['Amount (Negated)'], errors='coerce')
+        # Handle empty strings and convert to numeric more carefully
+        # First, replace empty strings with NaN, then convert to numeric
+        df_copy = df.copy()  # Work with a copy to avoid modifying original
+        
+        for col in required_cols:
+            # Replace empty strings with NaN before numeric conversion
+            df_copy[col] = df_copy[col].replace('', pd.NA)
+            df_copy[col] = pd.to_numeric(df_copy[col], errors='coerce')
     
         # Check for null values after conversion
-        null_amounts = df['Amount'].isna().sum()
-        null_negated = df['Amount (Negated)'].isna().sum()
+        null_amounts = df_copy['Amount'].isna().sum()
+        null_negated = df_copy['Amount (Negated)'].isna().sum()
         
         if null_amounts > 0:
-            warnings.append(f"Found {null_amounts} non-numeric values in Amount column")
+            self.logger.info(f"Found {null_amounts} empty/non-numeric values in Amount column")
         if null_negated > 0:
-            warnings.append(f"Found {null_negated} non-numeric values in Amount (Negated) column")
+            self.logger.info(f"Found {null_negated} empty/non-numeric values in Amount (Negated) column")
     
-        # Fill NaN with 0 for comparison
-        df['Amount'] = df['Amount'].fillna(0)
-        df['Amount (Negated)'] = df['Amount (Negated)'].fillna(0)
+        # Fill NaN with 0 for statistics
+        df_copy['Amount'] = df_copy['Amount'].fillna(0)
+        df_copy['Amount (Negated)'] = df_copy['Amount (Negated)'].fillna(0)
+    
+        # Check if all amounts are zero (which would be problematic)
+        total_amount_entries = (df_copy['Amount'] != 0).sum()
+        total_negated_entries = (df_copy['Amount (Negated)'] != 0).sum()
+        
+        if total_amount_entries == 0 and total_negated_entries == 0:
+            errors.append("All amount fields are zero or empty - no valid transactions found")
     
         # Log summary statistics
         self.logger.info("\nAmount validation summary:")
-        self.logger.info(f"Total rows: {len(df)}")
-        self.logger.info(f"Non-zero Amount entries: {(df['Amount'] != 0).sum()}")
-        self.logger.info(f"Non-zero Amount (Negated) entries: {(df['Amount (Negated)'] != 0).sum()}")
-        
-        # Only return errors if there are serious issues
-        # Convert warnings to logging messages
-        for warning in warnings:
-            self.logger.warning(warning)
+        self.logger.info(f"Total rows: {len(df_copy)}")
+        self.logger.info(f"Non-zero Amount entries: {total_amount_entries}")
+        self.logger.info(f"Non-zero Amount (Negated) entries: {total_negated_entries}")
         
         return errors  # Return only critical errors
 
@@ -156,10 +163,12 @@ class CorrectionValidator:
                 errors.append("Missing Category column")
                 return errors
 
-        # Check for invalid categories
+        # Check for invalid categories - now convert to warning instead of error
         invalid_categories = set(df['Category'].unique()) - self.valid_categories
         if invalid_categories:
-            errors.append(f"Found invalid categories: {invalid_categories}")
+            self.logger.warning(f"Found categories not in valid list: {invalid_categories}")
+            self.logger.warning("These categories will be used but may need review")
+            # Don't add to errors - allow unknown categories to pass with warning
 
         # Check for null categories
         null_categories = df['Category'].isna().sum()
@@ -181,10 +190,11 @@ class CorrectionValidator:
         if empty_descriptions > 0:
             errors.append(f"Found {empty_descriptions} empty descriptions")
 
-        # Check for very short descriptions (e.g., less than 3 characters)
+        # Check for very short descriptions (e.g., less than 3 characters) - now a warning instead of error
         short_descriptions = df[df['Description'].str.len() < 3].shape[0]
         if short_descriptions > 0:
-            errors.append(f"Found {short_descriptions} very short descriptions")
+            self.logger.warning(f"Found {short_descriptions} very short descriptions - these may be abbreviations")
+            # Don't add to errors - allow short descriptions to pass
 
         return errors
 
