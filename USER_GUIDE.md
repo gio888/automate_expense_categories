@@ -31,16 +31,17 @@ For advanced users or automation, use the CLI commands described below.
 
 **If you're starting fresh:**
 ```bash
-cd automate_expense_categories3
-python -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+cd automate_expense_categories
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
 **If you already have a virtual environment:**
 ```bash
 cd automate_expense_categories
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+source .venv/bin/activate  
 pip install -r requirements.txt  # Make sure all dependencies are installed
 ```
 
@@ -49,16 +50,28 @@ pip install -r requirements.txt  # Make sure all dependencies are installed
 python -c "import pandas, numpy, sklearn; print('✅ Core dependencies working')"
 ```
 
-### 2. Configure Your Personal Settings
+### 2. Set Up Personal Configuration
+
+**Copy personal configuration templates:**
 ```bash
-cp config.example.yaml config.yaml
+cp -r personal.example/ personal/
 ```
 
-Edit `config.yaml` with your Google Cloud Storage details:
-```yaml
-gcp:
-  credentials_path: "~/.config/gcp/service-account-key.json"
-  bucket_name: "your-expense-ml-models-backup"
+**Configure your settings:**
+```bash
+# Edit your GCP credentials and settings
+nano personal/config.yaml
+
+# Define your bank accounts and staff (if applicable)
+nano personal/accounts.yaml
+
+# Customize your expense categories
+nano personal/categories.yaml
+```
+
+**Generate your category definitions:**
+```bash
+python generate_categories.py
 ```
 
 **Set up your credentials securely:**
@@ -66,10 +79,10 @@ gcp:
 # Create secure directory
 mkdir -p ~/.config/gcp/
 
-# Move your downloaded key file (change filename as needed)
+# Move your downloaded GCP key file
 mv ~/Downloads/your-key.json ~/.config/gcp/service-account-key.json
 
-# Set secure permissions (owner read/write only)
+# Set secure permissions
 chmod 600 ~/.config/gcp/service-account-key.json
 ```
 

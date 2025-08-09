@@ -26,7 +26,7 @@ class Config:
             config_file: Path to YAML config file (optional)
         """
         self.project_root = Path(__file__).parent.parent
-        self.config_file = config_file or self.project_root / "config.yaml"
+        self.config_file = config_file or self.project_root / "personal" / "config.yaml"
         self._config = {}
         self._load_config()
     
@@ -196,6 +196,28 @@ class Config:
     def get_ml_config(self) -> Dict[str, Any]:
         """Get ML-specific configuration"""
         return self.get('ml', default={})
+    
+    def load_personal_accounts(self) -> Dict[str, Any]:
+        """Load personal accounts configuration"""
+        accounts_file = self.project_root / "personal" / "accounts.yaml"
+        if accounts_file.exists():
+            try:
+                with open(accounts_file, 'r') as f:
+                    return yaml.safe_load(f) or {}
+            except Exception as e:
+                logger.warning(f"Failed to load personal accounts: {e}")
+        return {}
+    
+    def load_personal_categories(self) -> Dict[str, Any]:
+        """Load personal categories configuration"""
+        categories_file = self.project_root / "personal" / "categories.yaml"
+        if categories_file.exists():
+            try:
+                with open(categories_file, 'r') as f:
+                    return yaml.safe_load(f) or {}
+            except Exception as e:
+                logger.warning(f"Failed to load personal categories: {e}")
+        return {}
     
     def get_file_handling_config(self) -> Dict[str, Any]:
         """Get file handling configuration"""

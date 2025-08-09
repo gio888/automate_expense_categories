@@ -1,0 +1,100 @@
+# Personal Expense Categories Configuration Template  
+# Copy this to personal/categories.yaml and customize for your needs
+
+# Category Generation Rules
+# Enable/disable different category types based on your needs
+category_structure:
+  
+  # Household Staff Expenses (uses accounts.yaml staff definitions)
+  # Set enabled: false if you don't have household staff
+  household_staff_expenses:
+    enabled: true  # Change to false if not needed
+    base_path: "Expenses:Household Staff"
+    
+  # Personal Loans/Liabilities (uses accounts.yaml loan definitions)  
+  personal_loans:
+    enabled: true
+    base_paths:
+      - "Assets:Loans to"
+      - "Liabilities:Other"
+    
+  # Bank Account References (uses accounts.yaml bank definitions)
+  bank_accounts:
+    enabled: true  
+    base_paths:
+      - "Assets:Current Assets:Banks Local"
+      - "Assets:Current Assets:Banks Foreign"
+    
+  # Investment References (uses accounts.yaml investment definitions)
+  investments:
+    enabled: true
+    base_path: "Assets:Investments"
+
+# Generic Categories (standard expense categories - customize as needed)
+# These categories don't contain personal information
+generic_categories:
+  # Assets
+  - "Assets"
+  - "Assets:Current Assets"
+  - "Assets:Current Assets:Cash Local"
+  - "Assets:Current Assets:Cash Local:Cash"
+  - "Assets:Current Assets:Cash Local:Digital Wallet"
+  - "Assets:Current Assets:Banks Local"
+  - "Assets:Current Assets:Banks Foreign"
+  - "Assets:Fixed Assets"
+  
+  # Expenses
+  - "Expenses"
+  - "Expenses:Food"
+  - "Expenses:Food:Groceries"
+  - "Expenses:Food:Dining"
+  - "Expenses:Food:Alcohol"
+  - "Expenses:Transportation"
+  - "Expenses:Transportation:Public"
+  - "Expenses:Transportation:Gas"
+  - "Expenses:Transportation:Parking"
+  - "Expenses:Utilities"
+  - "Expenses:Utilities:Electric"
+  - "Expenses:Utilities:Water"
+  - "Expenses:Utilities:Internet"
+  - "Expenses:Utilities:Mobile"
+  - "Expenses:Health"
+  - "Expenses:Health:Doctor"
+  - "Expenses:Health:Medicines"
+  - "Expenses:Health:Dental"
+  - "Expenses:Entertainment"
+  - "Expenses:Entertainment:Movies"
+  - "Expenses:Entertainment:Recreation"
+  - "Expenses:Clothes"
+  - "Expenses:Personal Care"
+  - "Expenses:Education"
+  - "Expenses:Education:Books"
+  - "Expenses:Professional Development"
+  - "Expenses:Gifts"
+  - "Expenses:Insurance"
+  - "Expenses:Banking Costs"
+  - "Expenses:Banking Costs:Fees"
+  - "Expenses:Banking Costs:Interest"
+  - "Expenses:Miscellaneous"
+  
+  # Income
+  - "Income"
+  - "Income:Salary"
+  - "Income:Bonus"
+  - "Income:Investment Returns"
+  
+  # Liabilities
+  - "Liabilities"
+  - "Liabilities:Credit Card"
+  - "Liabilities:Loans"
+  
+  # Special Categories
+  - "Split Transaction"
+
+# INSTRUCTIONS:
+# 1. Review the generic_categories and add/remove categories for your needs
+# 2. Enable/disable category_structure sections based on your requirements
+# 3. The system generates the final category list from:
+#    - Generic categories (above)
+#    - Personal accounts (from accounts.yaml)
+# 4. Run 'python generate_categories.py' after making changes

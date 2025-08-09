@@ -1,0 +1,44 @@
+# Personal Accounts Configuration Template
+# Copy this to personal/accounts.yaml and customize for your household/business
+
+# Household Staff Members (if applicable)
+# Remove this section if you don't have household staff
+household_staff:
+  - name: "StaffMember1"
+    roles: ["allowance", "basic", "benefits", "bonus", "load", "medical", "ot", "others"]
+  - name: "StaffMember2" 
+    roles: ["allowance", "basic", "benefits", "bonus", "load", "medical", "ot", "others"]
+
+# Personal Loans/Assets (customize with your actual loans/people)
+personal_loans:
+  - name: "PersonalLoan1"
+    types: ["allowance", "bonus", "ot", "others", "salary"]
+  - name: "Friend1"
+    types: []
+  - name: "Friend2"
+    types: []
+
+# Bank Account References (customize with your actual banks)
+bank_accounts:
+  - name: "Your Bank Checking"
+    type: "local"
+  - name: "Your Bank Savings" 
+    type: "local"
+  - name: "Foreign Bank USD"
+    type: "foreign"
+
+# Investment Accounts (customize with your actual investments)
+investments:
+  - name: "Investment Account 1"
+  - name: "Business Investment" 
+  - name: "Stock Portfolio"
+
+# Other Personal Entities (customize as needed)
+other_accounts:
+  - name: "Other Account 1"
+
+# INSTRUCTIONS:
+# 1. Replace the placeholder names with your actual account/people names
+# 2. Add or remove sections based on your needs
+# 3. The system will generate expense categories from these definitions
+# 4. Run 'python generate_categories.py' after making changes

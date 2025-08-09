@@ -31,7 +31,8 @@
       "Bash(pkill:*)",
       "Bash(pip3 install:*)",
       "Bash(pip3 uninstall:*)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(git pull:*)"
     ],
     "deny": []
   }

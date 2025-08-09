@@ -100,18 +100,41 @@ The system uses a standardized naming convention: `{source}_{period}_{stage}_{ti
 Install via: `pip install -r requirements.txt`
 Key ML libraries: scikit-learn, lightgbm, xgboost, catboost, flaml, shap, pyyaml
 
-### Configuration System
-The project uses a centralized configuration system that loads settings from:
-1. **Environment variables** (highest priority)
-2. **config.yaml file** (medium priority)
-3. **Default values** (lowest priority)
+### Personal Configuration System
+The project uses a **personal data architecture** that separates your private data from the public codebase:
+
+**Configuration Structure:**
+```
+personal/              # Your private data (ignored by git)
+├── config.yaml       # Your GCP credentials and settings
+├── accounts.yaml     # Your bank accounts, staff, loans
+└── categories.yaml   # Your expense category preferences
+
+personal.example/     # Templates for new users (tracked by git)
+├── config.yaml       # Template configuration
+├── accounts.yaml     # Example account definitions
+└── categories.yaml   # Example category structure
+```
 
 ### Required Setup
-1. **Copy configuration template:** `cp config.example.yaml config.yaml`
-2. **Set up GCP credentials:** Create service account and download JSON key
-3. **Configure settings:** Edit `config.yaml` or use environment variables
+1. **Copy personal configuration templates:**
+   ```bash
+   cp -r personal.example/ personal/
+   ```
+
+2. **Configure your personal settings:**
+   - Edit `personal/config.yaml` with your GCP credentials
+   - Edit `personal/accounts.yaml` with your bank accounts and staff
+   - Edit `personal/categories.yaml` with your expense preferences
+
+3. **Generate your category definitions:**
+   ```bash
+   python generate_categories.py
+   ```
+
 4. **Validate setup:** Run `python src/config.py` to test configuration
-5. **Required data files:** Ensure `data/valid_categories.txt` exists
+
+5. **Test category generation:** Run `python generate_categories.py` to create `data/valid_categories.txt`
 
 ### Environment Variables
 Key environment variables for configuration:

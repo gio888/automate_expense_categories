@@ -222,6 +222,7 @@ aws-*.json
 azure-*.json
 
 # Personal configuration
+personal/
 config.yaml
 config.local.yaml
 .config/
@@ -253,3 +254,6 @@ plots/
 data/old/
 catboost_*/
 automl_log.txt
+
+# Generated files (from personal configuration)
+data/valid_categories.txt

@@ -155,12 +155,15 @@ class CorrectionValidator:
         errors = []
         
         if 'Category' not in df.columns:
-            # Check if there's a "Corrected Category" column instead
+            # Check for alternative category column names
             if 'Corrected Category' in df.columns:
                 self.logger.info("Found 'Corrected Category' column, will use it as 'Category'")
                 df['Category'] = df['Corrected Category']
+            elif 'predicted_category' in df.columns:
+                self.logger.info("Found 'predicted_category' column, will use it as 'Category'")
+                df['Category'] = df['predicted_category']
             else:
-                errors.append("Missing Category column")
+                errors.append("Missing Category column (tried: 'Category', 'Corrected Category', 'predicted_category')")
                 return errors
 
         # Check for invalid categories - now convert to warning instead of error
@@ -266,11 +269,16 @@ class CorrectionValidator:
         # Make a copy to avoid modifying the original
         formatted_df = corrections_df.copy()
         
-        # If Corrected Category exists, use it as Category
-        if 'Corrected Category' in formatted_df.columns and 'Category' not in formatted_df.columns:
-            self.logger.info("Using 'Corrected Category' as 'Category'")
-            formatted_df['Category'] = formatted_df['Corrected Category']
-            formatted_df.drop('Corrected Category', axis=1, inplace=True)
+        # Handle alternative category column names
+        if 'Category' not in formatted_df.columns:
+            if 'Corrected Category' in formatted_df.columns:
+                self.logger.info("Using 'Corrected Category' as 'Category'")
+                formatted_df['Category'] = formatted_df['Corrected Category']
+                formatted_df.drop('Corrected Category', axis=1, inplace=True)
+            elif 'predicted_category' in formatted_df.columns:
+                self.logger.info("Using 'predicted_category' as 'Category'")
+                formatted_df['Category'] = formatted_df['predicted_category']
+                # Keep predicted_category for reference
         
         # Get missing columns
         existing_columns = set(existing_data.columns)
