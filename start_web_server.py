@@ -44,13 +44,15 @@ if __name__ == "__main__":
         print()
         print("🚀 Starting web server...")
         print("📱 Open http://localhost:8000 in your browser")
+        print("🔒 Server bound to localhost only for security")
         print("🛑 Press Ctrl+C to stop")
         print("=" * 50)
         print()
-        
+
         # Start the server
+        # Security: Bind to localhost only to prevent network exposure
         from src.web.app import app
-        uvicorn.run(app, host="0.0.0.0", port=8000, reload=False)
+        uvicorn.run(app, host="127.0.0.1", port=8000, reload=False)
         
     except ImportError as e:
         print(f"❌ Missing dependency: {e}")

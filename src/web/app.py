@@ -55,13 +55,13 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Add CORS middleware
+# Add CORS middleware - restricted to localhost for security
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, specify actual origins
+    allow_origins=["http://localhost:8000", "http://127.0.0.1:8000"],
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST"],
+    allow_headers=["Content-Type", "Accept"],
 )
 
 # Global state for tracking processing jobs and uploaded files
@@ -613,29 +613,47 @@ async def root():
 async def upload_file(file: UploadFile = File(...)):
     """Upload and validate a CSV or Excel file"""
     try:
+        # Security: Define maximum file size (10MB)
+        MAX_FILE_SIZE = 10 * 1024 * 1024  # 10MB
+
+        # Security: Sanitize filename - only keep the filename, remove any path components
+        original_filename = Path(file.filename).name
+
         # Validate file type
         allowed_extensions = ['.csv', '.xlsx', '.xls']
-        file_extension = Path(file.filename).suffix.lower()
+        file_extension = Path(original_filename).suffix.lower()
         if file_extension not in allowed_extensions:
             raise HTTPException(status_code=400, detail="Only CSV and Excel files are supported")
-        
+
         # Generate unique file ID
         global job_counter
         job_counter += 1
         file_id = f"file_{job_counter}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
-        
+
         # Extract source and period information for naming
-        original_filename = file.filename
         source, period = extract_source_and_period(original_filename)
-        
-        # Save uploaded file with original name preserved
+
+        # Security: Use sanitized filename for file path
         file_path = upload_dir / f"{file_id}_{original_filename}"
-        
+
+        # Security: Validate that the resolved path is within the upload directory (prevent path traversal)
+        if not file_path.resolve().is_relative_to(upload_dir.resolve()):
+            logger.warning(f"Path traversal attempt detected: {original_filename}")
+            raise HTTPException(status_code=400, detail="Invalid file path")
+
+        # Security: Check file size while saving to prevent DoS via disk exhaustion
+        file_size = 0
         with open(file_path, "wb") as buffer:
-            shutil.copyfileobj(file.file, buffer)
-        
-        logger.info(f"File uploaded: {file_path} (source: {source}, period: {period})")
-        
+            while chunk := await file.read(8192):  # Read in chunks
+                file_size += len(chunk)
+                if file_size > MAX_FILE_SIZE:
+                    buffer.close()
+                    file_path.unlink()  # Delete partial file
+                    raise HTTPException(status_code=413, detail="File too large (maximum 10MB)")
+                buffer.write(chunk)
+
+        logger.info(f"File uploaded: {file_path} (source: {source}, period: {period}, size: {file_size} bytes)")
+
         # Store source and period for later use in filename generation
         uploaded_files[file_id] = {
             "original_filename": original_filename,
@@ -643,13 +661,13 @@ async def upload_file(file: UploadFile = File(...)):
             "period": period,
             "file_path": str(file_path)
         }
-        
+
         # Validate file
         validation_result = file_detector.detect_and_validate(str(file_path))
-        
+
         return FileUploadResponse(
             success=True,
-            filename=file.filename,
+            filename=original_filename,
             file_id=file_id,
             validation_result={
                 "is_valid": validation_result.is_valid,
@@ -663,10 +681,12 @@ async def upload_file(file: UploadFile = File(...)):
             },
             message="File uploaded and validated successfully"
         )
-        
+
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"File upload failed: {e}")
-        raise HTTPException(status_code=500, detail=f"Upload failed: {str(e)}")
+        raise HTTPException(status_code=500, detail="Upload failed. Please try again.")
 
 @app.post("/process/{file_id}")
 async def start_processing(file_id: str, background_tasks: BackgroundTasks):
@@ -1065,8 +1085,10 @@ async def health_check():
 
 if __name__ == "__main__":
     import uvicorn
-    
+
     print("🚀 Starting Expense Categorization Web Server")
     print("📱 Open http://localhost:8000 in your browser")
-    
-    uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)
+    print("🔒 Server bound to localhost only for security")
+
+    # Security: Bind to localhost only to prevent network exposure
+    uvicorn.run(app, host="127.0.0.1", port=8000, reload=False)
