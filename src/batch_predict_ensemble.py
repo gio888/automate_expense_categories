@@ -20,6 +20,8 @@ from src.model_registry import ModelRegistry
 from src.model_storage import ModelStorage
 from src.utils.filename_utils import extract_source_and_period, generate_filename
 from src.utils.excel_processor import ExcelProcessor, is_excel_file
+from src.config import get_config
+
 MODELS_DIR = os.path.join(PROJECT_ROOT, "models")
 DATA_DIR = os.path.join(PROJECT_ROOT, "data")
 LOGS_DIR = os.path.join(PROJECT_ROOT, "logs")
@@ -39,14 +41,22 @@ class BatchPredictor:
     """Handles batch prediction with source-specific models and efficient processing"""
     
     def __init__(self, batch_size: int = 1000):
-        credentials_path = os.getenv("GCP_CREDENTIALS_PATH")
+        # Get configuration
+        config = get_config()
+        gcp_config = config.get_gcp_config()
+
+        # Get credentials path from config or environment variable (fallback)
+        credentials_path = gcp_config.get('credentials_path') or os.getenv("GCP_CREDENTIALS_PATH")
         if not credentials_path:
-            logger.error("GCP_CREDENTIALS_PATH environment variable is not set.")
-            raise ValueError("GCP_CREDENTIALS_PATH environment variable is not set.")
-        
+            logger.error("GCP credentials path not set in config or GCP_CREDENTIALS_PATH environment variable.")
+            raise ValueError("GCP credentials path not configured. Check personal/config.yaml or set GCP_CREDENTIALS_PATH.")
+
+        # Get bucket name from config or environment variable (fallback)
+        bucket_name = gcp_config.get('bucket_name') or os.getenv("GCP_BUCKET_NAME", "expense-categorization-ml-models-backup")
+
         self.registry = ModelRegistry(registry_dir=os.path.join(MODELS_DIR, "registry"))
         self.storage = ModelStorage(
-            bucket_name="expense-categorization-ml-models-backup",
+            bucket_name=bucket_name,
             credentials_path=credentials_path,
             models_dir=MODELS_DIR,
             cache_dir="cache"

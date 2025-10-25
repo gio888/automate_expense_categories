@@ -54,37 +54,50 @@ automate_expense_categories/
 ### Configuration Setup
 **IMPORTANT**: This project requires personal configuration before use.
 
-1. **Copy the configuration template:**
+#### Personal Configuration Architecture
+The project uses a `personal/` directory to keep your private data separate from the codebase:
+
+1. **Copy personal configuration templates:**
    ```bash
-   cp config.example.yaml config.yaml
+   cp -r personal.example/ personal/
    ```
 
-2. **Set up Google Cloud Storage:**
+2. **Configure your settings:**
+   ```bash
+   # Edit your GCP credentials and settings
+   nano personal/config.yaml
+
+   # Define your bank accounts and staff (if applicable)
+   nano personal/accounts.yaml
+
+   # Customize your expense categories
+   nano personal/categories.yaml
+   ```
+
+3. **Set up Google Cloud Storage:**
    - Create a GCP project and enable Cloud Storage API
    - Create a service account with "Storage Admin" role
    - Download the service account key JSON file
    - Create your own GCS bucket for model backups
+   - Update `personal/config.yaml` with your GCP credentials path and bucket name
 
-3. **Edit `config.yaml` with your settings:**
-   ```yaml
-   gcp:
-     credentials_path: "/path/to/your/service-account-key.json"
-     bucket_name: "your-expense-ml-models-backup"
+4. **Generate category definitions:**
+   ```bash
+   python generate_categories.py
    ```
 
-4. **Alternative: Use environment variables:**
+5. **Validate configuration:**
+   ```bash
+   python setup_validator.py
+   ```
+
+6. **Alternative: Use environment variables:**
    ```bash
    export GCP_CREDENTIALS_PATH="/path/to/your/service-account-key.json"
    export GCP_BUCKET_NAME="your-bucket-name"
    ```
 
-5. **Validate configuration:**
-   ```bash
-   python src/config.py
-   ```
-
-6. **Ensure required data files exist:**
-   - `data/valid_categories.txt` - List of approved expense categories
+**Note:** The `personal/` directory is gitignored to protect your private data.
 
 ## Usage
 
@@ -130,8 +143,11 @@ python src/auto_model_ensemble.py --source household
 ```bash
 cd $PROJECT_ROOT
 
-# 1. Predict categories using ensemble models (supports Excel and CSV)
-python src/batch_predict_ensemble.py --file your_statement.xlsx
+# 1. Predict categories using ensemble models
+# Supports Excel (.xlsx, .xls) and CSV files - automatic format detection
+python src/batch_predict_ensemble.py --file "Statement UNIONBANK Visa 2025-08.xlsx"
+# OR
+python src/batch_predict_ensemble.py --file "Statement UNIONBANK Visa 2025-08.csv"
 
 # 2. [Manual step] Review and correct predictions
 
@@ -145,8 +161,9 @@ python src/auto_model_ensemble.py --source credit_card
 ## How It Works
 
 ### 1. **Data Processing**
-- **Household**: Google Sheets exports → Transform → Predict
-- **Credit Card**: Bank CSV exports → Predict directly
+- **Household**: Google Sheets exports (Excel/CSV) → Transform → Predict
+- **Credit Card**: Bank statements (Excel/CSV) → Automatic format detection → Predict directly
+- **Automatic cleaning**: Currency symbols (PHP, $, etc.) removed automatically
 
 ### 2. **Machine Learning**
 - **Text Vectorization**: TF-IDF with source-specific optimizations
@@ -166,14 +183,45 @@ python src/auto_model_ensemble.py --source credit_card
 
 ## File Types & Naming Conventions
 
-### Input Files
+### Standardized Naming Format
+The system uses a standardized naming convention for all generated files:
+
+**Format**: `{source}_{period}_{stage}_{timestamp}.csv`
+
+Where:
+- **source**: `unionbank_visa`, `household_cash`, `bpi_mastercard` (standardized, no spaces)
+- **period**: `YYYY-MM` (statement period, not processing date)
+- **stage**: `input`, `predictions`, `corrected`, `accounting`, `training`
+- **timestamp**: `YYYYMMDD_HHMMSS` (when processed, for uniqueness)
+
+### Supported Input Files
+
+#### Excel Files (Recommended)
+- **Credit Card**: `"Statement UNIONBANK Visa 8214 YYYY-MM.xlsx"` (direct from bank)
+- **Household**: Excel exports from accounting systems
+- Automatic currency symbol removal (PHP, $, etc.)
+- Direct processing without manual conversion
+
+#### CSV Files (Legacy Format - Still Supported)
 - **Household**: `"House Kitty Transactions - Cash YYYY-MM.csv"`
 - **Credit Card**: `"For Automl Statement UNIONBANK Visa YYYY-MM.csv"`
+- Automatically converted to standardized format
 
-### Output Files
-- **Predictions**: `processed_{filename}_v{version}_{timestamp}.csv`
-- **Training Data**: `training_data_{source}_v{version}_{date}.csv`
-- **Models**: `{source}_{algorithm}_model_v{version}.pkl`
+### Output Files (Standardized Format)
+
+**Examples:**
+- **Predictions**: `unionbank_visa_2025-07_predictions_20250809_101640.csv`
+- **Corrected**: `unionbank_visa_2025-07_corrected_20250809_101640.csv`
+- **Accounting**: `unionbank_visa_2025-07_accounting_20250809_101640.csv`
+- **Training Data**: `training_data_credit_card_v{version}_{timestamp}.csv`
+- **Models**: `{source}_{algorithm}_model_v{version}.pkl` (unchanged)
+
+**Benefits:**
+- Purpose is clear from filename
+- Source and statement period preserved
+- Processing time tracked with timestamps
+- Chronological sorting works naturally
+- No spaces or special characters
 
 ## Documentation
 
