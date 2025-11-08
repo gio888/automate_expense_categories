@@ -32,7 +32,9 @@
       "Bash(pip3 install:*)",
       "Bash(pip3 uninstall:*)",
       "Bash(node:*)",
-      "Bash(git pull:*)"
+      "Bash(git pull:*)",
+      "Bash(git -C /Users/gio/Code/automate_expense_categories ls-files:*)",
+      "Bash(git -C /Users/gio/Code/automate_expense_categories check-ignore -v personal/config.yaml personal/credentials/ personal/accounts.yaml)"
     ],
     "deny": []
   }

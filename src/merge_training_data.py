@@ -269,7 +269,21 @@ class CorrectionValidator:
         """
         # Make a copy to avoid modifying the original
         formatted_df = corrections_df.copy()
-        
+
+        # First, map web interface column names to training data format
+        column_mappings = {
+            'DATE': 'Date',
+            'DESCRIPTION': 'Description',
+            'DEBIT': 'Amount (Negated)',
+            'CREDIT': 'Amount'
+        }
+
+        for web_col, train_col in column_mappings.items():
+            if web_col in formatted_df.columns and train_col not in formatted_df.columns:
+                self.logger.info(f"Mapping '{web_col}' to '{train_col}'")
+                formatted_df[train_col] = formatted_df[web_col]
+                # Keep the original column for reference
+
         # Handle alternative category column names
         if 'Category' not in formatted_df.columns:
             if 'Corrected Category' in formatted_df.columns:
@@ -280,12 +294,12 @@ class CorrectionValidator:
                 self.logger.info("Using 'predicted_category' as 'Category'")
                 formatted_df['Category'] = formatted_df['predicted_category']
                 # Keep predicted_category for reference
-        
+
         # Get missing columns
         existing_columns = set(existing_data.columns)
         corrections_columns = set(formatted_df.columns)
         missing_columns = existing_columns - corrections_columns
-        
+
         self.logger.info(f"Adding {len(missing_columns)} missing columns to match training data structure")
         
         # Add each missing column with appropriate defaults

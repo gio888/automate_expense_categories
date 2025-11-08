@@ -1,5 +1,12 @@
 # Future Improvements & Tasks
 
+## Recently Completed
+
+### 2025-11-08: Column Mapping Fix
+- [x] Fixed merge_training_data.py to handle web interface column format
+- [x] Added mapping for DATE→Date, DESCRIPTION→Description, DEBIT/CREDIT→Amount columns
+- [x] Cleaned up 10 legacy CSV upload files from data/uploads/
+
 ## High Priority - Project Organization & Documentation
 
 ### **File Structure Reorganization**
@@ -50,6 +57,8 @@
 ## Low Priority - Developer Experience
 
 ### **Testing & Validation**
+- [ ] Add unit tests for column mapping logic in merge_training_data.py
+- [ ] Test end-to-end web→corrections→merge→retrain workflow
 - [ ] Create integration tests for file reorganization
 - [ ] Add automated checks for documentation completeness
 - [ ] Set up pre-commit hooks for documentation standards
@@ -84,4 +93,5 @@
 ---
 
 *Created: 2025-08-09 - Based on comprehensive code quality review*
+*Last updated: 2025-11-08 - Added column mapping fix completion*
 *Priority: High impact, medium effort - tackle when dedicated time available*

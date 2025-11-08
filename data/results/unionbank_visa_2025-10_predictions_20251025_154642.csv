@@ -1,0 +1,85 @@
+DATE,DESCRIPTION,DEBIT,CREDIT,transaction_source,predicted_category,confidence
+2025-10-08,"LAZADA PH, MAKATI, PH",678.5,0.0,credit_card,Expenses:Household Supplies,0.8570305376270201
+2025-10-08,"LAZADA PH, MAKATI, PH",2060.07,0.0,credit_card,Expenses:Household Supplies,0.8570305376270201
+2025-10-07,"LAZADA PH, MAKATI, PH",0.0,1931.59,credit_card,Expenses:Household Supplies,0.8570305376270201
+2025-10-07,"ALLIED MOVNG SERVICES, DANDENONG, AU (AUD 371.86)",14772.7,0.0,credit_card,Expenses:Travel:Others,0.1854311548309349
+2025-10-07,"SOUTH STAR DRUG, PASIG, PH",2607.5,0.0,credit_card,Expenses:Health:Medicines,0.8423399624577388
+2025-10-07,"Spotify P3B4353D0A, Stockholm, SE",281.79,0.0,credit_card,Expenses:Entertainment:Music/Movies,0.8210900019232401
+2025-10-06,"LAZADA PH, MAKATI, PH",0.0,1166.5,credit_card,Expenses:Household Supplies,0.8570305376270201
+2025-10-06,"LAZADA PH, MAKATI, PH",2684.53,0.0,credit_card,Expenses:Household Supplies,0.8570305376270201
+2025-10-06,"LAZADA PH, MAKATI, PH",1949.5,0.0,credit_card,Expenses:Household Supplies,0.8570305376270201
+2025-10-06,"PETRON DASMA MAKATI, MAKATI, PH",2509.85,0.0,credit_card,Expenses:Utilities:Gas,0.5078482404977805
+2025-10-04,Online Bills Payment to PLDT,691.75,0.0,credit_card,Expenses:Travel:Internet,0.8012169582785865
+2025-10-04,"fp*Food Panda, https://wwwde, PH",1855.9,0.0,credit_card,Expenses:Food:Dining,0.7495299899956943
+2025-10-04,"GRAB, MAKATI, PH",1023.0,0.0,credit_card,Expenses:Transportation:Public,0.5163075630414621
+2025-10-04,"ZALORA, TAGUIG CITY, PH",9022.41,0.0,credit_card,Expenses:Clothes,0.6144316222336429
+2025-10-03,Online Bills Payment to PLDT,2699.0,0.0,credit_card,Expenses:Travel:Internet,0.8012169582785865
+2025-10-03,"INTERCARE CHIROPRACTIC MA, MAKATI CITY, PH",5500.0,0.0,credit_card,Expenses:Health:Alternative,0.8305398104060427
+2025-10-03,"XIAOTAIPEI CORPORATION, MAKATI CITY, PH",684.0,0.0,credit_card,Expenses:Food:Dining,0.48293994782667066
+2025-10-02,"LAZADA PH, MAKATI, PH",1281.97,0.0,credit_card,Expenses:Household Supplies,0.8570305376270201
+2025-10-02,"LAZADA PH, MAKATI, PH",3185.5,0.0,credit_card,Expenses:Household Supplies,0.8570305376270201
+2025-10-02,"LAZADA PH, MAKATI, PH",3503.26,0.0,credit_card,Expenses:Household Supplies,0.8570305376270201
+2025-10-01,Online Bills Payment to MERALCO (10-DIGIT ACCOUNT NUMBER),33901.74,0.0,credit_card,Expenses:Utilities:Electric,0.7550025340097054
+2025-10-01,"GO SALADS, QUEZON, PH",403.75,0.0,credit_card,Expenses:Health:Medicines,0.4407546220573484
+2025-09-30,"GRINGO RESTAURANT, MAKATI, PH",1633.5,0.0,credit_card,Expenses:Food:Dining,0.5567912578515589
+2025-09-30,"GRAB, MAKATI, PH",34.0,0.0,credit_card,Expenses:Transportation:Public,0.5163075630414621
+2025-09-30,"GRAB, MAKATI, PH",20.0,0.0,credit_card,Expenses:Transportation:Public,0.5163075630414621
+2025-09-30,"LAZADA PH, MAKATI, PH",2637.18,0.0,credit_card,Expenses:Household Supplies,0.8570305376270201
+2025-09-30,"GRAB, MAKATI, PH",168.0,0.0,credit_card,Expenses:Transportation:Public,0.5163075630414621
+2025-09-30,"GRAB, MAKATI, PH",112.0,0.0,credit_card,Expenses:Transportation:Public,0.5163075630414621
+2025-09-29,"LAZADA PH, MAKATI, PH",0.0,254.07,credit_card,Expenses:Household Supplies,0.8570305376270201
+2025-09-29,"fp*Food Panda, https://wwwde, PH",959.5,0.0,credit_card,Expenses:Food:Dining,0.7495299899956943
+2025-09-29,"MARUDORI MKT, MAKATI, PH",3240.62,0.0,credit_card,Expenses:Clothes,0.33322760530232315
+2025-09-29,"LAZADA PH, MAKATI, PH",1535.38,0.0,credit_card,Expenses:Household Supplies,0.8570305376270201
+2025-09-29,"MARUDORI MKT, MAKATI, PH",310.45,0.0,credit_card,Expenses:Clothes,0.33322760530232315
+2025-09-27,"Audible*0E7OM8XV3, Amzn.com/bill, US (USD 14.17)",854.27,0.0,credit_card,Expenses:Education:Books,0.6829165719329177
+2025-09-27,"Adobe.com, Saggart, Dubl, IE",1273.73,0.0,credit_card,Expenses:Professional Development & Productivity,0.838958185066281
+2025-09-26,"SMART, MAKATI, PH",599.0,0.0,credit_card,Expenses:Utilities:Mobile,0.8726841130608823
+2025-09-26,"MERCURYDRUGCORP0923, DAVAO CITY, PH",371.0,0.0,credit_card,Expenses:Childcare:Others,0.8123976289195859
+2025-09-26,"PAYPAL *MYOFFICE, 4029357733, SG",1696.8,0.0,credit_card,Assets:Investments:Turing Machines,0.8345241809796367
+2025-09-26,"LAZADA PH, MAKATI, PH",5798.0,0.0,credit_card,Expenses:Household Supplies,0.8570305376270201
+2025-09-26,"LAZADA PH, MAKATI, PH",4191.61,0.0,credit_card,Expenses:Household Supplies,0.8570305376270201
+2025-09-26,"PADDLE.NET* CRASHPLAN, London, GB (USD 22.38)",1349.22,0.0,credit_card,Expenses:Professional Development & Productivity,0.5713307506272268
+2025-09-23,"LAZADA PH, MAKATI, PH",434.0,0.0,credit_card,Expenses:Household Supplies,0.8570305376270201
+2025-09-23,"SHOPEE PH, MANDALUYONG, PH",256.0,0.0,credit_card,Expenses:Household Supplies,0.6379381298541985
+2025-09-23,"ROSE PHARMACY MANTAWI, MANDAUE, PH",329.0,0.0,credit_card,Expenses:Health:Medicines,0.6378595041444052
+2025-09-23,"INTERCARE CHIROPRACTIC MA, MAKATI CITY, PH",4200.0,0.0,credit_card,Expenses:Health:Alternative,0.8305398104060427
+2025-09-22,BPI BILLS PAYMENT -EONLINE & EMOBILE,0.0,283319.85,credit_card,Assets:Current Assets:Banks Local:BPI Savings (GB),0.6981805225544472
+2025-09-22,"fp*Food Panda, https://wwwde, PH",1507.0,0.0,credit_card,Expenses:Food:Dining,0.7495299899956943
+2025-09-22,"fp*Food Panda, https://wwwde, PH",2709.0,0.0,credit_card,Expenses:Food:Dining,0.7495299899956943
+2025-09-22,"LAZADA PH, MAKATI, PH",2697.0,0.0,credit_card,Expenses:Household Supplies,0.8570305376270201
+2025-09-22,"fp*Food Panda, https://wwwde, PH",1547.0,0.0,credit_card,Expenses:Food:Dining,0.7495299899956943
+2025-09-22,"SHOPEE PH, MANDALUYONG, PH",516.0,0.0,credit_card,Expenses:Household Supplies,0.6379381298541985
+2025-09-21,"LAZADA PH, MAKATI, PH",0.0,27.97,credit_card,Expenses:Household Supplies,0.8570305376270201
+2025-09-20,Online Bills Payment to MANILA WATER COMPANY INC,8966.37,0.0,credit_card,Expenses:Utilities:Water,0.8772765977684097
+2025-09-20,Online Bills Payment to SMART/SUN,1321.0,0.0,credit_card,Expenses:Utilities:Mobile,0.84523414569854
+2025-09-19,"LAZADA PH, MAKATI, PH",0.0,825.51,credit_card,Expenses:Household Supplies,0.8570305376270201
+2025-09-18,"LAZADA PH, MAKATI, PH",0.0,830.45,credit_card,Expenses:Household Supplies,0.8570305376270201
+2025-09-18,"LAZADA PH, MAKATI, PH",1739.5,0.0,credit_card,Expenses:Household Supplies,0.8570305376270201
+2025-09-18,"CLAUDE.AI SUBSCRIPTION, ANTHROPIC.COM, US (USD 20.00)",1178.96,0.0,credit_card,Expenses:Professional Development & Productivity,0.5903099486309163
+2025-09-17,"Adobe, Saggart, Dubl, IE",441.28,0.0,credit_card,Expenses:Professional Development & Productivity,0.8014955756217029
+2025-09-16,"INTERCARE CHIROPRACTIC MA, MAKATI CITY, PH",11000.0,0.0,credit_card,Expenses:Health:Alternative,0.8305398104060427
+2025-09-15,"STARBUCKS 575 AYALA T, MAKATI, PH",340.0,0.0,credit_card,Expenses:Food:Dining,0.5529785318612773
+2025-09-15,"LAZADA PH, MAKATI, PH",1088.0,0.0,credit_card,Expenses:Household Supplies,0.8570305376270201
+2025-09-15,"Grab* A-8BULS6KWWRRFAV, HA NOI, VN (VND 20,000.00)",44.76,0.0,credit_card,Expenses:Transportation:Public,0.45535141148017777
+2025-09-15,"Grab* A-8BULS6KWWRRFAV, HA NOI, VN (VND 320,320.00)",716.93,0.0,credit_card,Expenses:Transportation:Public,0.5030121377353455
+2025-09-15,"PlayStation Network, Sony PSN, JP (SGD 49.90)",2309.37,0.0,credit_card,Expenses:Entertainment:Recreation,0.6338469460418056
+2025-09-15,"LUU NIEM SACH NGHE THUAT, QUANG NAM, VN (VND 1,670,000.00)",3737.76,0.0,credit_card,Expenses:Health:Medicines,0.11005683044907155
+2025-09-15,"fp*Food Panda, https://wwwde, PH",714.0,0.0,credit_card,Expenses:Food:Dining,0.7495299899956943
+2025-09-15,"LAZADA PH, MAKATI, PH",5183.92,0.0,credit_card,Expenses:Household Supplies,0.8570305376270201
+2025-09-15,"LAZADA PH, MAKATI, PH",4452.58,0.0,credit_card,Expenses:Household Supplies,0.8570305376270201
+2025-09-13,"LAZADA PH, MAKATI, PH",2423.83,0.0,credit_card,Expenses:Household Supplies,0.8570305376270201
+2025-09-13,"Grab* A-8BRUL62WWFPFAV, HA NOI, VN (VND 53,040.00)",118.66,0.0,credit_card,Expenses:Transportation:Public,0.4553675687402326
+2025-09-12,"Grab* A-8BNSU8SWW2OTAV, HA NOI, VN (VND 53,040.00)",118.52,0.0,credit_card,Expenses:Transportation:Public,0.4553675687402326
+2025-09-12,"AIRALO, SINGAPORE, SG (USD 7.00)",414.09,0.0,credit_card,Expenses:Travel:Internet,0.7343681984853109
+2025-09-11,"TRINH CAPHE - PHAM HONG T, HAI CHAU DIST, VN (VND 287,000.00)",641.31,0.0,credit_card,Expenses:Health:Medicines,0.13591718138432105
+2025-09-11,Disputed Item - TIKTOK SHOP ONLINE,0.0,4275.0,credit_card,Expenses:Travel:Others,0.6334306951600301
+2025-09-10,"LAZADA PH, MAKATI, PH",3591.45,0.0,credit_card,Expenses:Household Supplies,0.8570305376270201
+2025-09-10,"LAZADA PH, MAKATI, PH",6000.98,0.0,credit_card,Expenses:Household Supplies,0.8570305376270201
+2025-09-10,"Grab* A-8BF7QP7WX92FAV, HA NOI, VN (VND 57,200.00)",126.9,0.0,credit_card,Expenses:Transportation:Public,0.4554478209753256
+2025-09-09,"THEFURAMARESORT-CAFEINDOC, DANANG, VN (VND 147,840.00)",331.11,0.0,credit_card,Expenses:Health:Medicines,0.11005683044907155
+2025-09-09,"TAXI XANH SM QNM, QUANG NAM, VN (VND 88,400.00)",197.98,0.0,credit_card,Expenses:Household Supplies,0.3731378200280384
+2025-09-09,"BLACKBIRD, MAKATI, PH",3228.21,0.0,credit_card,Expenses:Food:Dining,0.48962742859917124
+2025-09-09,"Grab* A-8BABGOQWWJOJAV, HA NOI, VN (VND 84,240.00)",188.66,0.0,credit_card,Expenses:Transportation:Public,0.5030121377353455
+2025-09-09,"Grab* A-8BBBHJMWXEGVAV, HA NOI, VN (VND 63,440.00)",142.09,0.0,credit_card,Expenses:Transportation:Public,0.4536252256046676
+2025-08-08,Interest Reversal,0.0,59.85,credit_card,Expenses:Banking Costs:Interest,0.3396314808377228
