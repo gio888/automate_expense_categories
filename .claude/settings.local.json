@@ -34,7 +34,9 @@
       "Bash(node:*)",
       "Bash(git pull:*)",
       "Bash(git -C /Users/gio/Code/automate_expense_categories ls-files:*)",
-      "Bash(git -C /Users/gio/Code/automate_expense_categories check-ignore -v personal/config.yaml personal/credentials/ personal/accounts.yaml)"
+      "Bash(git -C /Users/gio/Code/automate_expense_categories check-ignore -v personal/config.yaml personal/credentials/ personal/accounts.yaml)",
+      "Bash(python3:*)",
+      "Bash(/Users/gio/Code/automate_expense_categories/.venv/bin/python:*)"
     ],
     "deny": []
   }

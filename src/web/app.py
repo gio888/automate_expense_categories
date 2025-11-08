@@ -572,6 +572,247 @@ async def root():
                 outline-offset: 2px;
             }
 
+            /* Source Detection and Selection Styles */
+            .source-detection {
+                margin: 1rem 0;
+                padding: 1rem;
+                background: linear-gradient(135deg, #f6f9fc 0%, #e9f2f9 100%);
+                border-radius: 8px;
+                border: 2px solid #d1e3f0;
+            }
+
+            .source-badge {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+                padding: 0.75rem 1rem;
+                border-radius: 8px;
+                font-size: 1rem;
+                font-weight: 600;
+            }
+
+            .source-high-confidence {
+                background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+                color: #155724;
+                border: 2px solid #28a745;
+            }
+
+            .confidence-indicator {
+                font-size: 0.875rem;
+                font-weight: 500;
+                opacity: 0.85;
+            }
+
+            .btn-link-subtle {
+                background: none;
+                border: none;
+                color: #007bff;
+                text-decoration: underline;
+                cursor: pointer;
+                font-size: 0.875rem;
+                padding: 0.25rem 0.5rem;
+                margin-left: 1rem;
+                transition: color 0.2s ease;
+            }
+
+            .btn-link-subtle:hover {
+                color: #0056b3;
+            }
+
+            .btn-link-subtle:focus {
+                outline: 2px solid #667eea;
+                outline-offset: 2px;
+                border-radius: 4px;
+            }
+
+            /* Radio Card Design */
+            .radio-group-modern {
+                display: flex;
+                flex-direction: column;
+                gap: 0.75rem;
+                margin: 1rem 0;
+            }
+
+            .radio-card {
+                position: relative;
+                display: flex;
+                align-items: center;
+                padding: 1.25rem;
+                border: 2px solid #e2e8f0;
+                border-radius: 12px;
+                background: white;
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+
+            .radio-card:hover {
+                border-color: #667eea;
+                background: #f8f9ff;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+            }
+
+            .radio-card:has(input:checked) {
+                border-color: #667eea;
+                background: linear-gradient(135deg, #f8f9ff 0%, #e9ecff 100%);
+                box-shadow: 0 4px 16px rgba(102, 126, 234, 0.2);
+            }
+
+            .radio-card input[type="radio"] {
+                position: absolute;
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+
+            .radio-content {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                gap: 0.25rem;
+            }
+
+            .radio-title {
+                font-size: 1rem;
+                font-weight: 600;
+                color: #2d3748;
+            }
+
+            .radio-description {
+                font-size: 0.875rem;
+                color: #718096;
+                line-height: 1.4;
+            }
+
+            .radio-indicator {
+                width: 24px;
+                height: 24px;
+                border: 2px solid #cbd5e0;
+                border-radius: 50%;
+                position: relative;
+                transition: all 0.2s ease;
+            }
+
+            .radio-card:has(input:checked) .radio-indicator {
+                border-color: #667eea;
+                background: #667eea;
+            }
+
+            .radio-card:has(input:checked) .radio-indicator::after {
+                content: '';
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 8px;
+                height: 8px;
+                background: white;
+                border-radius: 50%;
+            }
+
+            /* Help Accordion */
+            .help-accordion {
+                margin-top: 1rem;
+                padding: 0.75rem;
+                background: #f7fafc;
+                border-radius: 8px;
+                border: 1px solid #e2e8f0;
+            }
+
+            .help-accordion summary {
+                cursor: pointer;
+                font-weight: 600;
+                color: #4a5568;
+                list-style: none;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            .help-accordion summary::-webkit-details-marker {
+                display: none;
+            }
+
+            .help-accordion summary:hover {
+                color: #667eea;
+            }
+
+            .help-accordion[open] summary {
+                margin-bottom: 0.75rem;
+            }
+
+            .help-content {
+                padding-left: 1.75rem;
+                color: #718096;
+                font-size: 0.875rem;
+                line-height: 1.6;
+            }
+
+            .help-content p {
+                margin: 0.5rem 0;
+            }
+
+            /* Medium/Low Confidence States */
+            .source-selection-medium,
+            .source-selection-required {
+                margin: 1rem 0;
+                padding: 1.25rem;
+                border-radius: 12px;
+                border: 2px solid #ff9800;
+            }
+
+            .source-selection-medium {
+                background: linear-gradient(135deg, #fff8f0 0%, #fff3e0 100%);
+            }
+
+            .source-selection-required {
+                background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+            }
+
+            .source-heading {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                margin-bottom: 0.5rem;
+                color: #2d3748;
+            }
+
+            .warning-icon {
+                font-size: 1.25rem;
+            }
+
+            /* Mobile Responsive */
+            @media (max-width: 768px) {
+                .source-badge {
+                    font-size: 0.9rem;
+                    padding: 0.5rem 0.75rem;
+                }
+
+                .confidence-indicator {
+                    font-size: 0.75rem;
+                }
+
+                .btn-link-subtle {
+                    display: block;
+                    margin-left: 0;
+                    margin-top: 0.5rem;
+                }
+
+                .radio-card {
+                    padding: 1rem;
+                    min-height: 44px;
+                }
+
+                .radio-title {
+                    font-size: 1rem;
+                }
+
+                .radio-indicator {
+                    width: 28px;
+                    height: 28px;
+                }
+            }
+
             /* Print styles */
             @media print {
                 .upload-zone, .status { display: none; }
@@ -637,7 +878,10 @@ async def upload_file(file: UploadFile = File(...)):
         file_path = upload_dir / f"{file_id}_{original_filename}"
 
         # Security: Validate that the resolved path is within the upload directory (prevent path traversal)
-        if not file_path.resolve().is_relative_to(upload_dir.resolve()):
+        # Python 3.8+ compatible - using relative_to() with exception handling
+        try:
+            file_path.resolve().relative_to(upload_dir.resolve())
+        except ValueError:
             logger.warning(f"Path traversal attempt detected: {original_filename}")
             raise HTTPException(status_code=400, detail="Invalid file path")
 
@@ -689,7 +933,7 @@ async def upload_file(file: UploadFile = File(...)):
         raise HTTPException(status_code=500, detail="Upload failed. Please try again.")
 
 @app.post("/process/{file_id}")
-async def start_processing(file_id: str, background_tasks: BackgroundTasks):
+async def start_processing(file_id: str, background_tasks: BackgroundTasks, confirmed_source: Optional[str] = None):
     """Start processing a file in the background"""
     try:
         # Find the uploaded file
@@ -697,13 +941,13 @@ async def start_processing(file_id: str, background_tasks: BackgroundTasks):
         for f in upload_dir.glob(f"{file_id}_*"):
             file_path = f
             break
-            
+
         if not file_path:
             raise HTTPException(status_code=404, detail="File not found")
-        
+
         # Generate job ID
         job_id = f"job_{file_id}_{datetime.now().strftime('%H%M%S')}"
-        
+
         # Initialize job status
         processing_jobs[job_id] = ProcessingStatus(
             job_id=job_id,
@@ -712,10 +956,10 @@ async def start_processing(file_id: str, background_tasks: BackgroundTasks):
             current_step="Initializing",
             message="Processing job queued"
         )
-        
-        # Start background processing
-        background_tasks.add_task(process_file_background, job_id, str(file_path))
-        
+
+        # Start background processing with user-confirmed source (if provided)
+        background_tasks.add_task(process_file_background, job_id, str(file_path), confirmed_source)
+
         return {"job_id": job_id, "message": "Processing started"}
         
     except Exception as e:
@@ -798,12 +1042,28 @@ async def submit_corrections(job_id: str, corrections: CorrectionRequest):
         for correction in corrections.corrections:
             row_id = correction.get('id')
             new_category = correction.get('predicted_category')
-            
+
             if row_id is not None and row_id < len(df) and new_category:
                 df.loc[row_id, 'predicted_category'] = new_category
                 df.loc[row_id, 'confidence'] = 1.0  # User corrections get full confidence
                 updated_rows += 1
-        
+
+        # Standardize column names to match training data format
+        # This ensures compatibility with merge_training_data.py validation
+        column_mapping = {
+            'DATE': 'Date',
+            'DESCRIPTION': 'Description',
+            'DEBIT': 'Amount (Negated)',
+            'CREDIT': 'Amount',
+            'predicted_category': 'Category'
+        }
+
+        # Apply column renaming for columns that exist
+        rename_dict = {old: new for old, new in column_mapping.items() if old in df.columns}
+        df = df.rename(columns=rename_dict)
+
+        logger.info(f"Standardized columns: {list(df.columns)}")
+
         # Generate standardized corrected filename from original predictions file
         original_predictions_filename = Path(job.result_file).name
         corrected_filename = create_corrected_filename(original_predictions_filename)
@@ -874,7 +1134,7 @@ async def download_results(job_id: str, format: str = "predictions"):
                     'Description': get_column_value_flexible(row, 'Description', ['DESCRIPTION', 'description'], ''),
                     'Amount (Negated)': get_column_value_flexible(row, 'Amount (Negated)', ['DEBIT', 'debit'], 0),
                     'Amount': get_column_value_flexible(row, 'Amount', ['CREDIT', 'credit'], 0),
-                    'Classification': row.get('predicted_category', '')
+                    'Classification': get_column_value_flexible(row, 'Category', ['predicted_category'], '')
                 })
             accounting_df = pd.DataFrame(accounting_data)
             
@@ -911,27 +1171,33 @@ async def download_results(job_id: str, format: str = "predictions"):
         )
 
 # Background task functions
-async def process_file_background(job_id: str, file_path: str):
+async def process_file_background(job_id: str, file_path: str, confirmed_source: Optional[str] = None):
     """Background task for processing files"""
     try:
         job = processing_jobs[job_id]
-        
+
         # Step 1: Validate and detect source
         job.status = "processing"
         job.progress = 0.1
         job.current_step = "Validating file"
         job.message = "Analyzing file structure and content"
         processing_jobs[job_id] = job
-        
+
         validation_result = file_detector.detect_and_validate(file_path)
-        
+
         if not validation_result.is_valid:
             job.status = "failed"
             job.error = f"File validation failed: {'; '.join(validation_result.issues)}"
             processing_jobs[job_id] = job
             return
-        
-        transaction_source = validation_result.transaction_source
+
+        # Use user-confirmed source if provided, otherwise use detected source
+        if confirmed_source:
+            transaction_source = TransactionSource(confirmed_source)
+            logger.info(f"Using user-confirmed source: {confirmed_source} for job {job_id}")
+        else:
+            transaction_source = validation_result.transaction_source
+            logger.info(f"Using auto-detected source: {transaction_source.value} ({validation_result.confidence:.0%} confidence) for job {job_id}")
         
         # Step 2: Load models and run predictions
         job.progress = 0.3

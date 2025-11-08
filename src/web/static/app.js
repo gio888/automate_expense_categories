@@ -8,7 +8,10 @@ class ExpensePipeline {
         this.currentFileId = null;
         this.predictions = [];
         this.corrections = [];
-        
+        this.detectedSource = null;
+        this.detectedConfidence = 0;
+        this.confirmedSource = null;
+
         this.initializeEventListeners();
     }
     
@@ -80,27 +83,136 @@ class ExpensePipeline {
     displayFileInfo(uploadResult) {
         const fileInfoDiv = document.getElementById('fileInfo');
         const validation = uploadResult.validation_result;
-        
-        const confidenceText = `${(validation.confidence * 100).toFixed(0)}%`;
-        const sourceText = validation.transaction_source ? 
+
+        // Store detected source and confidence
+        this.detectedSource = validation.transaction_source;
+        this.detectedConfidence = validation.confidence;
+        this.confirmedSource = validation.transaction_source; // Default to detected
+
+        const confidencePercent = (validation.confidence * 100).toFixed(0);
+        const sourceText = validation.transaction_source ?
             validation.transaction_source.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) : 'Unknown';
-        
+
+        let sourceSelectionHtml = '';
+
+        // Graduated source selection based on confidence
+        if (validation.confidence > 0.7) {
+            // High confidence: Show confirmation with override option
+            sourceSelectionHtml = `
+                <div class="source-detection" id="sourceDetection">
+                    <p><strong>Transaction Source:</strong></p>
+                    <div class="source-confirmed">
+                        <span class="source-badge source-high-confidence">
+                            ✅ <strong>${sourceText}</strong>
+                            <span class="confidence-indicator">(${confidencePercent}% confidence)</span>
+                        </span>
+                        <button class="btn-link-subtle" onclick="pipeline.showSourceOverride()">
+                            Wrong source? Change it
+                        </button>
+                    </div>
+                </div>
+            `;
+        } else if (validation.confidence >= 0.5) {
+            // Medium confidence: Show radio buttons with default selection
+            sourceSelectionHtml = this.renderSourceSelector(sourceText, confidencePercent, 'medium');
+        } else {
+            // Low confidence: Require explicit selection
+            sourceSelectionHtml = this.renderSourceSelector(sourceText, confidencePercent, 'low');
+        }
+
         fileInfoDiv.innerHTML = `
             <div class="file-info">
                 <h3>📄 File Information</h3>
                 <p><strong>Filename:</strong> ${uploadResult.filename}</p>
                 <p><strong>Rows:</strong> ${validation.row_count.toLocaleString()}</p>
                 <p><strong>Size:</strong> ${this.formatFileSize(validation.file_size)}</p>
-                <p><strong>Detected Source:</strong> ${sourceText} (${confidenceText} confidence)</p>
-                <p><strong>Status:</strong> ${validation.is_valid ? 
-                    '<span style="color: green;">✅ Valid</span>' : 
+                ${sourceSelectionHtml}
+                <p><strong>Status:</strong> ${validation.is_valid ?
+                    '<span style="color: green;">✅ Valid</span>' :
                     '<span style="color: orange;">⚠️ Has Issues</span>'}</p>
             </div>
         `;
-        
+
         fileInfoDiv.style.display = 'block';
     }
-    
+
+    renderSourceSelector(detectedSource, confidencePercent, level) {
+        const isLowConfidence = level === 'low';
+        const warningClass = isLowConfidence ? 'source-selection-required' : 'source-selection-medium';
+        const warningIcon = isLowConfidence ? '❓' : '⚠️';
+        const warningText = isLowConfidence ?
+            'Unable to determine transaction source' :
+            `Detected: ${detectedSource} (${confidencePercent}% confidence)`;
+
+        return `
+            <div class="${warningClass}" id="sourceDetection">
+                <p class="source-heading">
+                    <span class="warning-icon">${warningIcon}</span>
+                    <strong>${warningText}</strong>
+                </p>
+                <p style="margin-bottom: 1rem;">Please confirm or select the correct source:</p>
+
+                <div class="radio-group-modern">
+                    <label class="radio-card" tabindex="0">
+                        <input type="radio"
+                               name="transaction_source"
+                               value="household"
+                               ${this.detectedSource === 'household' ? 'checked' : ''}
+                               onchange="pipeline.confirmSourceSelection('household')">
+                        <div class="radio-content">
+                            <span class="radio-title">🏠 Household Expenses</span>
+                            <span class="radio-description">
+                                Personal expenses, groceries, utilities, rent
+                            </span>
+                        </div>
+                        <span class="radio-indicator"></span>
+                    </label>
+
+                    <label class="radio-card" tabindex="0">
+                        <input type="radio"
+                               name="transaction_source"
+                               value="credit_card"
+                               ${this.detectedSource === 'credit_card' ? 'checked' : ''}
+                               onchange="pipeline.confirmSourceSelection('credit_card')">
+                        <div class="radio-content">
+                            <span class="radio-title">💳 Credit Card Statements</span>
+                            <span class="radio-description">
+                                Bank statements, credit card transactions
+                            </span>
+                        </div>
+                        <span class="radio-indicator"></span>
+                    </label>
+                </div>
+
+                <details class="help-accordion">
+                    <summary>❓ Not sure which to choose?</summary>
+                    <div class="help-content">
+                        <p><strong>Choose Household if:</strong> Personal expense tracking,
+                           cash transactions, shared household budget</p>
+                        <p><strong>Choose Credit Card if:</strong> Bank export, credit card
+                           statement, loan payments, investment transactions</p>
+                    </div>
+                </details>
+            </div>
+        `;
+    }
+
+    showSourceOverride() {
+        const sourceDetection = document.getElementById('sourceDetection');
+        if (!sourceDetection) return;
+
+        sourceDetection.innerHTML = this.renderSourceSelector(
+            this.detectedSource.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()),
+            (this.detectedConfidence * 100).toFixed(0),
+            'medium'
+        );
+    }
+
+    confirmSourceSelection(source) {
+        this.confirmedSource = source;
+        console.log(`Source confirmed: ${source}`);
+    }
+
     showValidationIssues(validation) {
         const fileInfoDiv = document.getElementById('fileInfo');
         
@@ -144,20 +256,26 @@ class ExpensePipeline {
     async startProcessing() {
         try {
             this.showStatus('Starting processing...', 'info');
-            
-            const response = await fetch(`/process/${this.currentFileId}`, {
+
+            // Send confirmed source to backend
+            const url = new URL(`/process/${this.currentFileId}`, window.location.origin);
+            if (this.confirmedSource) {
+                url.searchParams.append('confirmed_source', this.confirmedSource);
+            }
+
+            const response = await fetch(url, {
                 method: 'POST'
             });
-            
+
             const result = await response.json();
-            
+
             if (!response.ok) {
                 throw new Error(result.detail || 'Processing failed');
             }
-            
+
             this.currentJobId = result.job_id;
             this.startProgressPolling();
-            
+
         } catch (error) {
             this.showStatus(`Processing failed: ${error.message}`, 'error');
         }

@@ -21,7 +21,7 @@ if __name__ == "__main__":
     # Check if virtual environment is activated
     if not hasattr(sys, 'real_prefix') and not (hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix):
         print("⚠️  Warning: Virtual environment not detected")
-        print("💡 Consider activating: source venv/bin/activate")
+        print("💡 Consider activating: source .venv/bin/activate")
         print()
     
     try:

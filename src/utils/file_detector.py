@@ -46,7 +46,7 @@ class FileDetector:
     HOUSEHOLD_PATTERNS = {
         'date': ['date', 'transaction_date', 'trans_date', 'timestamp'],
         'description': ['description', 'item', 'expense', 'details', 'memo'],
-        'amount': ['amount', 'cost', 'price', 'value', 'expense_amount'],
+        'amount': ['amount', 'cost', 'price', 'value', 'expense_amount', 'out', 'in', 'debit', 'credit'],
         'category': ['category', 'type', 'classification', 'expense_type']
     }
     
@@ -248,29 +248,45 @@ class FileDetector:
     def _detect_columns(self, df: pd.DataFrame, source: Optional[TransactionSource]) -> Dict[str, str]:
         """
         Detect which columns correspond to required fields
-        
+
         Returns:
             Dictionary mapping field_name -> column_name
         """
         column_mapping = {}
         columns_lower = {col.lower(): col for col in df.columns}
-        
+
         # Choose patterns based on detected source
         if source == TransactionSource.HOUSEHOLD:
             patterns = self.HOUSEHOLD_PATTERNS
         else:
             patterns = self.CREDIT_CARD_PATTERNS
-        
+
+        # Special handling for Out/In or Debit/Credit column pairs (common in household files)
+        has_out = 'out' in columns_lower
+        has_in = 'in' in columns_lower
+        has_debit = 'debit' in columns_lower
+        has_credit = 'credit' in columns_lower
+
+        if (has_out and has_in) or (has_debit and has_credit):
+            # Mark that we have valid amount columns as a pair
+            column_mapping['amount'] = 'out_in_pair' if (has_out and has_in) else 'debit_credit_pair'
+            column_mapping['amount_out'] = columns_lower.get('out') or columns_lower.get('debit')
+            column_mapping['amount_in'] = columns_lower.get('in') or columns_lower.get('credit')
+
         # Find best match for each required field
         for field, possible_names in patterns.items():
+            # Skip amount if we already detected a pair
+            if field == 'amount' and 'amount' in column_mapping:
+                continue
+
             best_match = None
-            
+
             # Look for exact matches first
             for pattern in possible_names:
                 if pattern in columns_lower:
                     best_match = columns_lower[pattern]
                     break
-            
+
             # If no exact match, look for partial matches
             if not best_match:
                 for pattern in possible_names:
@@ -280,46 +296,59 @@ class FileDetector:
                             break
                     if best_match:
                         break
-            
+
             if best_match:
                 column_mapping[field] = best_match
-        
+
         return column_mapping
     
     def _validate_data_quality(self, df: pd.DataFrame, column_mapping: Dict[str, str]) -> Tuple[List[str], List[str]]:
         """
         Validate data quality and provide feedback
-        
+
         Returns:
             Tuple of (issues, suggestions)
         """
         issues = []
         suggestions = []
-        
+
         # Check for required columns
         required_fields = ['date', 'description', 'amount']
         missing_fields = [field for field in required_fields if field not in column_mapping]
-        
+
         if missing_fields:
             issues.append(f"Missing required columns: {', '.join(missing_fields)}")
-            suggestions.append("Ensure your CSV has columns for date, description, and amount")
+            suggestions.append("Ensure your CSV has columns for date, description, and amount (or Out/In for household expenses)")
         
         # Validate data in detected columns
         for field, column in column_mapping.items():
+            # Skip special marker fields (out_in_pair, debit_credit_pair, amount_out, amount_in)
+            if field in ['amount_out', 'amount_in'] or column in ['out_in_pair', 'debit_credit_pair']:
+                continue
+
             if column not in df.columns:
                 continue
-            
+
             # Check for mostly empty columns
             non_null_ratio = df[column].notna().sum() / len(df)
             if non_null_ratio < 0.5:
                 issues.append(f"Column '{column}' is mostly empty ({non_null_ratio:.1%} filled)")
                 suggestions.append(f"Ensure '{column}' column contains valid data")
-            
+
             # Field-specific validations
             if field == 'date':
                 self._validate_date_column(df, column, issues, suggestions)
             elif field == 'amount':
-                self._validate_amount_column(df, column, issues, suggestions)
+                # For amount field, validate the actual columns (could be single or pair)
+                if column == 'out_in_pair' or column == 'debit_credit_pair':
+                    # Validate both out/in columns
+                    if 'amount_out' in column_mapping:
+                        self._validate_amount_column(df, column_mapping['amount_out'], issues, suggestions)
+                    if 'amount_in' in column_mapping:
+                        self._validate_amount_column(df, column_mapping['amount_in'], issues, suggestions)
+                else:
+                    # Validate single amount column
+                    self._validate_amount_column(df, column, issues, suggestions)
         
         # Check minimum row count
         if len(df) < 10:

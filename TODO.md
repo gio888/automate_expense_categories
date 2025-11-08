@@ -2,7 +2,16 @@
 
 ## Recently Completed
 
-### 2025-11-08: Column Mapping Fix
+### 2025-11-08: Web Upload and Column Mapping Fixes
+- [x] Fixed file_detector.py to accept Out/In/Debit/Credit columns for household files
+- [x] Fixed Python 3.8 compatibility (is_relative_to → relative_to with try/except)
+- [x] Added column standardization in submit_corrections (DEBIT/CREDIT → Amount/Amount (Negated))
+- [x] Implemented smart progressive source selection UI with graduated confidence levels
+- [x] Added CSS styling for source detection components (radio cards, badges, help accordion)
+- [x] Fixed .venv activation path in start_web_server.py
+- [x] Created run_web_server.sh helper script
+
+### 2025-11-08: Column Mapping Fix (Previous)
 - [x] Fixed merge_training_data.py to handle web interface column format
 - [x] Added mapping for DATE→Date, DESCRIPTION→Description, DEBIT/CREDIT→Amount columns
 - [x] Cleaned up 10 legacy CSV upload files from data/uploads/
@@ -57,11 +66,18 @@
 ## Low Priority - Developer Experience
 
 ### **Testing & Validation**
+- [ ] Test full end-to-end retrain workflow with corrected data from web UI
+- [ ] Add unit tests for Out/In column detection in file_detector.py
 - [ ] Add unit tests for column mapping logic in merge_training_data.py
 - [ ] Test end-to-end web→corrections→merge→retrain workflow
 - [ ] Create integration tests for file reorganization
 - [ ] Add automated checks for documentation completeness
 - [ ] Set up pre-commit hooks for documentation standards
+
+### **Web Interface Enhancements**
+- [ ] Add retrain status feedback to web UI (show success/failure in frontend)
+- [ ] Add progress indicator for retrain background task
+- [ ] Test with different CSV/Excel formats (edge cases)
 
 ### **Deployment & Packaging**
 - [ ] Update any deployment scripts for new file locations
@@ -93,5 +109,5 @@
 ---
 
 *Created: 2025-08-09 - Based on comprehensive code quality review*
-*Last updated: 2025-11-08 - Added column mapping fix completion*
+*Last updated: 2025-11-08 - Added web upload fixes and UX enhancements*
 *Priority: High impact, medium effort - tackle when dedicated time available*

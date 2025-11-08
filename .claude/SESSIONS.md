@@ -2,6 +2,13 @@
 
 This file tracks all Claude Code sessions for this project, newest first.
 
+## 2025-11-08: Fix Web Upload and Column Mapping Issues
+**Status**: ✅ Complete
+**Commit**: (pending)
+**What**: Fixed Out/In column validation, Python 3.8 compatibility, column naming mismatch, and added smart source selection UI
+**Result**: Web interface now accepts household CSV files with Out/In columns, corrections integrate correctly into training data, UX enhanced with graduated confidence-based source selection
+**Next**: Test full retrain workflow, verify model improvement, consider adding retrain status feedback to UI
+
 ## 2025-11-08: Fix Web Interface Column Mapping for Training Data Merge
 **Status**: ✅ Complete
 **Commit**: c97366a
